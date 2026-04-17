@@ -1,11 +1,31 @@
 package com.rpgpoo.Item.model;
 
+import com.rpgpoo.Enum.RaridadeEnum;
+import com.rpgpoo.Enum.TipoItemEnum;
+
 public class ItemModel {
     private int id;
     private String nome;
-    private enum tipoItem {item1, item2};
+    private TipoItemEnum tipoItem;
     private double valorEfeito;
-    private enum raridade {raridade1, raridade2};
+    private RaridadeEnum raridade;
+
+    public TipoItemEnum getTipoItem() {
+        return tipoItem;
+    }
+
+    public void setTipoItem(TipoItemEnum tipoItem) {
+        this.tipoItem = tipoItem;
+    }
+
+    public RaridadeEnum getRaridade() {
+        return raridade;
+    }
+
+    public void setRaridade(RaridadeEnum raridade) {
+        this.raridade = raridade;
+    }
+
     private double valor;
 
     public int getId() {
