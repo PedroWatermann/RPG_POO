@@ -1,13 +1,15 @@
 package com.rpgpoo.Entidade.model;
 
-public class EntidadeModel {
+import com.rpgpoo.Arma.model.ArmaModel;
+
+public abstract class EntidadeModel {
     private int id;
     private String nome;
     private int nivel;
     private int ataque;
     private int vida;
     private int defesa;
-    private Arma arma;
+    private ArmaModel arma;
 
     public int getId() {
         return id;
@@ -45,22 +47,28 @@ public class EntidadeModel {
     public void setDefesa(int defesa) {
         this.defesa = defesa;
     }
-    public Arma getArma() {
+    public ArmaModel getArma() {
         return this.arma;
     }
-    public void setArma(Arma arma) {
+    public void setArma(ArmaModel arma) {
         this.arma = arma;
     }
 
-    public int atacar() {
-        return this.ataque;
+    public abstract int atacar();
+
+    public abstract int defender();
+
+    public EntidadeModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma) {
+        gerarId();
+        this.setNome(nome);
+        this.setNivel(nivel);
+        this.setAtaque(ataque);
+        this.setVida(vida);
+        this.setDefesa(defesa);
+        this.setArma(arma);
     }
 
-    public int defender() {
-        return this.defesa;
-    }
-
-    public EntidadeModel() {
-
+    private void gerarId() {
+        this.id = 1;
     }
 }

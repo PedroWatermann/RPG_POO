@@ -28,12 +28,26 @@ public class AtributoModel {
         this.quantidadeDados = quantidadeDados;
     }
 
-    public AtributoModel(int id, String nome, int modificador, int quantidadeDados) {
-        this.id = id;
-        this.nome = nome;
-        this.modificador = modificador;
-        this.quantidadeDados = quantidadeDados;
+    public AtributoModel(String nome, int modificador, int quantidadeDados) {
+        gerarId();
+        this.setNome(nome);
+        this.setModificador(modificador);
+        this.setQuantidadeDados(quantidadeDados);
     }
     public AtributoModel() {
+    }
+
+    @Override
+    public String toString() {
+        return "AtributoModel{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", modificador=" + modificador +
+                ", quantidadeDados=" + quantidadeDados +
+                '}';
+    }
+
+    private void gerarId() {
+        this.id = 1;
     }
 }

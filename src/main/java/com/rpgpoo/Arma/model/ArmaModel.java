@@ -1,12 +1,15 @@
 package com.rpgpoo.Arma.model;
 
+import com.rpgpoo.Dado.model.DadoModel;
+import com.rpgpoo.Enum.RaridadeEnum;
+import com.rpgpoo.Enum.TipoItemEnum;
 import com.rpgpoo.Item.model.ItemModel;
 
 public class ArmaModel extends ItemModel {
     private int dano;
     private int alcance;
     private int durabilidade;
-    private Dado dado;
+    private DadoModel dado;
 
     public int getDano() { return this.dano; }
 
@@ -20,7 +23,25 @@ public class ArmaModel extends ItemModel {
 
     public void setDurabilidade(int durabilidade) { this.durabilidade = durabilidade; }
 
-    public Dado getDado() { return this.dado; }
+    public DadoModel getDado() { return this.dado; }
 
-    public void setDado(Dado dado) { this.dado = dado; }
+    public void setDado(DadoModel dado) { this.dado = dado; }
+
+    public ArmaModel(String nome, TipoItemEnum tipoItem, double valorEfeito, RaridadeEnum raridade, double valor, int dano, int alcance, int durabilidade, DadoModel dado) {
+        super(nome, tipoItem, valorEfeito, raridade, valor);
+        this.setDano(dano);
+        this.setAlcance(alcance);
+        this.setDurabilidade(durabilidade);
+        this.setDado(dado);
+    }
+
+    @Override
+    public String toString() {
+        return "ArmaModel{" +
+                "dano=" + dano +
+                ", alcance=" + alcance +
+                ", durabilidade=" + durabilidade +
+                ", dado=" + dado +
+                '}';
+    }
 }

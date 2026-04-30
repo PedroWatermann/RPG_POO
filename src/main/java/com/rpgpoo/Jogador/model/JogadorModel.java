@@ -24,7 +24,26 @@ public class JogadorModel {
         this.senha = senha;
     }
 
+    public JogadorModel(String nome, String senha) {
+        gerarId();
+        this.setNome(nome);
+        this.setSenha(senha);
+    }
+
     public JogadorModel() {
 
+    }
+
+    private void gerarId() {
+        this.id = 1;
+    }
+
+    @Override
+    public String toString() {
+        return "JogadorModel{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", senha='" + senha + '\'' +
+                '}';
     }
 }
