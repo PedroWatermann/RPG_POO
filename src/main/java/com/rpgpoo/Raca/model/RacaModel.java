@@ -20,9 +20,17 @@ public class RacaModel {
     }
 
     public RacaModel(String nome, AtributoModel atributo) {
-        this.nome = nome;
-        this.atributo = atributo;
+        this.setNome(nome);
+        this.setAtributo(atributo);
     }
     public RacaModel(){
+    }
+
+    @Override
+    public String toString() {
+        return "RacaModel{" +
+                "nome='" + nome + '\'' +
+                ", atributo=" + atributo.toString() +
+                '}';
     }
 }
