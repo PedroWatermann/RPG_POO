@@ -9,6 +9,7 @@ public class ClasseModel {
     private int multiplicadorDano;
     private int multiplicadorDefesa;
 
+    //region Getters e Setters
     public int getId() {
         return this.id;
     }
@@ -48,7 +49,9 @@ public class ClasseModel {
     public void setMultiplicadorDefesa(int multiplicador) {
         this.multiplicadorDefesa = multiplicador;
     }
+    //endregion
 
+    //Construtor
     public ClasseModel(String nome, TipoArmaEnum tipoArma, int multiplicadorDano, int multiplicadorDefesa) {
         gerarId();
         this.setNome(nome);
@@ -60,12 +63,12 @@ public class ClasseModel {
     @Override
     public String toString() {
         return "ClasseModel{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", tipoArma=" + tipoArma +
-                ", multiplicadorDano=" + multiplicadorDano +
-                ", multiplicadorDefesa=" + multiplicadorDefesa +
-                '}';
+                "\n\tid = " + id +
+                ",\n\tnome = '" + nome + '\'' +
+                ",\n\ttipoArma = " + tipoArma +
+                ",\n\tmultiplicadorDano = " + multiplicadorDano +
+                ",\n\tmultiplicadorDefesa = " + multiplicadorDefesa +
+                "\n}";
     }
 
     private void gerarId() {

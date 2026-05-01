@@ -4,7 +4,6 @@ import com.rpgpoo.Arma.model.ArmaModel;
 import com.rpgpoo.Atributo.model.AtributoModel;
 import com.rpgpoo.Campanha.model.CampanhaModel;
 import com.rpgpoo.Classe.model.ClasseModel;
-import com.rpgpoo.Dado.model.DadoModel;
 import com.rpgpoo.Entidade.model.EntidadeModel;
 import com.rpgpoo.Item.model.ItemModel;
 import com.rpgpoo.Jogador.model.JogadorModel;
@@ -20,8 +19,9 @@ public class PersonagemModel extends EntidadeModel {
     private RacaModel raca;
     private double dinheiro;
     private AtributoModel atributo;
-    private List<CampanhaModel> campanha;
+    private List<CampanhaModel> campanhas;
 
+    //region Getters e Setters
     public ClasseModel getClasse() {
         return classe;
     }
@@ -70,14 +70,22 @@ public class PersonagemModel extends EntidadeModel {
         this.atributo = atributo;
     }
 
-    public List<CampanhaModel> getCampanha() {
-        return campanha;
+    public List<CampanhaModel> getCampanhas() {
+        return campanhas;
     }
 
-    public void setCampanha(List<CampanhaModel> campanha) {
-        this.campanha = campanha;
+    public void setCampanhas(List<CampanhaModel> campanhas) {
+        if (campanhas != null && !campanhas.isEmpty())
+            this.campanhas = campanhas;
     }
 
+    public void setCampanha(CampanhaModel campanha) {
+        if (campanha != null)
+            this.campanhas.add(campanha);
+    }
+    //endregion
+
+    //Construtor
     public PersonagemModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, ClasseModel classe, List<ItemModel> itens, JogadorModel jogador, RacaModel raca, double dinheiro, AtributoModel atributo) {
         super(nome, nivel, ataque, vida, defesa, arma);
         this.setClasse(classe);
@@ -86,7 +94,7 @@ public class PersonagemModel extends EntidadeModel {
         this.setRaca(raca);
         this.setDinheiro(dinheiro);
         this.setAtributo(atributo);
-        this.campanha = new ArrayList<CampanhaModel>();
+        this.campanhas = new ArrayList<>();
     }
 
     @Override
@@ -101,14 +109,19 @@ public class PersonagemModel extends EntidadeModel {
 
     @Override
     public String toString() {
-        return "PersonagemModel{" +
-                "classe=" + classe +
-                ", itens=" + itens +
-                ", jogador=" + jogador +
-                ", raca=" + raca +
-                ", dinheiro=" + dinheiro +
-                ", atributo=" + atributo +
-                ", campanha=" + campanha +
-                '}';
+        List<String> itens = new ArrayList<>();
+        this.itens.forEach(item -> itens.add(item.getNome() + ", "));
+        List<String> campanhas = new ArrayList<>();
+        this.campanhas.forEach(item -> campanhas.add(item.getNome() + ", "));
+
+        return "PersonagemModel {" +
+                "\n\tclasse = " + this.getClasse() +
+                ",\n\titens = " + itens +
+                ",\n\tjogador = " + this.getJogador() +
+                ",\n\traca = " + this.getRaca() +
+                ",\n\tdinheiro = " + this.getDinheiro() +
+                ",\n\tatributo = " + this.getAtributo() +
+                ",\n\tcampanha = " + campanhas +
+                "\n}";
     }
 }

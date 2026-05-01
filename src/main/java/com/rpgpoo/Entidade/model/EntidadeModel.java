@@ -11,53 +11,65 @@ public abstract class EntidadeModel {
     private int defesa;
     private ArmaModel arma;
 
+    //region Getters e Setters
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
     public int getNivel() {
         return nivel;
     }
+
     public void setNivel(int nivel) {
         this.nivel = nivel;
     }
+
     public int getAtaque() {
         return ataque;
     }
+
     public void setAtaque(int ataque) {
         this.ataque = ataque;
     }
+
     public int getVida() {
         return vida;
     }
+
     public void setVida(int vida) {
         this.vida = vida;
     }
+
     public int getDefesa() {
         return defesa;
     }
+
     public void setDefesa(int defesa) {
         this.defesa = defesa;
     }
+
     public ArmaModel getArma() {
         return this.arma;
     }
+
     public void setArma(ArmaModel arma) {
         this.arma = arma;
     }
+    //endregion
 
-    public abstract int atacar();
-
-    public abstract int defender();
-
+    //Construtor
     public EntidadeModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma) {
         gerarId();
         this.setNome(nome);
@@ -67,6 +79,10 @@ public abstract class EntidadeModel {
         this.setDefesa(defesa);
         this.setArma(arma);
     }
+
+    public abstract int atacar();
+
+    public abstract int defender();
 
     private void gerarId() {
         this.id = 1;

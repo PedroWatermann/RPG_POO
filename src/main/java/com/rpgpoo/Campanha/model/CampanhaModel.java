@@ -15,6 +15,7 @@ public class CampanhaModel {
     private DadoModel dado;
     private JogadorModel mestre;
 
+    //region Getters e Setters
     public int getId() {
         return id;
     }
@@ -52,7 +53,13 @@ public class CampanhaModel {
     }
 
     public void setJogadores(List<JogadorModel> jogadores) {
-        this.jogadores = jogadores;
+        if (jogadores != null && !jogadores.isEmpty())
+            this.jogadores = jogadores;
+    }
+
+    public void setJogador(JogadorModel jogador) {
+        if (jogador != null)
+            this.jogadores.add(jogador);
     }
 
     public DadoModel getDado() {
@@ -70,7 +77,9 @@ public class CampanhaModel {
     public void setMestre(JogadorModel mestre) {
         this.mestre = mestre;
     }
+    //endregion
 
+    //Construtor
     public CampanhaModel(String nome, String descricao, List<PersonagemModel> personagens, List<JogadorModel> jogadores, DadoModel dado, JogadorModel mestre) {
         gerarId();
         this.setNome(nome);
@@ -81,20 +90,20 @@ public class CampanhaModel {
         this.setMestre(mestre);
     }
 
-    private void gerarId() {
-        this.id = 1;
-    }
-
     @Override
     public String toString() {
-        return "CampanhaModel{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", personagens=" + personagens +
-                ", jogadores=" + jogadores +
-                ", dado=" + dado +
-                ", mestre=" + mestre +
-                '}';
+        return "CampanhaModel {" +
+                "\n\tid = " + id +
+                ",\n\tnome = '" + nome + '\'' +
+                ",\n\tdescricao = '" + descricao + '\'' +
+                ",\n\tpersonagens = " + personagens +
+                ",\n\tjogadores = " + jogadores +
+                ",\n\tdado = " + dado +
+                ",\n\tmestre = " + mestre +
+                "\n}";
+    }
+
+    private void gerarId() {
+        this.id = 1;
     }
 }

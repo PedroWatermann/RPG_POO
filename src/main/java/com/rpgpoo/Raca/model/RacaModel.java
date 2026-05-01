@@ -6,6 +6,7 @@ public class RacaModel {
     private String nome;
     private AtributoModel atributo;
 
+    //region Getters e Setters
     public String getNome() {
         return nome;
     }
@@ -18,19 +19,19 @@ public class RacaModel {
     public void setAtributo(AtributoModel atributo) {
         this.atributo = atributo;
     }
+    //endregion
 
+    //Construtor
     public RacaModel(String nome, AtributoModel atributo) {
         this.setNome(nome);
         this.setAtributo(atributo);
     }
-    public RacaModel(){
-    }
 
     @Override
     public String toString() {
-        return "RacaModel{" +
-                "nome='" + nome + '\'' +
-                ", atributo=" + atributo.toString() +
-                '}';
+        return "RacaModel {" +
+                "\n\tnome = '" + this.getNome() + '\'' +
+                ",\n\tatributo = " + this.getAtributo().toString() +
+                "\n}";
     }
 }
