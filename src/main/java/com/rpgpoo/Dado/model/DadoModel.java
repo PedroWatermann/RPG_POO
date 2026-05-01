@@ -2,6 +2,8 @@ package com.rpgpoo.Dado.model;
 
 import com.rpgpoo.Atributo.model.AtributoModel;
 
+import java.lang.classfile.attribute.ModuleAttribute;
+
 public class DadoModel {
     private int lados;
     private AtributoModel atributo;
@@ -39,7 +41,7 @@ public class DadoModel {
                 "\n}";
     }
 
-    public void rolarDado() {
-
+    public int rolarDado() {
+        return (int)(Math.random() * this.getLados()) + 1;
     }
 }

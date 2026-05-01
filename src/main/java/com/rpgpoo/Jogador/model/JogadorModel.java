@@ -40,12 +40,12 @@ public class JogadorModel {
         return personagens;
     }
 
-    public void setJogadores(List<PersonagemModel> personagens) {
+    public void setPersonagens(List<PersonagemModel> personagens) {
         if (personagens != null && !personagens.isEmpty())
             this.personagens = personagens;
     }
 
-    public void setJogador(PersonagemModel personagem) {
+    public void setPersonagem(PersonagemModel personagem) {
         if (personagem != null)
             this.personagens.add(personagem);
     }

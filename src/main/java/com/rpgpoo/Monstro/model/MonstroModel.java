@@ -34,12 +34,14 @@ public class MonstroModel extends EntidadeModel {
 
     @Override
     public int atacar() {
-        return 0;
+        //Representa a aleatoriedade do sucesso que o monstro pode ter ao atacar
+        int sorte = this.getArma().getDado().rolarDado();
+        return this.getAtaque() + sorte;
     }
 
     @Override
     public int defender() {
-        return 0;
+        return this.getDefesa();
     }
 
     @Override

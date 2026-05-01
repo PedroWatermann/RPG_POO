@@ -99,12 +99,13 @@ public class PersonagemModel extends EntidadeModel {
 
     @Override
     public int atacar() {
-        return 0;
+        int sorte = this.getArma().getDado().rolarDado();
+        return (this.getAtaque() + sorte) * this.getClasse().getMultiplicadorDano();
     }
 
     @Override
     public int defender() {
-        return 0;
+        return this.getDefesa() * this.getClasse().getMultiplicadorDefesa();
     }
 
     @Override
