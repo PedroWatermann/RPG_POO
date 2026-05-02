@@ -1,20 +1,26 @@
 package com.rpgpoo.Personagem.model;
 
+import com.rpgpoo.Arma.model.ArmaModel;
+import com.rpgpoo.Atributo.model.AtributoModel;
 import com.rpgpoo.Campanha.model.CampanhaModel;
 import com.rpgpoo.Classe.model.ClasseModel;
+import com.rpgpoo.Dado.model.DadoModel;
+import com.rpgpoo.Entidade.model.EntidadeModel;
 import com.rpgpoo.Item.model.ItemModel;
 import com.rpgpoo.Jogador.model.JogadorModel;
+import com.rpgpoo.Raca.model.RacaModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class PersonagemModel {
+public class PersonagemModel extends EntidadeModel {
     private ClasseModel classe;
-    private ArrayList<ItemModel> itens;
+    private List<ItemModel> itens;
     private JogadorModel jogador;
     private RacaModel raca;
     private double dinheiro;
     private AtributoModel atributo;
-    private CampanhaModel campanha;
+    private List<CampanhaModel> campanha;
 
     public ClasseModel getClasse() {
         return classe;
@@ -24,11 +30,11 @@ public class PersonagemModel {
         this.classe = classe;
     }
 
-    public ArrayList<ItemModel> getItens() {
+    public List<ItemModel> getItens() {
         return itens;
     }
 
-    public void setItens(ArrayList<ItemModel> itens) {
+    public void setItens(List<ItemModel> itens) {
         this.itens = itens;
     }
 
@@ -64,11 +70,45 @@ public class PersonagemModel {
         this.atributo = atributo;
     }
 
-    public CampanhaModel getCampanha() {
+    public List<CampanhaModel> getCampanha() {
         return campanha;
     }
 
-    public void setCampanha(CampanhaModel campanha) {
+    public void setCampanha(List<CampanhaModel> campanha) {
         this.campanha = campanha;
+    }
+
+    public PersonagemModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, ClasseModel classe, List<ItemModel> itens, JogadorModel jogador, RacaModel raca, double dinheiro, AtributoModel atributo) {
+        super(nome, nivel, ataque, vida, defesa, arma);
+        this.setClasse(classe);
+        this.setItens(itens);
+        this.setJogador(jogador);
+        this.setRaca(raca);
+        this.setDinheiro(dinheiro);
+        this.setAtributo(atributo);
+        this.campanha = new ArrayList<CampanhaModel>();
+    }
+
+    @Override
+    public int atacar() {
+        return 0;
+    }
+
+    @Override
+    public int defender() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "PersonagemModel{" +
+                "classe=" + classe +
+                ", itens=" + itens +
+                ", jogador=" + jogador +
+                ", raca=" + raca +
+                ", dinheiro=" + dinheiro +
+                ", atributo=" + atributo +
+                ", campanha=" + campanha +
+                '}';
     }
 }

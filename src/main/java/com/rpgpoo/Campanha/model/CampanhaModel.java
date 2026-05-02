@@ -1,16 +1,18 @@
 package com.rpgpoo.Campanha.model;
 
+import com.rpgpoo.Dado.model.DadoModel;
 import com.rpgpoo.Jogador.model.JogadorModel;
+import com.rpgpoo.Personagem.model.PersonagemModel;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CampanhaModel {
     private int id;
     private String nome;
     private String descricao;
-    private ArrayList<Personagem> personagens;
-    private ArrayList<JogadorModel> jogadores;
-    private int dado;
+    private List<PersonagemModel> personagens;
+    private List<JogadorModel> jogadores;
+    private DadoModel dado;
     private JogadorModel mestre;
 
     public int getId() {
@@ -37,27 +39,27 @@ public class CampanhaModel {
         this.descricao = descricao;
     }
 
-    public ArrayList<Personagem> getPersonagens() {
+    public List<PersonagemModel> getPersonagens() {
         return personagens;
     }
 
-    public void setPersonagens(ArrayList<Personagem> personagens) {
+    public void setPersonagens(List<PersonagemModel> personagens) {
         this.personagens = personagens;
     }
 
-    public ArrayList<JogadorModel> getJogadores() {
+    public List<JogadorModel> getJogadores() {
         return jogadores;
     }
 
-    public void setJogadores(ArrayList<JogadorModel> jogadores) {
+    public void setJogadores(List<JogadorModel> jogadores) {
         this.jogadores = jogadores;
     }
 
-    public int getDado() {
-        return dado;
+    public DadoModel getDado() {
+        return this.dado;
     }
 
-    public void setDado(int dado) {
+    public void setDado(DadoModel dado) {
         this.dado = dado;
     }
 
@@ -67,5 +69,32 @@ public class CampanhaModel {
 
     public void setMestre(JogadorModel mestre) {
         this.mestre = mestre;
+    }
+
+    public CampanhaModel(String nome, String descricao, List<PersonagemModel> personagens, List<JogadorModel> jogadores, DadoModel dado, JogadorModel mestre) {
+        gerarId();
+        this.setNome(nome);
+        this.setDescricao(descricao);
+        this.setPersonagens(personagens);
+        this.setJogadores(jogadores);
+        this.setDado(dado);
+        this.setMestre(mestre);
+    }
+
+    private void gerarId() {
+        this.id = 1;
+    }
+
+    @Override
+    public String toString() {
+        return "CampanhaModel{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", personagens=" + personagens +
+                ", jogadores=" + jogadores +
+                ", dado=" + dado +
+                ", mestre=" + mestre +
+                '}';
     }
 }

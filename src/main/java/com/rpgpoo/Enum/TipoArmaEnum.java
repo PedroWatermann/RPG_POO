@@ -1,5 +1,8 @@
 package com.rpgpoo.Enum;
 
 public enum TipoArmaEnum {
-        TESTE
+        LONGA_DISTANCIA,
+        CURTA_DISTANCIA,
+        MEDIA_DISTANCIA,
+        AREA
 }

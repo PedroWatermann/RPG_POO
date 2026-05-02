@@ -20,10 +20,18 @@ public class DadoModel {
     }
 
     public DadoModel(int lados, AtributoModel atributo) {
-        this.lados = lados;
-        this.atributo = atributo;
+        this.setLados(lados);
+        this.setAtributo(atributo);
     }
     public DadoModel() {
+    }
+
+    @Override
+    public String toString() {
+        return "DadoModel{" +
+                "lados=" + lados +
+                ", atributo=" + atributo.toString() +
+                '}';
     }
 
     public void rolarDado(){

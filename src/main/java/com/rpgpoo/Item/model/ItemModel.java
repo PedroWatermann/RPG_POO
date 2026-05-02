@@ -53,7 +53,28 @@ public class ItemModel {
         this.valor = valor;
     }
 
-    public ItemModel() {
+    public ItemModel(String nome, TipoItemEnum tipoItem, double valorEfeito, RaridadeEnum raridade, double valor) {
+        gerarId();
+        this.nome = nome;
+        this.tipoItem = tipoItem;
+        this.valorEfeito = valorEfeito;
+        this.raridade = raridade;
+        this.valor = valor;
+    }
 
+    private void gerarId() {
+        this.id = 1;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemModel{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", tipoItem=" + tipoItem +
+                ", valorEfeito=" + valorEfeito +
+                ", raridade=" + raridade +
+                ", valor=" + valor +
+                '}';
     }
 }

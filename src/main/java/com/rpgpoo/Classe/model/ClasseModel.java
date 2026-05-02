@@ -48,4 +48,27 @@ public class ClasseModel {
     public void setMultiplicadorDefesa(int multiplicador) {
         this.multiplicadorDefesa = multiplicador;
     }
+
+    public ClasseModel(String nome, TipoArmaEnum tipoArma, int multiplicadorDano, int multiplicadorDefesa) {
+        gerarId();
+        this.setNome(nome);
+        this.setTipoArma(tipoArma);
+        this.setMultiplicadorDano(multiplicadorDano);
+        this.setMultiplicadorDefesa(multiplicadorDefesa);
+    }
+
+    @Override
+    public String toString() {
+        return "ClasseModel{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", tipoArma=" + tipoArma +
+                ", multiplicadorDano=" + multiplicadorDano +
+                ", multiplicadorDefesa=" + multiplicadorDefesa +
+                '}';
+    }
+
+    private void gerarId() {
+        this.id = 1;
+    }
 }
