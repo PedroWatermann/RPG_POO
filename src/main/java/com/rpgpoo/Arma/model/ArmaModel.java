@@ -11,6 +11,7 @@ public class ArmaModel extends ItemModel {
     private int durabilidade;
     private DadoModel dado;
 
+    //region Getters e Setters
     public int getDano() { return this.dano; }
 
     public void setDano(int dano) { this.dano = dano; }
@@ -26,7 +27,9 @@ public class ArmaModel extends ItemModel {
     public DadoModel getDado() { return this.dado; }
 
     public void setDado(DadoModel dado) { this.dado = dado; }
+    //endregion
 
+    //Construtor
     public ArmaModel(String nome, TipoItemEnum tipoItem, double valorEfeito, RaridadeEnum raridade, double valor, int dano, int alcance, int durabilidade, DadoModel dado) {
         super(nome, tipoItem, valorEfeito, raridade, valor);
         this.setDano(dano);
@@ -37,11 +40,11 @@ public class ArmaModel extends ItemModel {
 
     @Override
     public String toString() {
-        return "ArmaModel{" +
-                "dano=" + dano +
-                ", alcance=" + alcance +
-                ", durabilidade=" + durabilidade +
-                ", dado=" + dado +
-                '}';
+        return "ArmaModel {" +
+                "\n\tdano = " + dano +
+                ",\n\talcance = " + alcance +
+                ",\n\tdurabilidade = " + durabilidade +
+                ",\n\tdado = " + dado +
+                "\n}";
     }
 }

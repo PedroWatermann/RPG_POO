@@ -9,7 +9,9 @@ public class ItemModel {
     private TipoItemEnum tipoItem;
     private double valorEfeito;
     private RaridadeEnum raridade;
+    private double valor;
 
+    //region Getter e Setters
     public TipoItemEnum getTipoItem() {
         return tipoItem;
     }
@@ -26,33 +28,40 @@ public class ItemModel {
         this.raridade = raridade;
     }
 
-    private double valor;
-
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
+
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
     public double getValorEfeito() {
         return valorEfeito;
     }
+
     public void setValorEfeito(double valorEfeito) {
         this.valorEfeito = valorEfeito;
     }
+
     public double getValor() {
         return valor;
     }
+
     public void setValor(double valor) {
         this.valor = valor;
     }
+    //endregion
 
+    //Construtor
     public ItemModel(String nome, TipoItemEnum tipoItem, double valorEfeito, RaridadeEnum raridade, double valor) {
         gerarId();
         this.nome = nome;
@@ -62,19 +71,19 @@ public class ItemModel {
         this.valor = valor;
     }
 
-    private void gerarId() {
-        this.id = 1;
-    }
-
     @Override
     public String toString() {
-        return "ItemModel{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", tipoItem=" + tipoItem +
-                ", valorEfeito=" + valorEfeito +
-                ", raridade=" + raridade +
-                ", valor=" + valor +
-                '}';
+        return "ItemModel {" +
+                "\n\tid = " + id +
+                ",\n\tnome = '" + nome + '\'' +
+                ",\n\ttipoItem = " + tipoItem +
+                ",\n\tvalorEfeito = " + valorEfeito +
+                ",\n\traridade = " + raridade +
+                ",\n\tvalor = " + valor +
+                "\n}";
+    }
+
+    private void gerarId() {
+        this.id = 1;
     }
 }
