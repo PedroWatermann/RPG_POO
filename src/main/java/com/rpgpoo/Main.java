@@ -4,7 +4,9 @@ import com.rpgpoo.Arma.model.ArmaModel;
 import com.rpgpoo.Atributo.model.AtributoModel;
 import com.rpgpoo.Campanha.model.CampanhaModel;
 import com.rpgpoo.Classe.model.ClasseModel;
+import com.rpgpoo.Combate.model.CombateModel;
 import com.rpgpoo.Dado.model.DadoModel;
+import com.rpgpoo.Entidade.model.EntidadeModel;
 import com.rpgpoo.Enum.RaridadeEnum;
 import com.rpgpoo.Enum.TipoArmaEnum;
 import com.rpgpoo.Enum.TipoItemEnum;
@@ -14,6 +16,7 @@ import com.rpgpoo.Monstro.model.MonstroModel;
 import com.rpgpoo.Personagem.model.PersonagemModel;
 import com.rpgpoo.Raca.model.RacaModel;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Main {
@@ -84,18 +87,18 @@ public class Main {
         ItemModel elixirVida = new ItemModel("Elixir da Vida", TipoItemEnum.BEBIDA, 50.0, RaridadeEnum.MUITO_RARO, 300.0);
 
         List<ItemModel> lootOrc = List.of(pocaoCuraPequena, anelOuro, tocha, sacoMoedas);
-        MonstroModel orcGuerreiro = new MonstroModel("Orc Guerreiro", 3, 12, 45, 6, porreteGrosso, lootOrc);
+        MonstroModel orcGuerreiro = new MonstroModel("Orc Guerreiro das Sombras", 3, 300, 1000, 12, porreteGrosso, lootOrc, orc);
 
         List<ItemModel> itensThorin = List.of(armaduraCouro, pocaoCuraPequena);
-        List<ItemModel> itensElira  = List.of(arcoLongo, pocaoDestreza);
-        List<ItemModel> itensFinn   = List.of(adagaDupla, kitMedico);
+        List<ItemModel> itensElira = List.of(arcoLongo, pocaoDestreza);
+        List<ItemModel> itensFinn = List.of(adagaDupla, kitMedico);
         List<ItemModel> itensZarael = List.of(laminaElegante, pergaminhoFogo);
-        List<ItemModel> itensGrom   = List.of(machadoDeGuerra, pocaoForca);
-        PersonagemModel thorin = new PersonagemModel("Thorin, o Forte", 3, 14, 50, 8, espadaCurta, guerreiro, itensThorin, jogador1, humano, 85.0, forca);
-        PersonagemModel elira = new PersonagemModel("Elira Lança-Prata", 3, 12, 40, 5, arcoLongo, arqueiro, itensElira, jogador2, elfo, 120.0, destreza);
-        PersonagemModel finn = new PersonagemModel("Finn Pé-Leve", 2, 11, 35, 4, adagaDupla, ladino, itensFinn, jogador3, halfling, 65.0, destreza);
-        PersonagemModel zarael = new PersonagemModel("Zarael Chifre Negro", 4, 10, 32, 3, laminaElegante, mago, itensZarael, jogador4, tiefling, 95.0, inteligencia);
-        PersonagemModel grom = new PersonagemModel("Grom Barba de Ferro",  4, 16, 60, 9, machadoDeGuerra, barbaro, itensGrom, jogador5, anao, 45.0, forca);
+        List<ItemModel> itensGrom = List.of(machadoDeGuerra, pocaoForca);
+        PersonagemModel thorin = new PersonagemModel("Thorin, o Forte", 3, 14, 500, 8, espadaCurta, guerreiro, itensThorin, jogador1, humano, 85.0, forca);
+        PersonagemModel elira = new PersonagemModel("Elira Lança-Prata", 3, 12, 400, 5, arcoLongo, arqueiro, itensElira, jogador2, elfo, 120.0, destreza);
+        PersonagemModel finn = new PersonagemModel("Finn Pé-Leve", 2, 11, 350, 4, adagaDupla, ladino, itensFinn, jogador3, halfling, 65.0, destreza);
+        PersonagemModel zarael = new PersonagemModel("Zarael Chifre Negro", 4, 10, 320, 3, laminaElegante, mago, itensZarael, jogador4, tiefling, 95.0, inteligencia);
+        PersonagemModel grom = new PersonagemModel("Grom Barba de Ferro", 4, 16, 600, 9, machadoDeGuerra, barbaro, itensGrom, jogador5, anao, 45.0, forca);
         jogador1.setPersonagem(thorin);
         jogador2.setPersonagem(elira);
         jogador3.setPersonagem(finn);
@@ -111,5 +114,11 @@ public class Main {
         finn.setCampanha(campanha);
         zarael.setCampanha(campanha);
         grom.setCampanha(campanha);
+
+        // COMBATE
+        List<EntidadeModel> participantes = List.of(thorin, elira, finn, zarael, grom, orcGuerreiro);
+        CombateModel combate = new CombateModel(campanha, participantes, personagens, orcGuerreiro);
+
+        combate.iniciarCombate();
     }
 }
