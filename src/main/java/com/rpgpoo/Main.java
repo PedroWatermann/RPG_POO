@@ -25,12 +25,12 @@ public class Main {
         JogadorModel jogador4 = new JogadorModel("Vinicius", "005");
         JogadorModel jogador5 = new JogadorModel("Gustavo", "006");
 
-        AtributoModel inteligencia = new AtributoModel("Inteligência", 0, 3);
-        AtributoModel destreza = new AtributoModel("Destreza", 1, 3);
-        AtributoModel constituicao = new AtributoModel("Constituição", 1, 3);
-        AtributoModel sabedoria = new AtributoModel("Sabedoria", 0, 3);
-        AtributoModel carisma = new AtributoModel("Carisma", -1, 3);
-        AtributoModel forca = new AtributoModel("Força", 2, 3);
+        AtributoModel inteligencia = new AtributoModel("Inteligência", 0);
+        AtributoModel destreza = new AtributoModel("Destreza", 1);
+        AtributoModel constituicao = new AtributoModel("Constituição", 1);
+        AtributoModel sabedoria = new AtributoModel("Sabedoria", 0);
+        AtributoModel carisma = new AtributoModel("Carisma", -1);
+        AtributoModel forca = new AtributoModel("Força", 2);
 
         RacaModel humano = new RacaModel("Humano", inteligencia);
         RacaModel elfo = new RacaModel("Elfo", destreza);
