@@ -4,7 +4,6 @@ public class AtributoModel {
     private int id;
     private String nome;
     private int modificador;
-    private int quantidadeDados;
 
     //region Getters e Setters
     public int getId() {
@@ -26,22 +25,13 @@ public class AtributoModel {
     public void setModificador(int modificador) {
         this.modificador = modificador;
     }
-
-    public int getQuantidadeDados() {
-        return quantidadeDados;
-    }
-
-    public void setQuantidadeDados(int quantidadeDados) {
-        this.quantidadeDados = quantidadeDados;
-    }
     //endregion
 
     //Construtor
-    public AtributoModel(String nome, int modificador, int quantidadeDados) {
+    public AtributoModel(String nome, int modificador) {
         gerarId();
         this.setNome(nome);
         this.setModificador(modificador);
-        this.setQuantidadeDados(quantidadeDados);
     }
 
     @Override
@@ -50,7 +40,6 @@ public class AtributoModel {
                 "\n\tid = " + this.getId() +
                 ",\n\tnome = '" + this.getNome() + '\'' +
                 ",\n\tmodificador = " + this.getModificador() +
-                ",\n\tquantidadeDados = " + this.getQuantidadeDados() +
                 "\n}";
     }
 

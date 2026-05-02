@@ -104,8 +104,11 @@ public class PersonagemModel extends EntidadeModel {
     }
 
     @Override
-    public int defender() {
-        return this.getDefesa() * this.getClasse().getMultiplicadorDefesa();
+    public void defender(int dano) {
+        int reducao = this.getDefesa() * this.getClasse().getMultiplicadorDefesa();
+        int danoFinal = Math.max(dano - reducao, 0);
+
+        this.setVida(this.getVida() - danoFinal);
     }
 
     @Override

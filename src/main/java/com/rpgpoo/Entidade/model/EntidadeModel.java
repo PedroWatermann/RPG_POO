@@ -82,7 +82,7 @@ public abstract class EntidadeModel {
 
     public abstract int atacar();
 
-    public abstract int defender();
+    public abstract void defender(int dano);
 
     private void gerarId() {
         this.id = 1;
