@@ -57,7 +57,7 @@ public class CampanhaModel {
             this.jogadores = jogadores;
     }
 
-    public void setJogador(JogadorModel jogador) {
+    public void setJogadores(JogadorModel jogador) {
         if (jogador != null)
             this.jogadores.add(jogador);
     }

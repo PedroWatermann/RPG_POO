@@ -45,7 +45,7 @@ public class JogadorModel {
             this.personagens = personagens;
     }
 
-    public void setPersonagem(PersonagemModel personagem) {
+    public void setPersonagens(PersonagemModel personagem) {
         if (personagem != null)
             this.personagens.add(personagem);
     }

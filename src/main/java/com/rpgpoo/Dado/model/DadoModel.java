@@ -2,8 +2,6 @@ package com.rpgpoo.Dado.model;
 
 import com.rpgpoo.Atributo.model.AtributoModel;
 
-import java.lang.classfile.attribute.ModuleAttribute;
-
 public class DadoModel {
     private int lados;
     private AtributoModel atributo;
@@ -14,8 +12,9 @@ public class DadoModel {
     }
 
     public void setLados(int lados) {
-        if (lados > 0)
+        if (lados > 0) {
             this.lados = lados;
+        }
     }
 
     public AtributoModel getAtributo() {

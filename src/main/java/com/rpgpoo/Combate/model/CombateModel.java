@@ -53,7 +53,6 @@ public class CombateModel {
     //Construtor
     public CombateModel(CampanhaModel campanha, List<EntidadeModel> participantes, List<PersonagemModel> personagens, MonstroModel monstro) {
         this.campanha = campanha;
-        // Fazendo uma cópia mutável das listas para podermos manipular durante o combate
         this.participantes = new ArrayList<>(participantes);
         this.personagens = new ArrayList<>(personagens);
         this.monstro = monstro;
@@ -65,8 +64,8 @@ public class CombateModel {
 
     private void atualizaParticipantes() {
         List<PersonagemModel> personagensVivos = this.personagens.stream()
-                .filter(personagem -> personagem.getVida() > 0)
-                .toList();
+            .filter(personagem -> personagem.getVida() > 0)
+            .toList();
 
         this.setPersonagens(personagensVivos);
 
@@ -80,10 +79,10 @@ public class CombateModel {
 
         System.out.println("\n--- 📊 STATUS DO COMBATE ---");
         for (PersonagemModel personagem : personagensVivos) {
-            System.out.printf("❤️  %-25s | HP: %d\n", personagem.getNome(), personagem.getVida());
+            System.out.printf("❤️ %-25s | HP: %d\n", personagem.getNome(), personagem.getVida());
         }
         if (monstro.getVida() > 0) {
-            System.out.printf("👹  %-25s | HP: %d\n", monstro.getNome(), monstro.getVida());
+            System.out.printf("👹 %-25s | HP: %d\n", monstro.getNome(), monstro.getVida());
         }
         System.out.println("----------------------------\n");
     }
@@ -94,7 +93,6 @@ public class CombateModel {
         System.out.println("==================================================");
 
         for (EntidadeModel participante : participantes) {
-            // Se a entidade morreu antes do seu turno chegar, ela não ataca
             if (participante.getVida() <= 0) continue;
 
             if (participante instanceof PersonagemModel) {
@@ -111,7 +109,7 @@ public class CombateModel {
                         break;
                     }
                 }
-            } else { // É a vez do monstro
+            } else {
                 if (!personagens.isEmpty()) {
                     int indiceAlvo = (int) (Math.random() * personagens.size());
                     PersonagemModel personagemAlvo = personagens.get(indiceAlvo);
@@ -144,13 +142,6 @@ public class CombateModel {
 
         while (!personagens.isEmpty() && monstro.getVida() > 0) {
             this.iniciarTurno();
-
-            // Pausa dramática entre turnos (opcional, comente se não gostar)
-//            try {
-//                Thread.sleep(10000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
         }
 
         System.out.println("==================================================");

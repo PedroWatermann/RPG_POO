@@ -22,7 +22,7 @@ public class MonstroModel extends EntidadeModel {
             this.loot = loot;
     }
 
-    public void setItemLoot(ItemModel itemLoot) {
+    public void setLoot(ItemModel itemLoot) {
         if (this.loot != null)
             this.loot.add(itemLoot);
     }
@@ -45,7 +45,6 @@ public class MonstroModel extends EntidadeModel {
 
     @Override
     public int atacar() {
-        //Representa a aleatoriedade do sucesso que o monstro pode ter ao atacar
         int sorte = this.getArma().getDado().rolarDado();
         return this.getAtaque() + sorte;
     }
@@ -54,7 +53,6 @@ public class MonstroModel extends EntidadeModel {
     public void defender(int dano) {
         int reducao = this.getDefesa();
         int danoFinal = Math.max(dano - reducao, 0);
-
         this.setVida(this.getVida() - danoFinal);
     }
 
