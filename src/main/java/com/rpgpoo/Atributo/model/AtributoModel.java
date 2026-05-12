@@ -34,15 +34,6 @@ public class AtributoModel {
         this.setModificador(modificador);
     }
 
-    @Override
-    public String toString() {
-        return "AtributoModel {" +
-                "\n\tid = " + this.getId() +
-                ",\n\tnome = '" + this.getNome() + '\'' +
-                ",\n\tmodificador = " + this.getModificador() +
-                "\n}";
-    }
-
     private void gerarId() {
         this.id = 1;
     }

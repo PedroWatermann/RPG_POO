@@ -5,6 +5,7 @@ import com.rpgpoo.Jogador.model.JogadorModel;
 import com.rpgpoo.Personagem.model.PersonagemModel;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CampanhaModel {
     private int id;
@@ -91,19 +92,18 @@ public class CampanhaModel {
     }
 
     @Override
-    public String toString() {
-        return "CampanhaModel {" +
-                "\n\tid = " + id +
-                ",\n\tnome = '" + nome + '\'' +
-                ",\n\tdescricao = '" + descricao + '\'' +
-                ",\n\tpersonagens = " + personagens +
-                ",\n\tjogadores = " + jogadores +
-                ",\n\tdado = " + dado +
-                ",\n\tmestre = " + mestre +
-                "\n}";
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CampanhaModel that)) return false;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     private void gerarId() {
-        this.id = 1;
+        this.id = (int)(Math.random() * 10);
     }
 }

@@ -37,33 +37,24 @@ public class MonstroModel extends EntidadeModel {
     //endregion
 
     //Construtor
-    public MonstroModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, List<ItemModel> loot, RacaModel raca) {
-        super(nome, nivel, ataque, vida, defesa, arma);
+    public MonstroModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, List<ItemModel> loot, RacaModel raca, int dt) {
+        super(nome, nivel, ataque, vida, defesa, arma, dt);
         this.loot = loot;
         this.raca = raca;
     }
 
     @Override
-    public int atacar() {
-        int sorte = this.getArma().getDado().rolarDado();
-        return this.getAtaque() + sorte;
+    public int atacar(int dtAlvo) {
+        int sorte = this.getCampanhaAtual() != null ? this.getCampanhaAtual().getDado().rolarDado() : -1;
+        if (sorte > dtAlvo)
+            return this.getAtaque();
+        return 0;
     }
 
     @Override
-    public void defender(int dano) {
+    public void defender(int danoRecebido) {
         int reducao = this.getDefesa();
-        int danoFinal = Math.max(dano - reducao, 0);
+        int danoFinal = Math.max(danoRecebido - reducao, 0);
         this.setVida(this.getVida() - danoFinal);
-    }
-
-    @Override
-    public String toString() {
-        List<String> loot = new ArrayList<>();
-        this.loot.forEach(item -> loot.add(item.getNome() + ", "));
-
-        return "MonstroModel{" +
-                "loot=" + loot +
-                ", raca=" + this.raca +
-                '}';
     }
 }

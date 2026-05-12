@@ -71,18 +71,6 @@ public class ItemModel {
         this.valor = valor;
     }
 
-    @Override
-    public String toString() {
-        return "ItemModel {" +
-                "\n\tid = " + id +
-                ",\n\tnome = '" + nome + '\'' +
-                ",\n\ttipoItem = " + tipoItem +
-                ",\n\tvalorEfeito = " + valorEfeito +
-                ",\n\traridade = " + raridade +
-                ",\n\tvalor = " + valor +
-                "\n}";
-    }
-
     private void gerarId() {
         this.id = 1;
     }

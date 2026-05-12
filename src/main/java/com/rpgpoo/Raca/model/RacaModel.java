@@ -26,12 +26,4 @@ public class RacaModel {
         this.setNome(nome);
         this.setAtributo(atributo);
     }
-
-    @Override
-    public String toString() {
-        return "RacaModel {" +
-                "\n\tnome = '" + this.getNome() + '\'' +
-                ",\n\tatributo = " + this.getAtributo().toString() +
-                "\n}";
-    }
 }

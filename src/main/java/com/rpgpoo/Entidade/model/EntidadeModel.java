@@ -1,6 +1,10 @@
 package com.rpgpoo.Entidade.model;
 
 import com.rpgpoo.Arma.model.ArmaModel;
+import com.rpgpoo.Campanha.model.CampanhaModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class EntidadeModel {
     private int id;
@@ -10,6 +14,9 @@ public abstract class EntidadeModel {
     private int vida;
     private int defesa;
     private ArmaModel arma;
+    private List<CampanhaModel> campanhas;
+    private CampanhaModel campanhaAtual;
+    private int dt;
 
     //region Getters e Setters
     public int getId() {
@@ -67,10 +74,55 @@ public abstract class EntidadeModel {
     public void setArma(ArmaModel arma) {
         this.arma = arma;
     }
+
+    public List<CampanhaModel> getCampanhas() {
+        return campanhas;
+    }
+
+    public CampanhaModel getCampanhaAtual() {
+        return campanhaAtual;
+    }
+
+    public void setCampanhaAtual(CampanhaModel campanhaAtual) {
+        this.campanhaAtual = campanhaAtual;
+    }
+
+    public void setCampanhas(List<CampanhaModel> campanhas) {
+        if (campanhas != null && !campanhas.isEmpty())
+            for (CampanhaModel campanha : campanhas)
+                if (!this.getCampanhas().contains(campanha)) {
+                    this.campanhas.add(campanha);
+                    if (this.getCampanhaAtual() == null)
+                        this.setCampanhaAtual(campanha);
+                }
+    }
+
+    public void setCampanhas(CampanhaModel campanha) {
+        if (campanha != null) {
+            if (this.getCampanhas() == null) {
+                this.campanhas = new ArrayList<>();
+                this.campanhas.add(campanha);
+            } else {
+                if (!this.getCampanhas().contains(campanha)) {
+                    this.campanhas.add(campanha);
+                }
+            }
+            if (this.getCampanhaAtual() == null)
+                this.setCampanhaAtual(campanha);
+        }
+    }
+
+    public int getDt() {
+        return dt;
+    }
+
+    public void setDt(int dt) {
+        this.dt = dt;
+    }
     //endregion
 
     //Construtor
-    public EntidadeModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma) {
+    public EntidadeModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, int dt) {
         gerarId();
         this.setNome(nome);
         this.setNivel(nivel);
@@ -78,11 +130,12 @@ public abstract class EntidadeModel {
         this.setVida(vida);
         this.setDefesa(defesa);
         this.setArma(arma);
+        this.setDt(dt);
     }
 
-    public abstract int atacar();
+    public abstract int atacar(int dtAlvo);
 
-    public abstract void defender(int dano);
+    public abstract void defender(int danoRecebido);
 
     private void gerarId() {
         this.id = 1;

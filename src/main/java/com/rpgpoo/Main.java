@@ -42,13 +42,14 @@ public class Main {
         RacaModel orc = new RacaModel("Orc", forca);
 
         DadoModel dadoPadrao = new DadoModel(20, null);
+        DadoModel dadoArma = new DadoModel(15, null);
 
-        ArmaModel espadaCurta = new ArmaModel("Espada Curta", TipoItemEnum.ARMA, 0, RaridadeEnum.COMUM, 30.0, 6, 1, 100, dadoPadrao);
-        ArmaModel arcoLongo = new ArmaModel("Arco Longo Élfico", TipoItemEnum.ARMA, 0, RaridadeEnum.INCOMUM, 55.0, 6, 25, 85, dadoPadrao);
-        ArmaModel laminaElegante = new ArmaModel("Lâmina Élfica", TipoItemEnum.ARMA, 0, RaridadeEnum.RARO, 80.0, 7, 1, 90, dadoPadrao);
-        ArmaModel machadoDeGuerra = new ArmaModel("Machado de Guerra", TipoItemEnum.ARMA, 0, RaridadeEnum.INCOMUM, 50.0, 9, 1, 110, dadoPadrao);
-        ArmaModel adagaDupla = new ArmaModel("Adagas Duplas", TipoItemEnum.ARMA, 0, RaridadeEnum.INCOMUM, 35.0, 5, 1, 75, dadoPadrao);
-        ArmaModel porreteGrosso = new ArmaModel("Porrete Grosso", TipoItemEnum.ARMA, 0, RaridadeEnum.COMUM, 0, 8, 1, 50, dadoPadrao);
+        ArmaModel espadaCurta = new ArmaModel("Espada Curta", TipoItemEnum.ARMA, 0, RaridadeEnum.COMUM, 30.0, 6, 1, 100, dadoArma);
+        ArmaModel arcoLongo = new ArmaModel("Arco Longo Élfico", TipoItemEnum.ARMA, 0, RaridadeEnum.INCOMUM, 55.0, 6, 25, 85, dadoArma);
+        ArmaModel laminaElegante = new ArmaModel("Lâmina Élfica", TipoItemEnum.ARMA, 0, RaridadeEnum.RARO, 80.0, 7, 1, 90, dadoArma);
+        ArmaModel machadoDeGuerra = new ArmaModel("Machado de Guerra", TipoItemEnum.ARMA, 0, RaridadeEnum.INCOMUM, 50.0, 9, 1, 110, dadoArma);
+        ArmaModel adagaDupla = new ArmaModel("Adagas Duplas", TipoItemEnum.ARMA, 0, RaridadeEnum.INCOMUM, 35.0, 5, 1, 75, dadoArma);
+        ArmaModel porreteGrosso = new ArmaModel("Porrete Grosso", TipoItemEnum.ARMA, 0, RaridadeEnum.COMUM, 0, 8, 1, 50, dadoArma);
 
         ClasseModel guerreiro = new ClasseModel("Guerreiro", TipoArmaEnum.ESPADA, 2, 2);
         ClasseModel barbaro = new ClasseModel("Bárbaro", TipoArmaEnum.MACHADO, 3, 1);
@@ -67,18 +68,18 @@ public class Main {
         ItemModel pergaminhoFogo = new ItemModel("Pergaminho de Bola de Fogo", TipoItemEnum.PERGAMINHO, 40.0, RaridadeEnum.RARO, 120.0);
 
         List<ItemModel> lootOrc = List.of(pocaoCuraPequena, anelOuro, tocha, sacoMoedas);
-        MonstroModel orcGuerreiro = new MonstroModel("Orc Guerreiro das Sombras", 3, 300, 1000, 12, porreteGrosso, lootOrc, orc);
+        MonstroModel orcGuerreiro = new MonstroModel("Orc Guerreiro das Sombras", 3, 200, 700, 10, porreteGrosso, lootOrc, orc, 10);
 
         List<ItemModel> itensThorin = List.of(armaduraCouro, pocaoCuraPequena);
         List<ItemModel> itensElira = List.of(arcoLongo, pocaoDestreza);
         List<ItemModel> itensFinn = List.of(adagaDupla, kitMedico);
         List<ItemModel> itensZarael = List.of(laminaElegante, pergaminhoFogo);
         List<ItemModel> itensGrom = List.of(machadoDeGuerra, pocaoForca);
-        PersonagemModel thorin = new PersonagemModel("Thorin, o Forte", 3, 14, 500, 8, espadaCurta, guerreiro, itensThorin, jogador1, humano, 85.0, forca);
-        PersonagemModel elira = new PersonagemModel("Elira Lança-Prata", 3, 12, 400, 5, arcoLongo, arqueiro, itensElira, jogador2, elfo, 120.0, destreza);
-        PersonagemModel finn = new PersonagemModel("Finn Pé-Leve", 2, 11, 350, 4, adagaDupla, ladino, itensFinn, jogador3, halfling, 65.0, destreza);
-        PersonagemModel zarael = new PersonagemModel("Zarael Chifre Negro", 4, 10, 320, 3, laminaElegante, mago, itensZarael, jogador4, tiefling, 95.0, inteligencia);
-        PersonagemModel grom = new PersonagemModel("Grom Barba de Ferro", 4, 16, 600, 9, machadoDeGuerra, barbaro, itensGrom, jogador5, anao, 45.0, forca);
+        PersonagemModel thorin = new PersonagemModel("Thorin, o Forte", 3, 14, 500, 8, espadaCurta, guerreiro, itensThorin, jogador1, humano, 85.0, forca, 8);
+        PersonagemModel elira = new PersonagemModel("Elira Lança-Prata", 3, 12, 400, 5, arcoLongo, arqueiro, itensElira, jogador2, elfo, 120.0, destreza, 9);
+        PersonagemModel finn = new PersonagemModel("Finn Pé-Leve", 2, 11, 350, 4, adagaDupla, ladino, itensFinn, jogador3, halfling, 65.0, destreza, 4);
+        PersonagemModel zarael = new PersonagemModel("Zarael Chifre Negro", 4, 10, 320, 3, laminaElegante, mago, itensZarael, jogador4, tiefling, 95.0, inteligencia, 6);
+        PersonagemModel grom = new PersonagemModel("Grom Barba de Ferro", 4, 16, 600, 9, machadoDeGuerra, barbaro, itensGrom, jogador5, anao, 45.0, forca, 10);
         jogador1.setPersonagens(thorin);
         jogador2.setPersonagens(elira);
         jogador3.setPersonagens(finn);
@@ -89,11 +90,12 @@ public class Main {
         List<JogadorModel> jogadores = List.of(jogador1, jogador2, jogador3, jogador4, jogador5);
         CampanhaModel campanha = new CampanhaModel("D&D", "Dungeons and Dragons", personagens, jogadores, dadoPadrao, mestre);
 
-        thorin.setCampanha(campanha);
-        elira.setCampanha(campanha);
-        finn.setCampanha(campanha);
-        zarael.setCampanha(campanha);
-        grom.setCampanha(campanha);
+        thorin.setCampanhas(campanha);
+        elira.setCampanhas(campanha);
+        finn.setCampanhas(campanha);
+        zarael.setCampanhas(campanha);
+        grom.setCampanhas(campanha);
+        orcGuerreiro.setCampanhas(campanha);
 
         List<EntidadeModel> participantes = List.of(thorin, elira, finn, zarael, grom, orcGuerreiro);
         CombateModel combate = new CombateModel(campanha, participantes, personagens, orcGuerreiro);

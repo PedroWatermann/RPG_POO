@@ -32,14 +32,6 @@ public class DadoModel {
         this.setAtributo(atributo);
     }
 
-    @Override
-    public String toString() {
-        return "DadoModel {" +
-                "\n\tlados = " + lados +
-                ",\n\tatributo = " + atributo.toString() +
-                "\n}";
-    }
-
     public int rolarDado() {
         return (int)(Math.random() * this.getLados()) + 1;
     }

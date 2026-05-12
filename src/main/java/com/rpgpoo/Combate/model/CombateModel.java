@@ -98,7 +98,8 @@ public class CombateModel {
             if (participante instanceof PersonagemModel) {
                 if (monstro.getVida() > 0) {
                     int vidaMonstroAntes = monstro.getVida();
-                    monstro.defender(participante.atacar());
+                    int valorAtaque = participante.atacar(monstro.getDt());
+                    monstro.defender(valorAtaque);
                     int danoReal = vidaMonstroAntes - monstro.getVida();
 
                     System.out.printf("🗡️  [%s] ataca [%s]!\n", participante.getNome(), monstro.getNome());
@@ -115,7 +116,8 @@ public class CombateModel {
                     PersonagemModel personagemAlvo = personagens.get(indiceAlvo);
 
                     int vidaPersonagemAntes = personagemAlvo.getVida();
-                    personagemAlvo.defender(monstro.atacar());
+                    int valorAtaque = monstro.atacar(personagemAlvo.getDt());
+                    personagemAlvo.defender(valorAtaque);
                     int danoReal = vidaPersonagemAntes - personagemAlvo.getVida();
 
                     System.out.printf("👹 [%s] ataca ferozmente [%s]!\n", monstro.getNome(), personagemAlvo.getNome());
