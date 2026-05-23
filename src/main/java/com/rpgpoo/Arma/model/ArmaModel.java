@@ -37,14 +37,4 @@ public class ArmaModel extends ItemModel {
         this.setDurabilidade(durabilidade);
         this.setDado(dado);
     }
-
-    @Override
-    public String toString() {
-        return "ArmaModel {" +
-                "\n\tdano = " + dano +
-                ",\n\talcance = " + alcance +
-                ",\n\tdurabilidade = " + durabilidade +
-                ",\n\tdado = " + dado +
-                "\n}";
-    }
 }

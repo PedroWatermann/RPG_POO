@@ -60,17 +60,6 @@ public class ClasseModel {
         this.setMultiplicadorDefesa(multiplicadorDefesa);
     }
 
-    @Override
-    public String toString() {
-        return "ClasseModel{" +
-                "\n\tid = " + id +
-                ",\n\tnome = '" + nome + '\'' +
-                ",\n\ttipoArma = " + tipoArma +
-                ",\n\tmultiplicadorDano = " + multiplicadorDano +
-                ",\n\tmultiplicadorDefesa = " + multiplicadorDefesa +
-                "\n}";
-    }
-
     private void gerarId() {
         this.id = 1;
     }

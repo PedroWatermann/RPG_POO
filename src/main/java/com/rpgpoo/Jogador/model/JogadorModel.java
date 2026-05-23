@@ -59,18 +59,6 @@ public class JogadorModel {
         this.personagens = new ArrayList<>();
     }
 
-    @Override
-    public String toString() {
-        List<String> personagens = new ArrayList<>();
-        this.personagens.forEach(personagem -> personagens.add(personagem.getNome() + ", "));
-        return "JogadorModel {" +
-                "\n\tid = " + id +
-                ",\n\tnome = '" + nome + '\'' +
-                ",\n\tsenha = '" + senha + '\'' +
-                ",\n\tpersonagens = " + personagens +
-                "\n}";
-    }
-
     private void gerarId() {
         this.id = 1;
     }
