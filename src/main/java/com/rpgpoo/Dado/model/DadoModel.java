@@ -36,7 +36,7 @@ public class DadoModel {
     public String toString() {
         return "DadoModel {" +
                 "\n\tlados = " + lados +
-                ",\n\tatributo = " + atributo.toString() +
+                ",\n\tatributo = " + (atributo != null? atributo.toString() : "Sem atributo") +
                 "\n}";
     }
 
