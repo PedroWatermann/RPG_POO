@@ -3,108 +3,64 @@ package com.rpgpoo.Login.view;
 import javax.swing.*;
 import java.awt.*;
 
-import com.rpgpoo.Campanha.view.CampanhaSelectView;
-import com.rpgpoo.Main;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeRegular;
+import com.rpgpoo.Gerenciador.Gerenciador;
+import com.rpgpoo.Login.controller.LoginController;
+import com.rpgpoo.utils.AppColors;
+import com.rpgpoo.utils.JButtonCustom;
 import org.kordamp.ikonli.swing.FontIcon;
-import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 
-public class LoginView {
-    JPanel mainPanel = new JPanel();
+public class LoginView extends JPanel {
     JLabel lblTitulo = new JLabel();
     JLabel lblUsuario = new JLabel();
     JTextField txtUsuario = new JTextField();
     JLabel lblSenha = new JLabel();
     JPasswordField txtSenha = new JPasswordField();
-    JButton btnEntrar = new JButton();
-    JFrame mainFrame = new JFrame();
+    JButton btnEntrar;
 
-    public void principal() {
-        Main main = new Main();
-
-        lblTitulo.setIcon(FontIcon.of(FontAwesomeRegular.USER, 16, main.getGOLD()));
+    public LoginView(Gerenciador gerenciador) {
+        lblTitulo.setFont(new Font("Serif", Font.BOLD, 18));
+        lblTitulo.setIcon(FontIcon.of(FontAwesomeSolid.USER_SHIELD, AppColors.ICON_LG, AppColors.GOLD));
         lblTitulo.setText(" ACESSO AO SISTEMA");
-        lblTitulo.setFont(lblTitulo.getFont().deriveFont(Font.BOLD, 16));
-        lblTitulo.setForeground(main.getGOLD());
+        lblTitulo.setForeground(AppColors.GOLD);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 
         JSeparator sepTopo = new JSeparator();
-        sepTopo.setForeground(main.getGOLD());
-        sepTopo.setBackground(main.getGOLD());
+        sepTopo.setForeground(AppColors.GOLD);
+        sepTopo.setBackground(AppColors.GOLD);
 
-        JSeparator sepBaixo = new JSeparator();
-        sepBaixo.setForeground(main.getGOLD());
-        sepBaixo.setBackground(main.getGOLD());
-
+        lblUsuario.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblUsuario.setText("Usuário:");
-        lblUsuario.setForeground(main.getPARCHMENT());
+        lblUsuario.setForeground(AppColors.PARCHMENT);
 
+        txtUsuario.setFont(new Font("SansSerif", Font.PLAIN, 12));
         txtUsuario.setOpaque(false);
         txtUsuario.setForeground(Color.WHITE);
-        txtUsuario.setCaretColor(main.getPARCHMENT());
-        txtUsuario.setBorder(BorderFactory.createLineBorder(main.getPARCHMENT()));
+        txtUsuario.setCaretColor(AppColors.PARCHMENT);
+        txtUsuario.setBorder(BorderFactory.createLineBorder(AppColors.PARCHMENT));
         txtUsuario.setPreferredSize(new Dimension(220, 28));
 
+        lblSenha.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblSenha.setText("Senha:");
-        lblSenha.setForeground(main.getPARCHMENT());
+        lblSenha.setForeground(AppColors.PARCHMENT);
 
+        txtSenha.setFont(new Font("SansSerif", Font.PLAIN, 12));
         txtSenha.setOpaque(false);
         txtSenha.setForeground(Color.WHITE);
-        txtSenha.setCaretColor(main.getPARCHMENT());
-        txtSenha.setBorder(BorderFactory.createLineBorder(main.getPARCHMENT()));
+        txtSenha.setCaretColor(AppColors.PARCHMENT);
+        txtSenha.setBorder(BorderFactory.createLineBorder(AppColors.PARCHMENT));
         txtSenha.setPreferredSize(new Dimension(220, 28));
 
-        // Botão entrar - arredondado com padding
-        btnEntrar = new JButton(" Entrar") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(getBackground());
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-                g2.dispose();
-                super.paintComponent(g);
-            }
+        JSeparator sepBaixo = new JSeparator();
+        sepBaixo.setForeground(AppColors.GOLD);
+        sepBaixo.setBackground(AppColors.GOLD);
 
-            @Override
-            protected void paintBorder(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(main.getGOLD());
-                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
-                g2.dispose();
-            }
-        };
-        btnEntrar.setIcon(FontIcon.of(FontAwesomeSolid.SIGN_IN_ALT, 16, main.getPARCHMENT()));
-        btnEntrar.setContentAreaFilled(false);
-        btnEntrar.setFocusPainted(false);
-        btnEntrar.setOpaque(false);
-        btnEntrar.setForeground(main.getPARCHMENT());
-        btnEntrar.setBackground(new Color(0x24, 0x1E, 0x18));
-        btnEntrar.setPreferredSize(new Dimension(160, 36));
-        btnEntrar.setBorder(BorderFactory.createEmptyBorder(6, 20, 6, 20));
-        btnEntrar.addActionListener(e -> {
-            String usuario = txtUsuario.getText().trim();
-            String senha   = new String(txtSenha.getPassword()).trim();
+        btnEntrar = new JButtonCustom("Entrar", FontIcon.of(FontAwesomeSolid.SIGN_IN_ALT, AppColors.ICON_SM, AppColors.PARCHMENT));
 
-            if (usuario.isEmpty() || senha.isEmpty()) {
-                JOptionPane.showMessageDialog(mainFrame, "Preencha todos os campos.", "Atenção", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            if (!usuario.equals("admin") || !senha.equals("123")) {
-                JOptionPane.showMessageDialog(mainFrame, "Usuário e/ou senha incorretos. Tente novamente.", "Atenção", JOptionPane.ERROR_MESSAGE);
-            } else {
-                mainFrame.dispose();
-                new CampanhaSelectView().principal();
-            }
-        });
-
-        // Layout principal com GridBagLayout
-        mainPanel.setLayout(new GridBagLayout());
-        mainPanel.setBackground(main.getDARK());
-        mainPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(main.getGOLD(), 2),
+        this.setLayout(new GridBagLayout());
+        this.setBackground(AppColors.DARK);
+        this.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(AppColors.GOLD, 2),
                 BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
 
@@ -112,50 +68,54 @@ public class LoginView {
         bag.insets = new Insets(4, 4, 4, 4);
         bag.fill = GridBagConstraints.HORIZONTAL;
 
-        bag.gridx = 0; bag.gridy = 0;
+        bag.gridx = 0;
+        bag.gridy = 0;
         bag.gridwidth = 2;
-        mainPanel.add(lblTitulo, bag);
+        this.add(lblTitulo, bag);
 
         bag.gridy = 1;
-        mainPanel.add(sepTopo, bag);
+        this.add(sepTopo, bag);
 
-        bag.gridy = 2; bag.gridwidth = 1;
+        bag.gridy = 2;
+        bag.gridwidth = 1;
         bag.fill = GridBagConstraints.NONE;
         bag.anchor = GridBagConstraints.WEST;
-        mainPanel.add(lblUsuario, bag);
+        this.add(lblUsuario, bag);
 
         bag.gridx = 1; bag.gridy = 2;
         bag.fill = GridBagConstraints.HORIZONTAL;
         bag.weightx = 1.0;
-        mainPanel.add(txtUsuario, bag);
+        this.add(txtUsuario, bag);
 
         bag.gridx = 0; bag.gridy = 3;
         bag.fill = GridBagConstraints.NONE;
         bag.weightx = 0;
-        mainPanel.add(lblSenha, bag);
+        this.add(lblSenha, bag);
 
         bag.gridx = 1; bag.gridy = 3;
         bag.fill = GridBagConstraints.HORIZONTAL;
         bag.weightx = 1.0;
-        mainPanel.add(txtSenha, bag);
+        this.add(txtSenha, bag);
 
         bag.gridx = 0; bag.gridy = 4;
         bag.gridwidth = 2;
         bag.weightx = 0;
-        mainPanel.add(sepBaixo, bag);
+        this.add(sepBaixo, bag);
 
         bag.gridy = 5;
         bag.fill = GridBagConstraints.NONE;
         bag.anchor = GridBagConstraints.CENTER;
-        mainPanel.add(btnEntrar, bag);
+        this.add(btnEntrar, bag);
 
-        mainFrame.setTitle("RPG POO - Login");
-        mainFrame.setResizable(false);
-        mainFrame.setLayout(new BorderLayout());
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.add(mainPanel, BorderLayout.CENTER);
-        mainFrame.pack();
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setVisible(true);
+        LoginController loginController = new LoginController(this, gerenciador);
+        btnEntrar.addActionListener(_ -> loginController.btnEntrarClick());
+    }
+
+    public JTextField getTxtUsuario() {
+        return txtUsuario;
+    }
+
+    public JPasswordField getTxtSenha() {
+        return txtSenha;
     }
 }

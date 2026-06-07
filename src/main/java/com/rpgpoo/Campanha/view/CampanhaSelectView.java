@@ -1,62 +1,154 @@
 package com.rpgpoo.Campanha.view;
 
+import com.rpgpoo.Campanha.controller.CampanhaSelectController;
 import com.rpgpoo.Gerenciador.Gerenciador;
-import com.rpgpoo.Main;
+import com.rpgpoo.utils.AppColors;
+import com.rpgpoo.utils.DarkScrollBarUI;
+import com.rpgpoo.utils.IconTextCellRender;
+import com.rpgpoo.utils.JButtonCustom;
+import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
+import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class CampanhaSelectView {
-    JFrame mainFrame = new JFrame();
-    JPanel mainPanel = new JPanel();
-    JButton btnMudarONomeDepois = new JButton() ;
+public class CampanhaSelectView extends JPanel {
+    JLabel lblTitulo = new JLabel();
+    JTable tblCampanhas = new JTable();
+    JScrollPane scrCampanhas = new JScrollPane();
+    JButton btnNovo;
+    JButton btnEditar;
+    JButton btnExcluir;
+    JButton btnSelecionar;
 
-    public void principal() {
-        Main main = new Main();
+    public CampanhaSelectView(Gerenciador gerenciador) {
+        CampanhaSelectController campanhaSelectController = new CampanhaSelectController(this, gerenciador);
 
-        mainPanel.setBackground(main.getDARK());
-        mainPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(main.getGOLD(), 1),
+        lblTitulo.setIcon(FontIcon.of(FontAwesomeSolid.MAP, AppColors.ICON_LG, AppColors.GOLD));
+        lblTitulo.setText(" MINHAS CAMPANHAS");
+        lblTitulo.setFont(new Font("Serif", Font.BOLD, 18));
+        lblTitulo.setForeground(AppColors.GOLD);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JSeparator separador = new JSeparator();
+        separador.setForeground(AppColors.GOLD);
+        separador.setBackground(AppColors.GOLD);
+
+        Object[][] dadosTemporarios = {
+                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 1", FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)},
+                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 2", FontIcon.of(FontAwesomeSolid.CROWN, AppColors.ICON_SM, AppColors.PARCHMENT)},
+                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 3", FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)},
+                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 4", FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)},
+                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 5", FontIcon.of(FontAwesomeSolid.CROWN, AppColors.ICON_SM, AppColors.PARCHMENT)},
+                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 6", FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)},
+        };
+        tblCampanhas.setModel(new DefaultTableModel(dadosTemporarios, new Object[]{"", "", ""}));
+        tblCampanhas.setDefaultRenderer(Object.class, new IconTextCellRender());
+        tblCampanhas.getColumnModel().getColumn(0).setMaxWidth(30);
+        tblCampanhas.getColumnModel().getColumn(2).setMaxWidth(30);
+        tblCampanhas.setTableHeader(null);
+        tblCampanhas.setShowVerticalLines(false);
+        tblCampanhas.setBackground(AppColors.DARK);
+        tblCampanhas.setForeground(AppColors.PARCHMENT);
+        tblCampanhas.setSelectionBackground(AppColors.CRIMSON);
+        tblCampanhas.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        tblCampanhas.setRowHeight(28);
+
+        scrCampanhas.setViewportView(tblCampanhas);
+        scrCampanhas.setPreferredSize(new Dimension(0, 150));
+        scrCampanhas.getViewport().setBackground(AppColors.DARK);
+        scrCampanhas.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
+        scrCampanhas.getVerticalScrollBar().setUI(new DarkScrollBarUI());
+        scrCampanhas.getHorizontalScrollBar().setUI(new DarkScrollBarUI());
+        scrCampanhas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        btnNovo = new JButtonCustom(
+                "Criar",
+                JButtonCustom.Style.PRIMARY,
+                FontIcon.of(FontAwesomeSolid.PLUS, AppColors.ICON_SM, AppColors.PARCHMENT)
+        );
+        btnNovo.addActionListener(_ -> campanhaSelectController.btnNovoClick());
+
+        btnEditar = new JButtonCustom(
+                "Editar",
+                JButtonCustom.Style.SECONDARY,
+                FontIcon.of(FontAwesomeSolid.PENCIL_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)
+        );
+        btnEditar.addActionListener(_ -> campanhaSelectController.btnEditarClick());
+
+        btnExcluir = new JButtonCustom(
+                "Excluir",
+                JButtonCustom.Style.DANGER,
+                FontIcon.of(FontAwesomeSolid.TRASH_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)
+        );
+        btnExcluir.addActionListener(_ -> campanhaSelectController.btnExcluirClick());
+
+        btnSelecionar = new JButtonCustom(
+                "Selecionar",
+                FontIcon.of(FontAwesomeSolid.SIGN_IN_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)
+        );
+        btnSelecionar.addActionListener(_ -> campanhaSelectController.btnSelecionarClick());
+
+        this.setLayout(new GridBagLayout());
+        this.setBackground(AppColors.DARK);
+        this.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(AppColors.GOLD, 2),
                 BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
 
-        btnMudarONomeDepois = new JButton(" Selecionar Campanha") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(getBackground());
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-                g2.dispose();
-                super.paintComponent(g);
-            }
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 6, 0);
 
-            @Override
-            protected void paintBorder(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(main.getGOLD());
-                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
-                g2.dispose();
-            }
-        };
-        btnMudarONomeDepois.setForeground(main.getPARCHMENT());
-        btnMudarONomeDepois.setBackground(new Color(0x24, 0x1E, 0x18));
-        btnMudarONomeDepois.setPreferredSize(new Dimension(160, 36));
-        btnMudarONomeDepois.setBorder(BorderFactory.createEmptyBorder(6, 20, 6, 20));
-        btnMudarONomeDepois.addActionListener(e -> {
-            mainFrame.dispose();
-            new Gerenciador().legal();
-        });
+        // Definições para lblTitulo
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        this.add(lblTitulo, gbc);
 
-        mainPanel.add(btnMudarONomeDepois);
+        // Definições para separador
+        gbc.gridy = 1;
+        gbc.insets = new Insets(0, 0, 10, 0);
+        this.add(separador, gbc);
 
-        mainFrame.setTitle("RPG POO - Seleção de Campanha");
-        mainFrame.setLayout(new BorderLayout());
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.add(mainPanel, BorderLayout.CENTER);
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        mainFrame.setVisible(true);
+        // Definições para tblCampanhas
+        gbc.gridy = 2;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 0, 10, 0);
+        this.add(scrCampanhas, gbc);
+
+        // Definições para botões lado a lado
+        gbc.gridy = 3;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 0, 0);
+
+        // Definições para btnNovo
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.5;
+        gbc.insets = new Insets(0, 0, 0, 5);
+        this.add(btnNovo, gbc);
+
+        // Definições para btnEditar
+        gbc.gridx = 1;
+        gbc.insets = new Insets(0, 5, 0, 5);
+        this.add(btnEditar, gbc);
+
+        // Definições para btnExcluir
+        gbc.gridx = 2;
+        gbc.insets = new Insets(0, 5, 0, 0);
+        this.add(btnExcluir, gbc);
+
+        // Definições para btnSelecionar
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1;
+        gbc.insets = new Insets(5, 0, 0, 0);
+        this.add(btnSelecionar, gbc);
     }
 }
