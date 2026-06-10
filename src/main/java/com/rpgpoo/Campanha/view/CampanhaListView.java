@@ -364,7 +364,7 @@ public class CampanhaListView extends JPanel {
         this.add(btnEditarCampanha, gbc);
     }
 
-    private void estilizarComboBox(JComboBox<String> cbx) {
+    static void estilizarComboBox(JComboBox<String> cbx) {
         cbx.setBackground(AppColors.DARK);
         cbx.setForeground(AppColors.PARCHMENT);
         cbx.setFont(new Font("SansSerif", Font.PLAIN, 12));
