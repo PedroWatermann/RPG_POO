@@ -1,5 +1,6 @@
 package com.rpgpoo.Campanha.controller;
 
+import com.rpgpoo.Campanha.view.CampanhaCreateView;
 import com.rpgpoo.Campanha.view.CampanhaListView;
 import com.rpgpoo.Campanha.view.CampanhaSelectView;
 import com.rpgpoo.Gerenciador.Gerenciador;
@@ -20,7 +21,14 @@ public class CampanhaSelectController {
     }
 
     public void btnNovoClick() {
-        JOptionPane.showMessageDialog(view, "Já já abre um modal aí.", "Atenção", JOptionPane.WARNING_MESSAGE);
+        JDialog dialog = new JDialog(gerenciador, "Criar Nova Campanha", true);
+
+        CampanhaCreateView campanhaCreateView = new CampanhaCreateView(this.gerenciador);
+
+        dialog.setContentPane(campanhaCreateView);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this.gerenciador);
+        dialog.setVisible(true);
     }
 
     public void btnEditarClick() {
