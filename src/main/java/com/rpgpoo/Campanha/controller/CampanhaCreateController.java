@@ -11,5 +11,6 @@ public class CampanhaCreateController {
     public CampanhaCreateController(CampanhaCreateView view, Gerenciador gerenciador) {
         this.view = view;
         this.gerenciador = gerenciador;
+        // TODO: implementar listeners de salvamento e validação do formulário
     }
 }

@@ -1,22 +1,14 @@
 package com.rpgpoo.Campanha.view;
 
 import com.rpgpoo.Campanha.controller.CampanhaCreateController;
-import com.rpgpoo.Campanha.controller.CampanhaListController;
 import com.rpgpoo.Gerenciador.Gerenciador;
 import com.rpgpoo.utils.AppColors;
 import com.rpgpoo.utils.DarkScrollBarUI;
-import com.rpgpoo.utils.IconTextCellRender;
 import com.rpgpoo.utils.JButtonCustom;
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.ComboPopup;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import java.awt.*;
 
 public class CampanhaCreateView extends JPanel { // true = modal
@@ -82,7 +74,6 @@ public class CampanhaCreateView extends JPanel { // true = modal
         txtDescricao.setOpaque(false);
         txtDescricao.setForeground(Color.WHITE);
         txtDescricao.setCaretColor(AppColors.PARCHMENT);
-        txtDescricao.setBorder(BorderFactory.createLineBorder(AppColors.PARCHMENT));
         txtDescricao.setLineWrap(true);
         txtDescricao.setWrapStyleWord(true);
         txtDescricao.setBorder(BorderFactory.createLineBorder(AppColors.PARCHMENT, 0));
@@ -144,8 +135,6 @@ public class CampanhaCreateView extends JPanel { // true = modal
                 FontIcon.of(FontAwesomeSolid.USER_MINUS, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
 
-        this.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
-
         this.setLayout(new GridBagLayout());
         this.setBackground(AppColors.DARK);
         this.setBorder(BorderFactory.createCompoundBorder(
@@ -206,7 +195,7 @@ public class CampanhaCreateView extends JPanel { // true = modal
         gbc.insets = new Insets(0, 0, 0, 5);
         this.add(cbxMestre, gbc);
 
-        // Definições para cbxMestre
+        // Definições para cbxDadoPadrao
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 5, 0, 0);
         this.add(cbxDadoPadrao, gbc);
