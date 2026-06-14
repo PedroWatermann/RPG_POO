@@ -3,6 +3,7 @@ package com.rpgpoo.Campanha.controller;
 import com.rpgpoo.Campanha.view.CampanhaCreateView;
 import com.rpgpoo.Campanha.view.CampanhaListView;
 import com.rpgpoo.Campanha.view.CampanhaSelectView;
+import com.rpgpoo.Monstro.view.MonstroView;
 import com.rpgpoo.Gerenciador.Gerenciador;
 import com.rpgpoo.Gerenciador.TabbedView;
 import com.rpgpoo.utils.AppColors;
@@ -43,6 +44,7 @@ public class CampanhaSelectController {
 //        gerenciador.addPainel(new CampanhaListView(gerenciador), "campanhaList");
         TabbedView tabbed = new TabbedView();
         tabbed.addAba("Campanha", FontIcon.of(FontAwesomeSolid.MAP, 12, AppColors.GOLD), new CampanhaListView(gerenciador));
+        tabbed.addAba("Monstros", FontIcon.of(FontAwesomeSolid.SKULL, 12, AppColors.GOLD), new MonstroView(gerenciador));
 
         gerenciador.addPainel(tabbed, "tabbed");
         gerenciador.navegarPara("tabbed", false, "", true);
