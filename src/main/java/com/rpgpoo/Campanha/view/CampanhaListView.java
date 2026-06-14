@@ -2,17 +2,11 @@ package com.rpgpoo.Campanha.view;
 
 import com.rpgpoo.Campanha.controller.CampanhaListController;
 import com.rpgpoo.Gerenciador.Gerenciador;
-import com.rpgpoo.utils.AppColors;
-import com.rpgpoo.utils.DarkScrollBarUI;
-import com.rpgpoo.utils.IconTextCellRender;
-import com.rpgpoo.utils.JButtonCustom;
+import com.rpgpoo.utils.*;
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -55,7 +49,7 @@ public class CampanhaListView extends JPanel {
 
         lblTitulo.setIcon(FontIcon.of(FontAwesomeSolid.MAP, AppColors.ICON_LG, AppColors.GOLD));
         lblTitulo.setText(" DETALHES DA CAMPANHA");
-        lblTitulo.setFont(new Font("Serif", Font.BOLD, 18));
+        lblTitulo.setFont(new Font(Font.SERIF, Font.BOLD, 18));
         lblTitulo.setForeground(AppColors.GOLD);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -63,24 +57,24 @@ public class CampanhaListView extends JPanel {
         sepTopo.setForeground(AppColors.GOLD);
         sepTopo.setBackground(AppColors.GOLD);
 
-        lblNome.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblNome.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         lblNome.setText("Nome");
         lblNome.setHorizontalAlignment(SwingConstants.LEFT);
         lblNome.setForeground(AppColors.PARCHMENT);
 
-        txtNome.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtNome.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         txtNome.setOpaque(false);
         txtNome.setForeground(Color.WHITE);
         txtNome.setCaretColor(AppColors.PARCHMENT);
         txtNome.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
         txtNome.setPreferredSize(new Dimension(0, 28));
 
-        lblDescricao.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblDescricao.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         lblDescricao.setText("Descrição");
         lblDescricao.setHorizontalAlignment(SwingConstants.LEFT);
         lblDescricao.setForeground(AppColors.PARCHMENT);
 
-        txtDescricao.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtDescricao.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         txtDescricao.setOpaque(false);
         txtDescricao.setForeground(Color.WHITE);
         txtDescricao.setCaretColor(AppColors.PARCHMENT);
@@ -99,30 +93,30 @@ public class CampanhaListView extends JPanel {
         scrDescricao.getHorizontalScrollBar().setUI(new DarkScrollBarUI());
         scrDescricao.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        lblMestre.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblMestre.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         lblMestre.setText("Mestre");
         lblMestre.setHorizontalAlignment(SwingConstants.LEFT);
         lblMestre.setForeground(AppColors.PARCHMENT);
 
-        cbxMestre.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        cbxMestre.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         cbxMestre.setForeground(Color.WHITE);
         cbxMestre.setBackground(AppColors.DARK);
-        estilizarComboBox(cbxMestre);
+        GenericUtils.estilizarComboBox(cbxMestre);
         // Dados ficticios
         cbxMestre.addItem("Alemão");
         cbxMestre.addItem("Barela");
         cbxMestre.addItem("Laranjinha");
 
-        lblDadoPadrao.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblDadoPadrao.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         lblDadoPadrao.setText("Dado padrão");
         lblDadoPadrao.setHorizontalAlignment(SwingConstants.LEFT);
         lblDadoPadrao.setForeground(AppColors.PARCHMENT);
 
-        cbxDadoPadrao.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        cbxDadoPadrao.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         cbxDadoPadrao.setOpaque(false);
         cbxDadoPadrao.setForeground(Color.WHITE);
         cbxDadoPadrao.setBackground(AppColors.DARK);
-        estilizarComboBox(cbxDadoPadrao);
+        GenericUtils.estilizarComboBox(cbxDadoPadrao);
         // Dados ficticios
         cbxDadoPadrao.addItem("D4");
         cbxDadoPadrao.addItem("D6");
@@ -136,7 +130,7 @@ public class CampanhaListView extends JPanel {
         sepEsquerda.setForeground(AppColors.GOLD);
         sepEsquerda.setBackground(AppColors.GOLD);
 
-        lblJogadores.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblJogadores.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         lblJogadores.setText("Jogadores");
         lblJogadores.setHorizontalAlignment(SwingConstants.LEFT);
         lblJogadores.setForeground(AppColors.PARCHMENT);
@@ -160,7 +154,7 @@ public class CampanhaListView extends JPanel {
         tblJogadores.setBackground(AppColors.DARK);
         tblJogadores.setForeground(AppColors.PARCHMENT);
         tblJogadores.setSelectionBackground(AppColors.CRIMSON);
-        tblJogadores.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        tblJogadores.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         tblJogadores.setRowHeight(28);
         JTableHeader header = tblJogadores.getTableHeader();
         header.setDefaultRenderer(new DefaultTableCellRenderer() {
@@ -171,7 +165,7 @@ public class CampanhaListView extends JPanel {
                 lbl.setOpaque(true);
                 lbl.setBackground(AppColors.DARK);
                 lbl.setForeground(AppColors.GOLD);
-                lbl.setFont(new Font("SansSerif", Font.BOLD, 12));
+                lbl.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
                 lbl.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, AppColors.GOLD));
 
                 return lbl;
@@ -362,36 +356,5 @@ public class CampanhaListView extends JPanel {
         gbc.insets = new Insets(5, 5, 0, 0);
         gbc.anchor = GridBagConstraints.EAST;
         this.add(btnEditarCampanha, gbc);
-    }
-
-    private void estilizarComboBox(JComboBox<String> cbx) {
-        cbx.setBackground(AppColors.DARK);
-        cbx.setForeground(AppColors.PARCHMENT);
-        cbx.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        cbx.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
-
-        cbx.setUI(new BasicComboBoxUI() {
-            @Override
-            protected JButton createArrowButton() {
-                JButton btn = new JButton("▾");
-                btn.setBackground(AppColors.DARK);
-                btn.setForeground(AppColors.PARCHMENT);
-                btn.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-                btn.setFocusPainted(false);
-                btn.setContentAreaFilled(false);
-                return btn;
-            }
-
-            @Override
-            protected ComboPopup createPopup() {
-                BasicComboPopup popup = (BasicComboPopup) super.createPopup();
-                popup.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
-                popup.getList().setBackground(AppColors.DARK3);
-                popup.getList().setForeground(AppColors.PARCHMENT);
-                popup.getList().setSelectionBackground(AppColors.CRIMSON);
-                popup.getList().setSelectionForeground(AppColors.PARCHMENT);
-                return popup;
-            }
-        });
     }
 }

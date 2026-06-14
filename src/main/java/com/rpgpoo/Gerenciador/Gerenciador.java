@@ -10,7 +10,7 @@ public class Gerenciador extends JFrame {
     private final JPanel cardPanel = new JPanel(cardLayout);
 
     public Gerenciador() {
-        cardPanel.add(new LoginView(this), "login");;
+        cardPanel.add(new LoginView(this), "login");
         this.setContentPane(cardPanel);
         this.setTitle("Narratus RPG - Login");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
