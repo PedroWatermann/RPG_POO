@@ -27,7 +27,7 @@ public class CampanhaSelectView extends JPanel {
 
         lblTitulo.setIcon(FontIcon.of(FontAwesomeSolid.MAP, AppColors.ICON_LG, AppColors.GOLD));
         lblTitulo.setText(" MINHAS CAMPANHAS");
-        lblTitulo.setFont(new Font("Serif", Font.BOLD, 18));
+        lblTitulo.setFont(new Font(Font.SERIF, Font.BOLD, 18));
         lblTitulo.setForeground(AppColors.GOLD);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -52,7 +52,7 @@ public class CampanhaSelectView extends JPanel {
         tblCampanhas.setBackground(AppColors.DARK);
         tblCampanhas.setForeground(AppColors.PARCHMENT);
         tblCampanhas.setSelectionBackground(AppColors.CRIMSON);
-        tblCampanhas.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        tblCampanhas.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         tblCampanhas.setRowHeight(28);
 
         scrCampanhas.setViewportView(tblCampanhas);

@@ -24,11 +24,11 @@ public class JButtonCustom extends JButton {
     private Color corDaBorda;
 
     public JButtonCustom(String text, FontIcon icone) {
-        this(" " + text, Style.PRIMARY, icone);
+        this(icone != null && !text.isBlank() ? " " + text : text, Style.PRIMARY, icone);
     }
 
     public JButtonCustom(String text, Style style, FontIcon icone) {
-        super(icone != null ? " " + text : text);
+        super(icone != null && !text.isBlank() ? " " + text : text);
         this.estilo = style;
         if (icone != null) this.setIcon(icone);
         aplicarEstilo();
