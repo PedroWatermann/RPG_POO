@@ -6,6 +6,7 @@ import com.rpgpoo.Gerenciador.Gerenciador;
 import com.rpgpoo.Gerenciador.TabbedView;
 import com.rpgpoo.Item.view.ItemView;
 import com.rpgpoo.Login.view.LoginView;
+import com.rpgpoo.Personagem.view.PersonagemView;
 import com.rpgpoo.RpgLog.view.RpgLogView;
 import com.rpgpoo.utils.AppColors;
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
@@ -38,6 +39,7 @@ public class CampanhaSelectController {
 //        gerenciador.addPainel(new CampanhaListView(gerenciador), "campanhaList");
         TabbedView tabbed = new TabbedView();
         tabbed.addAba("Campanha", FontIcon.of(FontAwesomeSolid.MAP, AppColors.ICON_SM, AppColors.GOLD), new CampanhaListView(gerenciador));
+        tabbed.addAba("Personagem", FontIcon.of(FontAwesomeSolid.USER, AppColors.ICON_SM, AppColors.GOLD), new PersonagemView(gerenciador));
         tabbed.addAba("Itens", FontIcon.of(FontAwesomeSolid.SHOPPING_BAG, AppColors.ICON_SM, AppColors.GOLD), new ItemView(gerenciador));
         tabbed.addAba("Log", FontIcon.of(FontAwesomeSolid.TERMINAL, AppColors.ICON_SM, AppColors.GOLD), new RpgLogView(gerenciador));
 
