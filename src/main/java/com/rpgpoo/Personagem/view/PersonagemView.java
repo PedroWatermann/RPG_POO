@@ -16,6 +16,7 @@ import java.awt.*;
 public class PersonagemView extends JPanel {
 
     JPanel pnlFichaPersonagem = new JPanel();
+    JPanel pnlArmaInventario = new JPanel();
     JPanel pnlArmaPersonagem = new JPanel();
     JPanel pnlInventarioPersonagem = new JPanel();
 
@@ -65,7 +66,7 @@ public class PersonagemView extends JPanel {
     JLabel lblStatusVida = new JLabel();
     JLabel lblStatusAtaque = new JLabel();
     JLabel lblStatusDefesa = new JLabel();
-    JProgressBar HPAtual = new JProgressBar(0, 500);
+    JProgressBar pbrHpAtual = new JProgressBar(0, 500);
 
     // Arma equipada
     JLabel lblTituloArma = new JLabel();
@@ -87,8 +88,11 @@ public class PersonagemView extends JPanel {
     JTable tblInventario = new JTable();
     JScrollPane scrInventario = new JScrollPane();
 
-    JButton btnAdicionarInventario = new JButton();
-    JButton btnRemoverInventario = new JButton();
+    JButton btnAdicionarInventario;
+    JButton btnRemoverInventario;
+
+    JButton btnNovoPersonagem;
+    JButton btnExcluirPersonagem;
 
     public PersonagemView(Gerenciador gerenciador) {
         PersonagemController controller = new PersonagemController(this, gerenciador);
@@ -296,10 +300,19 @@ public class PersonagemView extends JPanel {
         lblStatusDefesa.setHorizontalAlignment(SwingConstants.LEFT);
 
         lblHpAtual.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        lblHpAtual.setText("Hp Atual");
+        lblHpAtual.setText("HP Atual");
         lblHpAtual.setSize(400, 150);
         lblHpAtual.setVisible(true);
         lblHpAtual.setForeground(AppColors.PARCHMENT);
+
+        pbrHpAtual.setValue(400);
+        pbrHpAtual.setString("400 / 500");
+        pbrHpAtual.setStringPainted(true);
+        pbrHpAtual.setForeground(new Color(34, 139, 34)); // verde
+        pbrHpAtual.setBackground(AppColors.DARK);
+        pbrHpAtual.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
+        pbrHpAtual.setFont(new Font("SansSerif", Font.BOLD, 12));
+        pbrHpAtual.setPreferredSize(new Dimension(0, 24));
 
         // private void atualizarCor(int vida) {
         //     if (vida > 60) {
@@ -311,11 +324,11 @@ public class PersonagemView extends JPanel {
         //     }
 
         //Arma equipada
-        lblTituloArma.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        lblTituloArma.setText("Arma Equipada");
-        lblTituloArma.setForeground(AppColors.PARCHMENT);
-        lblTituloArma.setHorizontalAlignment(SwingConstants.LEFT);
-        lblTituloArma.setPreferredSize(new Dimension(0, 28));
+        lblTituloArma.setIcon(FontIcon.of(FontAwesomeSolid.SHIELD_ALT, AppColors.ICON_LG, AppColors.GOLD));
+        lblTituloArma.setText(" ARMA EQUIPADA");
+        lblTituloArma.setFont(new Font("Serif", Font.BOLD, 18));
+        lblTituloArma.setForeground(AppColors.GOLD);
+        lblTituloArma.setHorizontalAlignment(SwingConstants.CENTER);
 
         JSeparator sepArma = new JSeparator();
         sepArma.setForeground(AppColors.GOLD);
@@ -381,10 +394,11 @@ public class PersonagemView extends JPanel {
         GenericUtils.estilizarComboBox(cbxDadoArma);
 
         // INVENTARIO
-        lblTituloInventario.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        lblTituloInventario.setText("INVENTÁRIO");
-        lblTituloInventario.setForeground(AppColors.PARCHMENT);
-        lblTituloInventario.setHorizontalAlignment(SwingConstants.LEFT);
+        lblTituloInventario.setIcon(FontIcon.of(FontAwesomeSolid.SHOPPING_BAG, AppColors.ICON_LG, AppColors.GOLD));
+        lblTituloInventario.setText(" INVENTÁRIO");
+        lblTituloInventario.setFont(new Font("Serif", Font.BOLD, 18));
+        lblTituloInventario.setForeground(AppColors.GOLD);
+        lblTituloInventario.setHorizontalAlignment(SwingConstants.CENTER);
 
         JSeparator sepInventario = new JSeparator();
         sepInventario.setForeground(AppColors.GOLD);
@@ -395,7 +409,7 @@ public class PersonagemView extends JPanel {
                 {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Amuleto do Herói", "Acessório", "Raro", 300},
                 {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Escudo", "Acessório", "Comum", 120},
         };
-        tblInventario.setModel(new DefaultTableModel(dadosTemporarios, new Object[]{"ITEM", "TIPO", "RARIDADE", "GP"}));
+        tblInventario.setModel(new DefaultTableModel(dadosTemporarios, new Object[]{"", "ITEM", "TIPO", "RARIDADE", "GP"}));
         tblInventario.setDefaultRenderer(Object.class, new IconTextCellRender());
         tblInventario.getColumnModel().getColumn(0).setMaxWidth(30);
         tblInventario.setShowVerticalLines(false);
@@ -421,7 +435,6 @@ public class PersonagemView extends JPanel {
             }
         });
 
-
         scrInventario.setViewportView(tblInventario);
         scrInventario.setPreferredSize(new Dimension(0, 150));
         scrInventario.getViewport().setBackground(AppColors.DARK);
@@ -443,31 +456,50 @@ public class PersonagemView extends JPanel {
                 FontIcon.of(FontAwesomeSolid.USER_PLUS, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
 
+        btnNovoPersonagem = new JButtonCustom(
+                "Novo",
+                JButtonCustom.Style.PRIMARY,
+                FontIcon.of(FontAwesomeSolid.USER_PLUS, AppColors.ICON_SM, AppColors.PARCHMENT)
+        );
+
+        btnExcluirPersonagem = new JButtonCustom(
+                "Excluir",
+                JButtonCustom.Style.DANGER,
+                FontIcon.of(FontAwesomeSolid.USER_MINUS, AppColors.ICON_SM, AppColors.PARCHMENT)
+        );
+
         this.setLayout(new GridBagLayout());
         this.setBackground(AppColors.DARK);
         this.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(AppColors.GOLD, 0),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+
+        pnlFichaPersonagem.setLayout(new GridBagLayout());
+        pnlFichaPersonagem.setBackground(AppColors.DARK);
+        pnlFichaPersonagem.setBorder(BorderFactory.createCompoundBorder(
+                new RoundedBorder(AppColors.GOLD, 1, 20),
+                BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
+
+        pnlArmaInventario.setLayout(new GridBagLayout());
+        pnlArmaInventario.setBackground(AppColors.DARK);
+        pnlArmaInventario.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(AppColors.GOLD, 0),
+                BorderFactory.createEmptyBorder(0, 0, 0, 0)
+        ));
+
+        pnlArmaPersonagem.setLayout(new GridBagLayout());
+        pnlArmaPersonagem.setBackground(AppColors.DARK);
+        pnlArmaPersonagem.setBorder(BorderFactory.createCompoundBorder(
+                new RoundedBorder(AppColors.GOLD, 1, 20),
                 BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
 
         pnlInventarioPersonagem.setLayout(new GridBagLayout());
         pnlInventarioPersonagem.setBackground(AppColors.DARK);
         pnlInventarioPersonagem.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(AppColors.GOLD, 1),
-                BorderFactory.createEmptyBorder(15, 20, 15, 20)
-        ));
-
-        pnlArmaPersonagem.setLayout(new GridBagLayout());
-        pnlArmaPersonagem.setBackground(AppColors.DARK);
-        pnlArmaPersonagem.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(AppColors.GOLD, 0),
-                BorderFactory.createEmptyBorder(15, 20, 15, 20)
-        ));
-
-        pnlFichaPersonagem.setLayout(new GridBagLayout());
-        pnlFichaPersonagem.setBackground(AppColors.DARK);
-        pnlFichaPersonagem.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(AppColors.GOLD, 0),
+                new RoundedBorder(AppColors.GOLD, 1, 20),
                 BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
 
@@ -557,7 +589,11 @@ public class PersonagemView extends JPanel {
         pnlFichaPersonagem.add(cbxCampanha, gbcPnlFichaPersonagem);
 
         JPanel pnlAtributo = new JPanel(new GridBagLayout());
-        pnlAtributo.setOpaque(false);
+        pnlAtributo.setBackground(AppColors.DARK);
+        pnlAtributo.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(AppColors.GOLD, 0),
+                BorderFactory.createEmptyBorder(10, 0, 5, 0)
+        ));
 
         GridBagConstraints gbcPnlAtributo = new GridBagConstraints();
         gbcPnlAtributo.gridy = 0;
@@ -588,14 +624,15 @@ public class PersonagemView extends JPanel {
         gbcPnlFichaPersonagem.gridx = 0;
         gbcPnlFichaPersonagem.gridy = 8;
         gbcPnlFichaPersonagem.gridwidth = 6;
-        gbcPnlFichaPersonagem.insets = new Insets(5, 0, 5, 0);
+        gbcPnlFichaPersonagem.insets = new Insets(0, 0, 0, 0);
         pnlFichaPersonagem.add(pnlAtributo, gbcPnlFichaPersonagem);
 
+        //region Atributos Base
         // Adiciona painel para colocar atributo base de FOR
         JPanel pnlAtrFor = new JPanel(new GridBagLayout());
         pnlAtrFor.setOpaque(false);
         pnlAtrFor.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(AppColors.GOLD, 2),
+                BorderFactory.createLineBorder(AppColors.GOLD, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         GridBagConstraints gbcPnlAtrFor = new GridBagConstraints();
@@ -613,7 +650,7 @@ public class PersonagemView extends JPanel {
         JPanel pnlAtrDes = new JPanel(new GridBagLayout());
         pnlAtrDes.setOpaque(false);
         pnlAtrDes.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(AppColors.GOLD, 2),
+                BorderFactory.createLineBorder(AppColors.GOLD, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         GridBagConstraints gbcPnlAtrDes = new GridBagConstraints();
@@ -631,7 +668,7 @@ public class PersonagemView extends JPanel {
         JPanel pnlAtrCon = new JPanel(new GridBagLayout());
         pnlAtrCon.setOpaque(false);
         pnlAtrCon.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(AppColors.GOLD, 2),
+                BorderFactory.createLineBorder(AppColors.GOLD, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         GridBagConstraints gbcPnlAtrCon = new GridBagConstraints();
@@ -649,7 +686,7 @@ public class PersonagemView extends JPanel {
         JPanel pnlAtrInt = new JPanel(new GridBagLayout());
         pnlAtrInt.setOpaque(false);
         pnlAtrInt.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(AppColors.GOLD, 2),
+                BorderFactory.createLineBorder(AppColors.GOLD, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         GridBagConstraints gbcPnlAtrInt = new GridBagConstraints();
@@ -667,7 +704,7 @@ public class PersonagemView extends JPanel {
         JPanel pnlAtrSab = new JPanel(new GridBagLayout());
         pnlAtrSab.setOpaque(false);
         pnlAtrSab.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(AppColors.GOLD, 2),
+                BorderFactory.createLineBorder(AppColors.GOLD, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         GridBagConstraints gbcPnlAtrSab = new GridBagConstraints();
@@ -685,7 +722,7 @@ public class PersonagemView extends JPanel {
         JPanel pnlAtrCar = new JPanel(new GridBagLayout());
         pnlAtrCar.setOpaque(false);
         pnlAtrCar.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(AppColors.GOLD, 2),
+                BorderFactory.createLineBorder(AppColors.GOLD, 1),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         GridBagConstraints gbcPnlAtrCar = new GridBagConstraints();
@@ -698,20 +735,25 @@ public class PersonagemView extends JPanel {
         pnlAtrCar.add(lblCar, gbcPnlAtrCar);
         gbcPnlAtrCar.gridy = 1;
         pnlAtrCar.add(lblAtrCar, gbcPnlAtrCar);
+        //endregion
 
         JPanel pnlAtrBase = new JPanel(new GridBagLayout());
-        pnlAtrBase.setOpaque(false);
+        pnlAtrBase.setBackground(AppColors.DARK);
+        pnlAtrBase.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(AppColors.GOLD, 0),
+                BorderFactory.createEmptyBorder(5, 0, 5, 0)
+        ));
         GridBagConstraints gbcPnlAtrBase = new GridBagConstraints();
         gbcPnlAtrBase.gridx = 0;
         gbcPnlAtrBase.gridy = 9;
         gbcPnlAtrBase.gridwidth = 1; //2
         gbcPnlAtrBase.weightx = 0.17; // 0.33
         gbcPnlAtrBase.fill = GridBagConstraints.HORIZONTAL;
-        gbcPnlAtrBase.insets = new Insets(5, 0, 5, 5);
+        gbcPnlAtrBase.insets = new Insets(0, 0, 0, 5);
         pnlAtrBase.add(pnlAtrFor, gbcPnlAtrBase);
 
         gbcPnlAtrBase.gridx = 1;
-        gbcPnlAtrBase.insets = new Insets(5, 5, 5, 5);
+        gbcPnlAtrBase.insets = new Insets(0, 5, 0, 5);
         pnlAtrBase.add(pnlAtrDes, gbcPnlAtrBase);
 
         gbcPnlAtrBase.gridx = 2;
@@ -724,7 +766,7 @@ public class PersonagemView extends JPanel {
         pnlAtrBase.add(pnlAtrSab, gbcPnlAtrBase);
 
         gbcPnlAtrBase.gridx = 5;
-        gbcPnlAtrBase.insets = new Insets(5, 5, 5, 0);
+        gbcPnlAtrBase.insets = new Insets(0, 5, 0, 0);
         pnlAtrBase.add(pnlAtrCar, gbcPnlAtrBase);
 
         gbcPnlFichaPersonagem.gridx = 0;
@@ -735,7 +777,11 @@ public class PersonagemView extends JPanel {
 
         // pnl de titulo do status combate
         JPanel pnlStatusCombate = new JPanel(new GridBagLayout());
-        pnlStatusCombate.setOpaque(false);
+        pnlStatusCombate.setBackground(AppColors.DARK);
+        pnlStatusCombate.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(AppColors.GOLD, 0),
+                BorderFactory.createEmptyBorder(10, 0, 5, 0)
+        ));
 
         GridBagConstraints PnlStatusCombate = new GridBagConstraints();
         PnlStatusCombate.gridy = 0;
@@ -765,7 +811,7 @@ public class PersonagemView extends JPanel {
         gbcPnlFichaPersonagem.gridx = 0;
         gbcPnlFichaPersonagem.gridy = 11;
         gbcPnlFichaPersonagem.gridwidth = 6;
-        gbcPnlFichaPersonagem.insets = new Insets(5, 0, 5, 0);
+        gbcPnlFichaPersonagem.insets = new Insets(10, 0, 5, 0);
         pnlFichaPersonagem.add(pnlStatusCombate, gbcPnlFichaPersonagem);
 
         //Panel de vida
@@ -830,115 +876,167 @@ public class PersonagemView extends JPanel {
         gbcPnlStatus.gridwidth = 1;
         gbcPnlStatus.weightx = 0.33;
         gbcPnlStatus.fill = GridBagConstraints.HORIZONTAL;
-        gbcPnlStatus.insets = new Insets(5, 0, 5, 5);
+        gbcPnlStatus.insets = new Insets(0, 0, 0, 5);
         pnlStatus.add(pnlVidaStatus, gbcPnlStatus);
 
         gbcPnlStatus.gridx = 1;
-        gbcPnlStatus.insets = new Insets(5, 5, 5, 5);
+        gbcPnlStatus.insets = new Insets(0, 5, 0, 5);
         pnlStatus.add(pnlAtaqueStatus, gbcPnlStatus);
 
         gbcPnlStatus.gridx = 2;
-        gbcPnlStatus.insets = new Insets(5, 5, 5, 0);
+        gbcPnlStatus.insets = new Insets(0, 5, 0, 0);
         pnlStatus.add(pnlDefesaStatus, gbcPnlStatus);
 
         gbcPnlFichaPersonagem.gridy = 12;
+        gbcPnlFichaPersonagem.insets = new Insets(5, 0, 5, 0);
         pnlFichaPersonagem.add(pnlStatus, gbcPnlFichaPersonagem);
 
         //Hp atual
         gbcPnlFichaPersonagem.gridy = 13;
-        gbcPnlFichaPersonagem.gridwidth = 3;
-        gbcPnlFichaPersonagem.weightx = 0.5;
-        gbcPnlFichaPersonagem.insets = new Insets(5, 0, 5, 5);
-        pnlFichaPersonagem.add(lblHpAtual, gbcPnlFichaPersonagem);
-
-        //Barra de Hp
-        HPAtual.setValue(400);
-        HPAtual.setString("400 / 500");
-        HPAtual.setStringPainted(true);
-        HPAtual.setForeground(new Color(34, 139, 34)); // verde
-        HPAtual.setBackground(AppColors.DARK);
-        HPAtual.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
-        HPAtual.setFont(new Font("SansSerif", Font.BOLD, 12));
-        HPAtual.setPreferredSize(new Dimension(0, 24));
-
-        // lblHpAtual já está no gridy = 13
-        // adiciona a barra no gridy = 14
-        gbcPnlFichaPersonagem.gridy = 14;
         gbcPnlFichaPersonagem.gridx = 0;
         gbcPnlFichaPersonagem.gridwidth = 6;
         gbcPnlFichaPersonagem.weightx = 1.0;
-        gbcPnlFichaPersonagem.fill = GridBagConstraints.HORIZONTAL;
-        gbcPnlFichaPersonagem.insets = new Insets(0, 0, 5, 0);
-        pnlFichaPersonagem.add(HPAtual, gbcPnlFichaPersonagem);
+        gbcPnlFichaPersonagem.insets = new Insets(5, 0, 0, 0);
+        pnlFichaPersonagem.add(lblHpAtual, gbcPnlFichaPersonagem);
 
+        gbcPnlFichaPersonagem.gridy = 14;
+        gbcPnlFichaPersonagem.insets = new Insets(0, 0, 0, 0);
+        pnlFichaPersonagem.add(pbrHpAtual, gbcPnlFichaPersonagem);
 
+        // Definições para pnlArmaEquipada
+        GridBagConstraints gbcPnlArmaPersonagem = new GridBagConstraints();
+        gbcPnlArmaPersonagem.gridy = 0;
+        gbcPnlArmaPersonagem.gridx = 0;
+        gbcPnlArmaPersonagem.gridwidth = 3;
+        gbcPnlArmaPersonagem.weightx = 1.0;
+        gbcPnlArmaPersonagem.fill = GridBagConstraints.HORIZONTAL;
+        gbcPnlArmaPersonagem.insets = new Insets(0, 0, 5, 0);
+        pnlArmaPersonagem.add(lblTituloArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridy = 1;
+        gbcPnlArmaPersonagem.insets = new Insets(0, 0, 5, 0);
+        pnlArmaPersonagem.add(sepArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridy = 2;
+        gbcPnlArmaPersonagem.insets = new Insets(5, 0, 0, 0);
+        pnlArmaPersonagem.add(lblNomeArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridy = 3;
+        gbcPnlArmaPersonagem.insets = new Insets(0, 0, 5, 0);
+        pnlArmaPersonagem.add(txtNomeArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridy = 4;
+        gbcPnlArmaPersonagem.weightx = 0.33;
+        gbcPnlArmaPersonagem.gridwidth = 1;
+        gbcPnlArmaPersonagem.insets = new Insets(5, 0, 0, 5);
+        pnlArmaPersonagem.add(lblDanoArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridx = 1;
+        gbcPnlArmaPersonagem.insets = new Insets(5, 5, 0, 5);
+        pnlArmaPersonagem.add(lblAlcanceArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridx = 2;
+        gbcPnlArmaPersonagem.insets = new Insets(5, 5, 0, 0);
+        pnlArmaPersonagem.add(lblDurabilidadeArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridy = 5;
+        gbcPnlArmaPersonagem.gridx = 0;
+        gbcPnlArmaPersonagem.insets = new Insets(0, 0, 5, 5);
+        pnlArmaPersonagem.add(txtDanoArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridx = 1;
+        gbcPnlArmaPersonagem.insets = new Insets(0, 5, 5, 5);
+        pnlArmaPersonagem.add(txtAlcanceArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridx = 2;
+        gbcPnlArmaPersonagem.insets = new Insets(0, 5, 5, 0);
+        pnlArmaPersonagem.add(txtDurabilidadeArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridy = 6;
+        gbcPnlArmaPersonagem.gridx = 0;
+        gbcPnlArmaPersonagem.gridwidth = 3;
+        gbcPnlArmaPersonagem.insets = new Insets(5, 0, 0, 0);
+        pnlArmaPersonagem.add(lblDadoArma, gbcPnlArmaPersonagem);
 
+        gbcPnlArmaPersonagem.gridy = 7;
+        gbcPnlArmaPersonagem.insets = new Insets(0, 0, 0, 0);
+        pnlArmaPersonagem.add(cbxDadoArma, gbcPnlArmaPersonagem);
 
+        // Definições para pnlInventarioPersonagem
+        GridBagConstraints gbcPnlInventarioPersonagem = new GridBagConstraints();
+        gbcPnlInventarioPersonagem.gridy = 0;
+        gbcPnlInventarioPersonagem.gridx = 0;
+        gbcPnlInventarioPersonagem.gridwidth = 2;
+        gbcPnlInventarioPersonagem.weightx = 1.0;
+        gbcPnlInventarioPersonagem.weighty = 0.0;
+        gbcPnlInventarioPersonagem.fill = GridBagConstraints.HORIZONTAL;
+        gbcPnlInventarioPersonagem.insets = new Insets(0, 0, 5, 0);
+        pnlInventarioPersonagem.add(lblTituloInventario, gbcPnlInventarioPersonagem);
 
+        gbcPnlInventarioPersonagem.gridy = 1;
+        gbcPnlInventarioPersonagem.insets = new Insets(0, 0, 5, 0);
+        pnlInventarioPersonagem.add(sepInventario, gbcPnlInventarioPersonagem);
 
+        gbcPnlInventarioPersonagem.gridy = 2;
+        gbcPnlInventarioPersonagem.weighty = 1.0;
+        gbcPnlInventarioPersonagem.fill = GridBagConstraints.BOTH;
+        gbcPnlInventarioPersonagem.insets = new Insets(5, 5, 5, 5);
+        pnlInventarioPersonagem.add(scrInventario, gbcPnlInventarioPersonagem);
 
+        gbcPnlInventarioPersonagem.gridy = 3;
+        gbcPnlInventarioPersonagem.weighty = 0.0;
+        gbcPnlInventarioPersonagem.fill = GridBagConstraints.HORIZONTAL;
+        gbcPnlInventarioPersonagem.gridwidth = 1;
+        gbcPnlInventarioPersonagem.weightx = 0.5;
+        gbcPnlInventarioPersonagem.insets = new Insets(5, 0, 0, 5);
+        pnlInventarioPersonagem.add(btnAdicionarInventario, gbcPnlInventarioPersonagem);
 
+        gbcPnlInventarioPersonagem.gridx = 1;
+        gbcPnlInventarioPersonagem.insets = new Insets(5, 5, 0, 0);
+        pnlInventarioPersonagem.add(btnRemoverInventario, gbcPnlInventarioPersonagem);
 
+        // Definições para pnlArmaInventario
+        GridBagConstraints gbcPnlArmaInventario = new GridBagConstraints();
+        gbcPnlArmaInventario.gridy = 0;
+        gbcPnlArmaInventario.gridx = 0;
+        gbcPnlArmaInventario.gridwidth = 1;
+        gbcPnlArmaInventario.gridheight = 1;
+        gbcPnlArmaInventario.weightx = 1.0;
+        gbcPnlArmaInventario.weighty = 1.0;
+        gbcPnlArmaInventario.fill = GridBagConstraints.BOTH;
+        gbcPnlArmaInventario.insets = new Insets(0, 0, 5, 0);
+        pnlArmaInventario.add(pnlArmaPersonagem, gbcPnlArmaInventario);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        gbcPnlArmaInventario.gridy = 1;
+        gbcPnlArmaInventario.insets = new Insets(5, 0, 0, 0);
+        pnlArmaInventario.add(pnlInventarioPersonagem, gbcPnlArmaInventario);
 
         // Definições para a tela de personagem
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridy = 8;
+        gbc.gridy = 0;
         gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.gridheight = 1;
+        gbc.gridwidth = 1;
         gbc.weighty = 1.0;
-        gbc.weightx = 1.0;
+        gbc.weightx = 0.5;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(0, 0, 6, 0);
+        gbc.insets = new  Insets(0, 0, 5, 5);
         this.add(pnlFichaPersonagem, gbc);
+
+        // Definições para o lado esquerdo da tela
+        gbc.gridx = 1;
+        gbc.insets = new  Insets(0, 5, 5, 0);
+        this.add(pnlArmaInventario, gbc);
+
+        // Definições para os botões do rodapé
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weighty = 0.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new  Insets(5, 0, 0, 5);
+        this.add(btnNovoPersonagem, gbc);
+
+        gbc.gridx = 1;
+        gbc.insets = new  Insets(5, 5, 0, 0);
+        this.add(btnExcluirPersonagem, gbc);
     }
 }

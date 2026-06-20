@@ -39,5 +39,10 @@ public class GenericUtils {
                 return popup;
             }
         });
+
+        Dimension pref = cbx.getPreferredSize();
+        Dimension fixo = new Dimension(pref.width, 28);
+        cbx.setPreferredSize(fixo);
+        cbx.setMinimumSize(fixo);
     }
 }
