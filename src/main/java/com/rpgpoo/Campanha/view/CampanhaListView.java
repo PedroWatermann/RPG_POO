@@ -7,6 +7,9 @@ import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -356,5 +359,36 @@ public class CampanhaListView extends JPanel {
         gbc.insets = new Insets(5, 5, 0, 0);
         gbc.anchor = GridBagConstraints.EAST;
         this.add(btnEditarCampanha, gbc);
+    }
+
+    static void estilizarComboBox(JComboBox<String> cbx) {
+        cbx.setBackground(AppColors.DARK);
+        cbx.setForeground(AppColors.PARCHMENT);
+        cbx.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        cbx.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
+
+        cbx.setUI(new BasicComboBoxUI() {
+            @Override
+            protected JButton createArrowButton() {
+                JButton btn = new JButton("▾");
+                btn.setBackground(AppColors.DARK);
+                btn.setForeground(AppColors.PARCHMENT);
+                btn.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
+                btn.setFocusPainted(false);
+                btn.setContentAreaFilled(false);
+                return btn;
+            }
+
+            @Override
+            protected ComboPopup createPopup() {
+                BasicComboPopup popup = (BasicComboPopup) super.createPopup();
+                popup.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
+                popup.getList().setBackground(AppColors.DARK3);
+                popup.getList().setForeground(AppColors.PARCHMENT);
+                popup.getList().setSelectionBackground(AppColors.CRIMSON);
+                popup.getList().setSelectionForeground(AppColors.PARCHMENT);
+                return popup;
+            }
+        });
     }
 }

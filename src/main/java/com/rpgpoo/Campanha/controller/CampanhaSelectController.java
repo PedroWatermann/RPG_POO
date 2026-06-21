@@ -1,7 +1,9 @@
 package com.rpgpoo.Campanha.controller;
 
+import com.rpgpoo.Campanha.view.CampanhaCreateView;
 import com.rpgpoo.Campanha.view.CampanhaListView;
 import com.rpgpoo.Campanha.view.CampanhaSelectView;
+import com.rpgpoo.Monstro.view.MonstroView;
 import com.rpgpoo.Gerenciador.Gerenciador;
 import com.rpgpoo.Gerenciador.TabbedView;
 import com.rpgpoo.Item.view.ItemView;
@@ -24,7 +26,14 @@ public class CampanhaSelectController {
     }
 
     public void btnNovoClick() {
-        JOptionPane.showMessageDialog(view, "Já já abre um modal aí.", "Atenção", JOptionPane.WARNING_MESSAGE);
+        JDialog dialog = new JDialog(gerenciador, "Criar Nova Campanha", true);
+
+        CampanhaCreateView campanhaCreateView = new CampanhaCreateView(this.gerenciador);
+
+        dialog.setContentPane(campanhaCreateView);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this.gerenciador);
+        dialog.setVisible(true);
     }
 
     public void btnEditarClick() {
@@ -38,6 +47,8 @@ public class CampanhaSelectController {
     public void btnSelecionarClick() {
 //        gerenciador.addPainel(new CampanhaListView(gerenciador), "campanhaList");
         TabbedView tabbed = new TabbedView();
+        tabbed.addAba("Campanha", FontIcon.of(FontAwesomeSolid.MAP, 12, AppColors.GOLD), new CampanhaListView(gerenciador));
+        tabbed.addAba("Monstros", FontIcon.of(FontAwesomeSolid.SKULL, 12, AppColors.GOLD), new MonstroView(gerenciador));
         tabbed.addAba("Campanha", FontIcon.of(FontAwesomeSolid.MAP, AppColors.ICON_SM, AppColors.GOLD), new CampanhaListView(gerenciador));
         tabbed.addAba("Personagem", FontIcon.of(FontAwesomeSolid.USER, AppColors.ICON_SM, AppColors.GOLD), new PersonagemView(gerenciador));
         tabbed.addAba("Itens", FontIcon.of(FontAwesomeSolid.SHOPPING_BAG, AppColors.ICON_SM, AppColors.GOLD), new ItemView(gerenciador));

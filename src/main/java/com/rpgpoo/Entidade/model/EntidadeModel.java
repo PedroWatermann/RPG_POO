@@ -40,6 +40,7 @@ public abstract class EntidadeModel {
     }
 
     public void setNivel(int nivel) {
+        if (nivel < 0) throw new IllegalArgumentException("Nível não pode ser negativo");
         this.nivel = nivel;
     }
 
@@ -48,6 +49,7 @@ public abstract class EntidadeModel {
     }
 
     public void setAtaque(int ataque) {
+        if (ataque < 0) throw new IllegalArgumentException("Ataque não pode ser negativo");
         this.ataque = ataque;
     }
 
@@ -56,6 +58,7 @@ public abstract class EntidadeModel {
     }
 
     public void setVida(int vida) {
+        if (vida < 0) throw new IllegalArgumentException("Vida não pode ser negativa");
         this.vida = vida;
     }
 
@@ -64,6 +67,7 @@ public abstract class EntidadeModel {
     }
 
     public void setDefesa(int defesa) {
+        if (defesa < 0) throw new IllegalArgumentException("Defesa não pode ser negativa");
         this.defesa = defesa;
     }
 
@@ -117,6 +121,7 @@ public abstract class EntidadeModel {
     }
 
     public void setDt(int dt) {
+        if (dt < 0) throw new IllegalArgumentException("DT não pode ser negativo");
         this.dt = dt;
     }
     //endregion
