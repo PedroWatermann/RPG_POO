@@ -1,8 +1,18 @@
 package com.rpgpoo.Atributo.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "atributo")
 public class AtributoModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false)
     private int modificador;
 
     //region Getters e Setters
@@ -27,14 +37,10 @@ public class AtributoModel {
     }
     //endregion
 
-    //Construtor
+    protected AtributoModel() {}
+
     public AtributoModel(String nome, int modificador) {
-        gerarId();
         this.setNome(nome);
         this.setModificador(modificador);
-    }
-
-    private void gerarId() {
-        this.id = 1;
     }
 }

@@ -4,12 +4,19 @@ import com.rpgpoo.Arma.model.ArmaModel;
 import com.rpgpoo.Entidade.model.EntidadeModel;
 import com.rpgpoo.Item.model.ItemModel;
 import com.rpgpoo.Raca.model.RacaModel;
+import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "monstro")
 public class MonstroModel extends EntidadeModel {
+    // TODO: trocar @Transient por @OneToMany quando ItemModel for anotada
+    @Transient
     private List<ItemModel> loot;
+
+    // TODO: trocar @Transient por @ManyToOne quando RacaModel for anotada
+    @Transient
     private RacaModel raca;
 
     //region Getters e Setters
@@ -37,6 +44,8 @@ public class MonstroModel extends EntidadeModel {
     //endregion
 
     //Construtor
+    protected MonstroModel() {}
+
     public MonstroModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, List<ItemModel> loot, RacaModel raca, int dt) {
         super(nome, nivel, ataque, vida, defesa, arma, dt);
         this.loot = loot;

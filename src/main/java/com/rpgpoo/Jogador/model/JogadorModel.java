@@ -1,23 +1,30 @@
 package com.rpgpoo.Jogador.model;
 
 import com.rpgpoo.Personagem.model.PersonagemModel;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "jogador")
 public class JogadorModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false, unique = true)
     private String nome;
+
+    @Column(nullable = false)
     private String senha;
-    private List<PersonagemModel> personagens;
+
+    @OneToMany(mappedBy = "jogador", cascade = CascadeType.ALL)
+    private List<PersonagemModel> personagens = new ArrayList<>();
 
     //region Getters e Setters
     public int  getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -40,26 +47,19 @@ public class JogadorModel {
         return personagens;
     }
 
-    public void setPersonagens(List<PersonagemModel> personagens) {
-        if (personagens != null && !personagens.isEmpty())
-            this.personagens = personagens;
-    }
-
-    public void setPersonagens(PersonagemModel personagem) {
-        if (personagem != null)
-            this.personagens.add(personagem);
+    public void adicionarPersonagem(PersonagemModel personagem) {
+        if (personagem != null) {
+            personagens.add(personagem);
+            personagem.setJogador(this);
+        }
     }
     //endregion
 
-    //Construtor
+    protected JogadorModel() {}
+
     public JogadorModel(String nome, String senha) {
-        gerarId();
         this.setNome(nome);
         this.setSenha(senha);
         this.personagens = new ArrayList<>();
-    }
-
-    private void gerarId() {
-        this.id = 1;
     }
 }

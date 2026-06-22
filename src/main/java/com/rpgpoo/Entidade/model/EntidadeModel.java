@@ -2,21 +2,47 @@ package com.rpgpoo.Entidade.model;
 
 import com.rpgpoo.Arma.model.ArmaModel;
 import com.rpgpoo.Campanha.model.CampanhaModel;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "entidade")
 public abstract class EntidadeModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false)
     private int nivel;
+
+    @Column(nullable = false)
     private int ataque;
+
+    @Column(nullable = false)
     private int vida;
+
+    @Column(nullable = false)
     private int defesa;
-    private ArmaModel arma;
-    private List<CampanhaModel> campanhas;
-    private CampanhaModel campanhaAtual;
+
+    @Column(nullable = false)
     private int dt;
+
+    // TODO: trocar @Transient por @ManyToOne quando ArmaModel for anotada
+    @Transient
+    private ArmaModel arma;
+
+    // TODO: trocar @Transient por @ManyToMany quando CampanhaModel for anotada
+    @Transient
+    private List<CampanhaModel> campanhas;
+
+    @Transient
+    private CampanhaModel campanhaAtual;
 
     //region Getters e Setters
     public int getId() {
@@ -127,6 +153,8 @@ public abstract class EntidadeModel {
     //endregion
 
     //Construtor
+    protected EntidadeModel() {}
+
     public EntidadeModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, int dt) {
         gerarId();
         this.setNome(nome);

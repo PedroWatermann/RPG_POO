@@ -7,16 +7,34 @@ import com.rpgpoo.Entidade.model.EntidadeModel;
 import com.rpgpoo.Item.model.ItemModel;
 import com.rpgpoo.Jogador.model.JogadorModel;
 import com.rpgpoo.Raca.model.RacaModel;
+import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "personagem")
 public class PersonagemModel extends EntidadeModel {
+    // TODO: trocar @Transient por @ManyToOne quando ClasseModel for anotada
+    @Transient
     private ClasseModel classe;
+
+    // TODO: trocar @Transient por @OneToMany quando ItemModel for anotada
+    @Transient
     private List<ItemModel> itens;
+
+    @ManyToOne
+    @JoinColumn(name = "jogador_id")
     private JogadorModel jogador;
+
+    // TODO: trocar @Transient por @ManyToOne quando RacaModel for anotada
+    @Transient
     private RacaModel raca;
+
+    @Column(nullable = false)
     private double dinheiro;
+
+    @ManyToOne
+    @JoinColumn(name = "atributo_id")
     private AtributoModel atributo;
 
     //region Getters e Setters
@@ -70,6 +88,8 @@ public class PersonagemModel extends EntidadeModel {
     //endregion
 
     //Construtor
+    protected PersonagemModel() {}
+
     public PersonagemModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, ClasseModel classe, List<ItemModel> itens, JogadorModel jogador, RacaModel raca, double dinheiro, AtributoModel atributo, int dt) {
         super(nome, nivel, ataque, vida, defesa, arma, dt);
         this.setClasse(classe);
