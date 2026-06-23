@@ -14,20 +14,24 @@ import java.util.List;
 @Entity
 @Table(name = "personagem")
 public class PersonagemModel extends EntidadeModel {
-    // TODO: trocar @Transient por @ManyToOne quando ClasseModel for anotada
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "classe_id")
     private ClasseModel classe;
 
-    // TODO: trocar @Transient por @OneToMany quando ItemModel for anotada
-    @Transient
+    @ManyToMany
+    @JoinTable(
+            name = "personagem_item",
+            joinColumns = @JoinColumn(name = "personagem_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
     private List<ItemModel> itens;
 
     @ManyToOne
     @JoinColumn(name = "jogador_id")
     private JogadorModel jogador;
 
-    // TODO: trocar @Transient por @ManyToOne quando RacaModel for anotada
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "raca_id")
     private RacaModel raca;
 
     @Column(nullable = false)

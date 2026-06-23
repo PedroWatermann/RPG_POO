@@ -1,29 +1,37 @@
 package com.rpgpoo.Raca.model;
 
 import com.rpgpoo.Atributo.model.AtributoModel;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "raca")
 public class RacaModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false)
     private String nome;
+
+    @ManyToOne
+    @JoinColumn(name = "atributo_id")
     private AtributoModel atributo;
 
-    //region Getters e Setters
-    public String getNome() {
-        return nome;
-    }
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    public AtributoModel getAtributo() {
-        return atributo;
-    }
-    public void setAtributo(AtributoModel atributo) {
-        this.atributo = atributo;
-    }
-    //endregion
+    protected RacaModel() {}
 
-    //Construtor
     public RacaModel(String nome, AtributoModel atributo) {
         this.setNome(nome);
         this.setAtributo(atributo);
     }
+
+    //region Getters e Setters
+    public int getId() { return id; }
+
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+
+    public AtributoModel getAtributo() { return atributo; }
+    public void setAtributo(AtributoModel atributo) { this.atributo = atributo; }
+    //endregion
 }

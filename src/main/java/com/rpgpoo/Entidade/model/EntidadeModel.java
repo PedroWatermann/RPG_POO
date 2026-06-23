@@ -33,24 +33,21 @@ public abstract class EntidadeModel {
     @Column(nullable = false)
     private int dt;
 
-    // TODO: trocar @Transient por @ManyToOne quando ArmaModel for anotada
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "arma_id")
     private ArmaModel arma;
 
-    // TODO: trocar @Transient por @ManyToMany quando CampanhaModel for anotada
+    // Deixar transiente para não gerar inconsistência nos dados. Validar se é possível remover
     @Transient
     private List<CampanhaModel> campanhas;
 
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "campanha_atual_id")
     private CampanhaModel campanhaAtual;
 
     //region Getters e Setters
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -156,7 +153,6 @@ public abstract class EntidadeModel {
     protected EntidadeModel() {}
 
     public EntidadeModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, int dt) {
-        gerarId();
         this.setNome(nome);
         this.setNivel(nivel);
         this.setAtaque(ataque);
@@ -169,8 +165,4 @@ public abstract class EntidadeModel {
     public abstract int atacar(int dtAlvo);
 
     public abstract void defender(int danoRecebido);
-
-    private void gerarId() {
-        this.id = 1;
-    }
 }

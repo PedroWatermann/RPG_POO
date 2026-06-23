@@ -11,12 +11,16 @@ import java.util.List;
 @Entity
 @Table(name = "monstro")
 public class MonstroModel extends EntidadeModel {
-    // TODO: trocar @Transient por @OneToMany quando ItemModel for anotada
-    @Transient
+    @ManyToMany
+    @JoinTable(
+            name = "monstro_loot",
+            joinColumns = @JoinColumn(name = "monstro_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
     private List<ItemModel> loot;
 
-    // TODO: trocar @Transient por @ManyToOne quando RacaModel for anotada
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "raca_id")
     private RacaModel raca;
 
     //region Getters e Setters

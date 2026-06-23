@@ -1,66 +1,51 @@
 package com.rpgpoo.Classe.model;
 
 import com.rpgpoo.Enum.TipoArmaEnum;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "classe")
 public class ClasseModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false)
     private String nome;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TipoArmaEnum tipoArma;
+
+    @Column(nullable = false)
     private int multiplicadorDano;
+
+    @Column(nullable = false)
     private int multiplicadorDefesa;
 
-    //region Getters e Setters
-    public int getId() {
-        return this.id;
-    }
+    protected ClasseModel() {}
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return this.nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public TipoArmaEnum getTipoArma() {
-        return this.tipoArma;
-    }
-
-    public void setTipoArma(TipoArmaEnum tipoArma) {
-        this.tipoArma = tipoArma;
-    }
-
-    public int getMultiplicadorDano() {
-        return this.multiplicadorDano;
-    }
-
-    public void setMultiplicadorDano(int multiplicador) {
-        this.multiplicadorDano = multiplicador;
-    }
-
-    public int getMultiplicadorDefesa() {
-        return this.multiplicadorDefesa;
-    }
-
-    public void setMultiplicadorDefesa(int multiplicador) {
-        this.multiplicadorDefesa = multiplicador;
-    }
-    //endregion
-
-    //Construtor
     public ClasseModel(String nome, TipoArmaEnum tipoArma, int multiplicadorDano, int multiplicadorDefesa) {
-        gerarId();
         this.setNome(nome);
         this.setTipoArma(tipoArma);
         this.setMultiplicadorDano(multiplicadorDano);
         this.setMultiplicadorDefesa(multiplicadorDefesa);
     }
 
-    private void gerarId() {
-        this.id = 1;
-    }
+    //region Getters e Setters
+    public int getId() { return this.id; }
+
+    public String getNome() { return this.nome; }
+    public void setNome(String nome) { this.nome = nome; }
+
+    public TipoArmaEnum getTipoArma() { return this.tipoArma; }
+    public void setTipoArma(TipoArmaEnum tipoArma) { this.tipoArma = tipoArma; }
+
+    public int getMultiplicadorDano() { return this.multiplicadorDano; }
+    public void setMultiplicadorDano(int multiplicador) { this.multiplicadorDano = multiplicador; }
+
+    public int getMultiplicadorDefesa() { return this.multiplicadorDefesa; }
+    public void setMultiplicadorDefesa(int multiplicador) { this.multiplicadorDefesa = multiplicador; }
+    //endregion
 }
