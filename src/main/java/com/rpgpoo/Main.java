@@ -1,42 +1,66 @@
 package com.rpgpoo;
 
-import com.rpgpoo.Atributo.model.AtributoModel;
 import com.rpgpoo.Gerenciador.Gerenciador;
-import com.rpgpoo.Jogador.model.JogadorModel;
-import com.rpgpoo.Monstro.model.MonstroModel;
-import com.rpgpoo.Personagem.model.PersonagemModel;
 import com.rpgpoo.utils.JpaUtil;
 import jakarta.persistence.EntityManager;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
 
 public class Main {
+
     static void main() {
-        try (EntityManager em = JpaUtil.getEntityManager()) {
-            em.getTransaction().begin();
+        SwingUtilities.invokeLater(Main::iniciar);
+    }
 
-            JogadorModel jogador = new JogadorModel("Barela", "senha123");
-            AtributoModel atributoForca = new AtributoModel("Força", 4);
+    private static void iniciar() {
+        JFrame splash = criarSplash();
+        splash.setVisible(true);
 
-            PersonagemModel personagem = new PersonagemModel(
-                    "Thorin, o Forte", 1, 10, 100, 5,
-                    null, null, null, jogador, null, 50.0, atributoForca, 12
-            );
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() {
+                try (EntityManager _ = JpaUtil.getEntityManager()) {
+                    System.out.println("Conexão estabelecida com sucesso!");
+                } catch (Exception e) {
+                    System.err.println("Erro ao conectar: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                return null;
+            }
 
-            jogador.adicionarPersonagem(personagem); // sincroniza os dois lados
+            @Override
+            protected void done() {
+                splash.dispose();
+                new Gerenciador();
+            }
+        };
 
-            em.persist(jogador);        // cascateia e persiste o personagem junto
-            em.persist(atributoForca);  // esse precisa ser persistido manualmente (não tem cascade vindo de ninguém)
+        worker.execute();
+    }
 
-            MonstroModel goblin = new MonstroModel("Goblin Saqueador", 1, 3, 7, 12, null, null, null, 10);
-            em.persist(goblin);
+    private static JFrame criarSplash() {
+        JFrame splash = new JFrame();
+        splash.setUndecorated(true);
+        splash.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            new Gerenciador();
-        }
+        URL url = Main.class.getResource("/logo.png");
+        assert url != null;
+        ImageIcon iconOriginal = new ImageIcon(url);
+
+        int novoTamanho = 350;
+        Image imagemEscalada = iconOriginal.getImage().getScaledInstance(
+                novoTamanho, novoTamanho, Image.SCALE_SMOOTH
+        );
+
+        JLabel lblImagem = new JLabel(new ImageIcon(imagemEscalada));
+
+        splash.getContentPane().add(lblImagem);
+        splash.pack();
+        splash.setLocationRelativeTo(null);
+        splash.setResizable(false);
+
+        return splash;
     }
 }

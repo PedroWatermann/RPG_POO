@@ -12,6 +12,11 @@ import org.kordamp.ikonli.swing.FontIcon;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Objects;
 
 public class CampanhaSelectView extends JPanel {
     JLabel lblTitulo = new JLabel();
@@ -35,15 +40,18 @@ public class CampanhaSelectView extends JPanel {
         separador.setForeground(AppColors.GOLD);
         separador.setBackground(AppColors.GOLD);
 
-        Object[][] dadosTemporarios = {
-                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 1", FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)},
-                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 2", FontIcon.of(FontAwesomeSolid.CROWN, AppColors.ICON_SM, AppColors.PARCHMENT)},
-                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 3", FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)},
-                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 4", FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)},
-                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 5", FontIcon.of(FontAwesomeSolid.CROWN, AppColors.ICON_SM, AppColors.PARCHMENT)},
-                {FontIcon.of(FontAwesomeSolid.BOOK_OPEN, AppColors.ICON_SM, AppColors.PARCHMENT), "Campanha 6", FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)},
-        };
-        tblCampanhas.setModel(new DefaultTableModel(dadosTemporarios, new Object[]{"", "", ""}));
+        Dictionary<String, Object> dicionarioDados = campanhaSelectController.listarCampanhasParaTabela();
+        tblCampanhas.setModel(
+                new DefaultTableModel(
+                        (Object[][]) dicionarioDados.get("dados"),
+                        (Object[]) dicionarioDados.get("colunas")
+                ) {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                }
+        );
         tblCampanhas.setDefaultRenderer(Object.class, new IconTextCellRender());
         tblCampanhas.getColumnModel().getColumn(0).setMaxWidth(30);
         tblCampanhas.getColumnModel().getColumn(2).setMaxWidth(30);
@@ -54,6 +62,7 @@ public class CampanhaSelectView extends JPanel {
         tblCampanhas.setSelectionBackground(AppColors.CRIMSON);
         tblCampanhas.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         tblCampanhas.setRowHeight(28);
+        tblCampanhas.setAutoCreateColumnsFromModel(false);
 
         scrCampanhas.setViewportView(tblCampanhas);
         scrCampanhas.setPreferredSize(new Dimension(0, 150));
@@ -150,5 +159,25 @@ public class CampanhaSelectView extends JPanel {
         gbc.weightx = 1;
         gbc.insets = new Insets(5, 0, 0, 0);
         this.add(btnSelecionar, gbc);
+    }
+
+    public JTable getTblCampanhas() {
+        return tblCampanhas;
+    }
+
+    public JButton getBtnNovo() {
+        return btnNovo;
+    }
+
+    public JButton getBtnEditar() {
+        return btnEditar;
+    }
+
+    public JButton getBtnExcluir() {
+        return btnExcluir;
+    }
+
+    public JButton getBtnSelecionar() {
+        return btnSelecionar;
     }
 }

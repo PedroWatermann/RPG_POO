@@ -1,7 +1,9 @@
 package com.rpgpoo.Campanha.view;
 
 import com.rpgpoo.Campanha.controller.CampanhaCreateController;
+import com.rpgpoo.Dado.model.DadoModel;
 import com.rpgpoo.Gerenciador.Gerenciador;
+import com.rpgpoo.Jogador.model.JogadorModel;
 import com.rpgpoo.utils.AppColors;
 import com.rpgpoo.utils.DarkScrollBarUI;
 import com.rpgpoo.utils.JButtonCustom;
@@ -22,20 +24,17 @@ public class CampanhaCreateView extends JPanel { // true = modal
     JScrollPane scrDescricao = new JScrollPane();
 
     JLabel lblMestre = new JLabel();
-    JComboBox<String> cbxMestre = new JComboBox<>();
+    JTextField txtMestre = new JTextField();
 
     JLabel lblDadoPadrao = new JLabel();
-    JComboBox<String> cbxDadoPadrao = new JComboBox<>();
+    JComboBox<DadoModel> cbxDadoPadrao = new JComboBox<>();
 
-    JLabel lblJogadores = new JLabel();
-    JTable tblJogadores = new JTable();
-    JScrollPane scrJogadores = new JScrollPane();
+    JButton btnCriarCampanha;
 
-    JButton btnAdicionarJogador;
-    JButton btnRemoverJogador;
+    CampanhaCreateController campanhaCreateController;
 
-    public CampanhaCreateView(Gerenciador gerenciador) {
-        CampanhaCreateController campanhaCreateController = new CampanhaCreateController(this, gerenciador);
+    public CampanhaCreateView(Gerenciador gerenciador, Runnable sucesso) {
+        this.campanhaCreateController = new CampanhaCreateController(this, gerenciador, sucesso);
 
         UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(AppColors.GOLD, 1));
         UIManager.put("List.background", AppColors.DARK);
@@ -93,14 +92,12 @@ public class CampanhaCreateView extends JPanel { // true = modal
         lblMestre.setHorizontalAlignment(SwingConstants.LEFT);
         lblMestre.setForeground(AppColors.PARCHMENT);
 
-        cbxMestre.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        cbxMestre.setForeground(Color.WHITE);
-        cbxMestre.setBackground(AppColors.DARK);
-        CampanhaListView.estilizarComboBox(cbxMestre);
-        // Dados ficticios
-        cbxMestre.addItem("Alemão");
-        cbxMestre.addItem("Barela");
-        cbxMestre.addItem("Laranjinha");
+        txtMestre.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtMestre.setOpaque(false);
+        txtMestre.setForeground(Color.WHITE);
+        txtMestre.setCaretColor(AppColors.PARCHMENT);
+        txtMestre.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
+        txtMestre.setEditable(false);
 
         lblDadoPadrao.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblDadoPadrao.setText("Dado padrão");
@@ -113,27 +110,14 @@ public class CampanhaCreateView extends JPanel { // true = modal
         cbxDadoPadrao.setBackground(AppColors.DARK);
         CampanhaListView.estilizarComboBox(cbxDadoPadrao);
 
-        // Dados ficticios
-        cbxDadoPadrao.addItem("D4");
-        cbxDadoPadrao.addItem("D6");
-        cbxDadoPadrao.addItem("D8");
-        cbxDadoPadrao.addItem("D10");
-        cbxDadoPadrao.addItem("D12");
-        cbxDadoPadrao.addItem("D20");
-        cbxDadoPadrao.addItem("D100");
-
-
-        btnAdicionarJogador = new JButtonCustom(
-                "Adicionar Jogador",
-                JButtonCustom.Style.SECONDARY,
-                FontIcon.of(FontAwesomeSolid.USER_PLUS, AppColors.ICON_SM, AppColors.PARCHMENT)
+        btnCriarCampanha = new JButtonCustom(
+                "Criar Campanha",
+                JButtonCustom.Style.PRIMARY,
+                FontIcon.of(FontAwesomeSolid.PLUS, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
+        btnCriarCampanha.addActionListener(_ -> this.campanhaCreateController.btnCriarCampanhaClick());
 
-        btnRemoverJogador = new JButtonCustom(
-                "Remover Jogador",
-                JButtonCustom.Style.DANGER,
-                FontIcon.of(FontAwesomeSolid.USER_MINUS, AppColors.ICON_SM, AppColors.PARCHMENT)
-        );
+        this.campanhaCreateController.preencherComponentes();
 
         this.setLayout(new GridBagLayout());
         this.setBackground(AppColors.DARK);
@@ -193,28 +177,35 @@ public class CampanhaCreateView extends JPanel { // true = modal
         gbc.gridy = 7;
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 0, 0, 5);
-        this.add(cbxMestre, gbc);
+        this.add(txtMestre, gbc);
 
         // Definições para cbxDadoPadrao
         gbc.gridx = 1;
-        gbc.insets = new Insets(0, 5, 0, 0);
+        gbc.insets = new Insets(0, 5, 5, 0);
         this.add(cbxDadoPadrao, gbc);
 
-        // Definições para botões lado a lado
-        gbc.gridy = 10;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // Definições para btnAdicionarJogador
         gbc.gridx = 0;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(10, 0, 5, 5);
-        this.add(btnAdicionarJogador, gbc);
+        gbc.gridy = 10;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        this.add(btnCriarCampanha, gbc);
+    }
 
-        // Definições para btnRemoverJogador
-        gbc.gridx = 1;
-        gbc.insets = new Insets(10, 5, 5, 0);
-        this.add(btnRemoverJogador, gbc);
+    public JTextField getTxtNome() {
+        return txtNome;
+    }
 
+    public JTextArea getTxtDescricao() {
+        return txtDescricao;
+    }
+
+    public JTextField getTxtMestre() {
+        return txtMestre;
+    }
+
+    public JComboBox<DadoModel> getCbxDadoPadrao() {
+        return cbxDadoPadrao;
     }
 }

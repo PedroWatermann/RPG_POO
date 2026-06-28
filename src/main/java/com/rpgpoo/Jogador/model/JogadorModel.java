@@ -5,8 +5,17 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
+@NamedQuery(
+        name = "Jogador.porNome",
+        query = "SELECT j FROM JogadorModel j WHERE j.nome = :nome"
+)
+@NamedQuery(
+        name = "Jogador.login",
+        query = "SELECT j FROM JogadorModel j WHERE j.nome = :nome AND j.senha = :senha"
+)
 @Table(name = "jogador")
 public class JogadorModel {
     @Id
@@ -61,5 +70,10 @@ public class JogadorModel {
         this.setNome(nome);
         this.setSenha(senha);
         this.personagens = new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        return this.getNome().substring(0, 1).toUpperCase() + this.getNome().substring(1);
     }
 }

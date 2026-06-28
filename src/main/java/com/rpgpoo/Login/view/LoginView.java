@@ -2,6 +2,11 @@ package com.rpgpoo.Login.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.rpgpoo.Gerenciador.Gerenciador;
 import com.rpgpoo.Login.controller.LoginController;
@@ -17,6 +22,7 @@ public class LoginView extends JPanel {
     JLabel lblSenha = new JLabel();
     JPasswordField txtSenha = new JPasswordField();
     JButton btnEntrar;
+    JLabel lblRegistrar = new JLabel();
 
     public LoginView(Gerenciador gerenciador) {
         lblTitulo.setFont(new Font("Serif", Font.BOLD, 18));
@@ -55,7 +61,14 @@ public class LoginView extends JPanel {
         sepBaixo.setForeground(AppColors.GOLD);
         sepBaixo.setBackground(AppColors.GOLD);
 
-        btnEntrar = new JButtonCustom("Entrar", FontIcon.of(FontAwesomeSolid.SIGN_IN_ALT, AppColors.ICON_SM, AppColors.PARCHMENT));
+        lblRegistrar.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblRegistrar.setText("Registrar-se");
+        lblRegistrar.setForeground(AppColors.PARCHMENT);
+
+        btnEntrar = new JButtonCustom(
+                "Entrar",
+                FontIcon.of(FontAwesomeSolid.SIGN_IN_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)
+        );
 
         this.setLayout(new GridBagLayout());
         this.setBackground(AppColors.DARK);
@@ -64,51 +77,79 @@ public class LoginView extends JPanel {
                 BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
 
-        GridBagConstraints bag = new GridBagConstraints();
-        bag.insets = new Insets(4, 4, 4, 4);
-        bag.fill = GridBagConstraints.HORIZONTAL;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(4, 4, 4, 4);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        bag.gridx = 0;
-        bag.gridy = 0;
-        bag.gridwidth = 2;
-        this.add(lblTitulo, bag);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        this.add(lblTitulo, gbc);
 
-        bag.gridy = 1;
-        this.add(sepTopo, bag);
+        gbc.gridy = 1;
+        this.add(sepTopo, gbc);
 
-        bag.gridy = 2;
-        bag.gridwidth = 1;
-        bag.fill = GridBagConstraints.NONE;
-        bag.anchor = GridBagConstraints.WEST;
-        this.add(lblUsuario, bag);
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.WEST;
+        this.add(lblUsuario, gbc);
 
-        bag.gridx = 1; bag.gridy = 2;
-        bag.fill = GridBagConstraints.HORIZONTAL;
-        bag.weightx = 1.0;
-        this.add(txtUsuario, bag);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        this.add(txtUsuario, gbc);
 
-        bag.gridx = 0; bag.gridy = 3;
-        bag.fill = GridBagConstraints.NONE;
-        bag.weightx = 0;
-        this.add(lblSenha, bag);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
+        this.add(lblSenha, gbc);
 
-        bag.gridx = 1; bag.gridy = 3;
-        bag.fill = GridBagConstraints.HORIZONTAL;
-        bag.weightx = 1.0;
-        this.add(txtSenha, bag);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        this.add(txtSenha, gbc);
 
-        bag.gridx = 0; bag.gridy = 4;
-        bag.gridwidth = 2;
-        bag.weightx = 0;
-        this.add(sepBaixo, bag);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.weightx = 0;
+        this.add(sepBaixo, gbc);
 
-        bag.gridy = 5;
-        bag.fill = GridBagConstraints.NONE;
-        bag.anchor = GridBagConstraints.CENTER;
-        this.add(btnEntrar, bag);
+        gbc.gridy = 5;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        this.add(btnEntrar, gbc);
+
+        gbc.gridy = 6;
+        this.add(lblRegistrar, gbc);
 
         LoginController loginController = new LoginController(this, gerenciador);
         btnEntrar.addActionListener(_ -> loginController.btnEntrarClick());
+        lblRegistrar.addMouseListener(new MouseAdapter() {
+            final Font original = lblRegistrar.getFont();
+            final Map<TextAttribute, Object> attributes = new HashMap<>(original.getAttributes());
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                lblRegistrar.setFont(original.deriveFont(attributes));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                attributes.put(TextAttribute.UNDERLINE, -1);
+                lblRegistrar.setFont(original.deriveFont(attributes));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                loginController.lblRegistrarClick();
+            }
+        });
     }
 
     public JTextField getTxtUsuario() {

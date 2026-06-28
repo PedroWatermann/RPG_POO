@@ -42,4 +42,9 @@ public class DadoModel {
     public int rolarDado() {
         return (int) (Math.random() * this.getLados()) + 1;
     }
+
+    @Override
+    public String toString() {
+        return "D" + this.getLados();
+    }
 }
