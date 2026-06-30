@@ -28,7 +28,11 @@ public class CampanhaSelectView extends JPanel {
     JButton btnSelecionar;
 
     public CampanhaSelectView(Gerenciador gerenciador) {
-        CampanhaSelectController campanhaSelectController = new CampanhaSelectController(this, gerenciador);
+        this(gerenciador, false, null);
+    }
+
+    public CampanhaSelectView(Gerenciador gerenciador, boolean modoTroca, Runnable aoSelecionar) {
+        CampanhaSelectController campanhaSelectController = new CampanhaSelectController(this, gerenciador, modoTroca, aoSelecionar);
 
         lblTitulo.setIcon(FontIcon.of(FontAwesomeSolid.MAP, AppColors.ICON_LG, AppColors.GOLD));
         lblTitulo.setText(" MINHAS CAMPANHAS");
@@ -63,6 +67,8 @@ public class CampanhaSelectView extends JPanel {
         tblCampanhas.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         tblCampanhas.setRowHeight(28);
         tblCampanhas.setAutoCreateColumnsFromModel(false);
+        tblCampanhas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblCampanhas.getSelectionModel().addListSelectionListener(campanhaSelectController::tblCampanhaSelectRow);
 
         scrCampanhas.setViewportView(tblCampanhas);
         scrCampanhas.setPreferredSize(new Dimension(0, 150));
@@ -84,6 +90,7 @@ public class CampanhaSelectView extends JPanel {
                 JButtonCustom.Style.SECONDARY,
                 FontIcon.of(FontAwesomeSolid.PENCIL_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
+        btnEditar.setEnabled(false);
         btnEditar.addActionListener(_ -> campanhaSelectController.btnEditarClick());
 
         btnExcluir = new JButtonCustom(
@@ -91,12 +98,14 @@ public class CampanhaSelectView extends JPanel {
                 JButtonCustom.Style.DANGER,
                 FontIcon.of(FontAwesomeSolid.TRASH_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
+        btnExcluir.setEnabled(false);
         btnExcluir.addActionListener(_ -> campanhaSelectController.btnExcluirClick());
 
         btnSelecionar = new JButtonCustom(
                 "Selecionar",
                 FontIcon.of(FontAwesomeSolid.SIGN_IN_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
+        btnSelecionar.setEnabled(false);
         btnSelecionar.addActionListener(_ -> campanhaSelectController.btnSelecionarClick());
 
         this.setLayout(new GridBagLayout());

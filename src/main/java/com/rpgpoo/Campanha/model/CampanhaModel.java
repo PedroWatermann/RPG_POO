@@ -10,6 +10,13 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@NamedQuery(
+        name = "Campanha.porIdCampanha",
+        query = "SELECT c FROM CampanhaModel c " +
+                "JOIN FETCH c.dado " +
+                "JOIN FETCH c.mestre " +
+                "WHERE c.id = :id"
+)
 @Table(name = "campanha")
 public class CampanhaModel {
 

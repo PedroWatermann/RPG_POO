@@ -27,7 +27,7 @@ public class Gerenciador extends JFrame {
     public void navegarPara(String tela, boolean modal, String titulo, boolean redimensionavel) {
         if (modal) {
             this.pack();
-            this.setLocationRelativeTo(null);
+            this.setLocationRelativeTo(this);
         } else {
             this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         }

@@ -5,6 +5,7 @@ import com.rpgpoo.Campanha.view.CampanhaCreateView;
 import com.rpgpoo.Campanha.view.CampanhaListView;
 import com.rpgpoo.Campanha.view.CampanhaSelectView;
 import com.rpgpoo.Jogador.model.JogadorModel;
+import com.rpgpoo.Login.sessao.SessaoCampanha;
 import com.rpgpoo.Login.sessao.SessaoUsuario;
 import com.rpgpoo.Monstro.view.MonstroView;
 import com.rpgpoo.Gerenciador.Gerenciador;
@@ -19,6 +20,7 @@ import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -27,18 +29,25 @@ import java.util.List;
 public class CampanhaSelectController {
     private final CampanhaSelectView view;
     private final Gerenciador gerenciador;
+    private final boolean modoTroca;
+    private final Runnable aoSelecionar;
 
     public CampanhaSelectController(CampanhaSelectView view, Gerenciador gerenciador) {
-        this.view = view;
-        this.gerenciador = gerenciador;
+        this(view, gerenciador, false, null);
     }
 
+    public CampanhaSelectController(CampanhaSelectView view, Gerenciador gerenciador, boolean modoTroca, Runnable aoSelecionar) {
+        this.view = view;
+        this.gerenciador = gerenciador;
+        this.modoTroca = modoTroca;
+        this.aoSelecionar = aoSelecionar;
+    }
     public void btnNovoClick() {
-        JDialog dialog = new JDialog(gerenciador, "Nova Campanha", true);
+        JDialog dialog = new JDialog(gerenciador, "Narratus RPG - Nova Campanha", true);
 
-        CampanhaCreateView campanhaCreateView = new CampanhaCreateView(this.gerenciador, () -> {
+        CampanhaCreateView campanhaCreateView = new CampanhaCreateView(this.gerenciador, true, () -> {
             dialog.dispose();
-            recarregartblCampanha();
+            recarregarTblCampanha();
         });
 
         dialog.setContentPane(campanhaCreateView);
@@ -48,14 +57,54 @@ public class CampanhaSelectController {
     }
 
     public void btnEditarClick() {
-        JOptionPane.showMessageDialog(view, "Já já abre um outro modal aí.", "Atenção", JOptionPane.WARNING_MESSAGE);
+        JDialog dialog = new JDialog(gerenciador, "Narratus RPG - Editar Campanha", true);
+
+        CampanhaCreateView campanhaCreateView = new CampanhaCreateView(this.gerenciador, false, dialog::dispose);
+
+        dialog.setContentPane(campanhaCreateView);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this.gerenciador);
+        dialog.setVisible(true);
     }
 
     public void btnExcluirClick() {
-        JOptionPane.showMessageDialog(view, "Ainda não pode...", "Atenção", JOptionPane.WARNING_MESSAGE);
+        if (JOptionPane.showConfirmDialog(
+            view,
+            "Deseja realmente excluir essa campanha?",
+            "Atenção",
+            JOptionPane.YES_NO_OPTION
+        ) == JOptionPane.YES_OPTION) {
+            int idCampanha = SessaoCampanha.getInstancia().getCampanhaLogada().getId();
+            if (idCampanha > 0) {
+                try (EntityManager em = JpaUtil.getEntityManager()) {
+                    em.getTransaction().begin();
+                    CampanhaModel campanha = em.find(CampanhaModel.class, idCampanha);
+                    if (campanha != null) {
+                        em.remove(campanha);
+                        em.getTransaction().commit();
+                        recarregarTblCampanha();
+                        JOptionPane.showMessageDialog(
+                                view,
+                                "Campanha excluída com sucesso!",
+                                "Sucesso",
+                                JOptionPane.PLAIN_MESSAGE
+                        );
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
     public void btnSelecionarClick() {
+        if (modoTroca) {
+            if (aoSelecionar != null) {
+                aoSelecionar.run();
+            }
+            return;
+        }
+
         TabbedView tabbed = new TabbedView();
         tabbed.addAba("Campanha", FontIcon.of(FontAwesomeSolid.MAP, AppColors.ICON_SM, AppColors.GOLD), new CampanhaListView(gerenciador));
         tabbed.addAba("Personagem", FontIcon.of(FontAwesomeSolid.USER, AppColors.ICON_SM, AppColors.GOLD), new PersonagemView(gerenciador));
@@ -103,7 +152,7 @@ public class CampanhaSelectController {
         }
     }
 
-    public void recarregartblCampanha() {
+    public void recarregarTblCampanha() {
         Dictionary<String, Object> campanhas = listarCampanhasParaTabela();
 
         view.getTblCampanhas().setModel(
@@ -112,5 +161,27 @@ public class CampanhaSelectController {
                         (Object[]) campanhas.get("colunas")
                 )
         );
+    }
+
+    public void tblCampanhaSelectRow(ListSelectionEvent e) {
+        JTable tblCampanhas = view.getTblCampanhas();
+
+        if (!e.getValueIsAdjusting()) {
+            int linha = tblCampanhas.getSelectedRow();
+            if (linha != -1) {
+                int i = tblCampanhas.convertRowIndexToModel(linha);
+                SessaoCampanha.getInstancia().setCampanhaLogada(
+                    (CampanhaModel) tblCampanhas.getModel().getValueAt(i, 1)
+                );
+                view.getBtnEditar().setEnabled(true);
+                view.getBtnExcluir().setEnabled(true);
+                view.getBtnSelecionar().setEnabled(true);
+            } else {
+                SessaoCampanha.getInstancia().logout();
+                view.getBtnEditar().setEnabled(false);
+                view.getBtnExcluir().setEnabled(false);
+                view.getBtnSelecionar().setEnabled(false);
+            }
+        }
     }
 }

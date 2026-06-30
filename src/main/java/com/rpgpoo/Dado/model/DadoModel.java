@@ -3,6 +3,8 @@ package com.rpgpoo.Dado.model;
 import com.rpgpoo.Atributo.model.AtributoModel;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "dado")
 public class DadoModel {
@@ -46,5 +48,18 @@ public class DadoModel {
     @Override
     public String toString() {
         return "D" + this.getLados();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DadoModel)) return false;
+        DadoModel that = (DadoModel) o;
+        return Objects.equals(this.getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

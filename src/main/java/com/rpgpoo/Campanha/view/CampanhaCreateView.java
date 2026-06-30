@@ -3,9 +3,9 @@ package com.rpgpoo.Campanha.view;
 import com.rpgpoo.Campanha.controller.CampanhaCreateController;
 import com.rpgpoo.Dado.model.DadoModel;
 import com.rpgpoo.Gerenciador.Gerenciador;
-import com.rpgpoo.Jogador.model.JogadorModel;
 import com.rpgpoo.utils.AppColors;
 import com.rpgpoo.utils.DarkScrollBarUI;
+import com.rpgpoo.utils.GenericUtils;
 import com.rpgpoo.utils.JButtonCustom;
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import org.kordamp.ikonli.swing.FontIcon;
@@ -13,7 +13,7 @@ import org.kordamp.ikonli.swing.FontIcon;
 import javax.swing.*;
 import java.awt.*;
 
-public class CampanhaCreateView extends JPanel { // true = modal
+public class CampanhaCreateView extends JPanel {
     JLabel lblTitulo = new JLabel();
 
     JLabel lblNome = new JLabel();
@@ -33,8 +33,8 @@ public class CampanhaCreateView extends JPanel { // true = modal
 
     CampanhaCreateController campanhaCreateController;
 
-    public CampanhaCreateView(Gerenciador gerenciador, Runnable sucesso) {
-        this.campanhaCreateController = new CampanhaCreateController(this, gerenciador, sucesso);
+    public CampanhaCreateView(Gerenciador gerenciador, boolean ehNovo, Runnable sucesso) {
+        this.campanhaCreateController = new CampanhaCreateController(this, gerenciador, ehNovo, sucesso);
 
         UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(AppColors.GOLD, 1));
         UIManager.put("List.background", AppColors.DARK);
@@ -108,16 +108,16 @@ public class CampanhaCreateView extends JPanel { // true = modal
         cbxDadoPadrao.setOpaque(false);
         cbxDadoPadrao.setForeground(Color.WHITE);
         cbxDadoPadrao.setBackground(AppColors.DARK);
-        CampanhaListView.estilizarComboBox(cbxDadoPadrao);
+        GenericUtils.estilizarComboBox(cbxDadoPadrao);
 
         btnCriarCampanha = new JButtonCustom(
-                "Criar Campanha",
+                "Salvar",
                 JButtonCustom.Style.PRIMARY,
-                FontIcon.of(FontAwesomeSolid.PLUS, AppColors.ICON_SM, AppColors.PARCHMENT)
+                FontIcon.of(FontAwesomeSolid.SAVE, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
         btnCriarCampanha.addActionListener(_ -> this.campanhaCreateController.btnCriarCampanhaClick());
 
-        this.campanhaCreateController.preencherComponentes();
+        this.campanhaCreateController.preencherCampos();
 
         this.setLayout(new GridBagLayout());
         this.setBackground(AppColors.DARK);
@@ -173,10 +173,10 @@ public class CampanhaCreateView extends JPanel { // true = modal
         gbc.insets = new Insets(6, 5, 0, 0);
         this.add(lblDadoPadrao, gbc);
 
-        // Definições para cbxMestre
+        // Definições para txtMestre
         gbc.gridy = 7;
         gbc.gridx = 0;
-        gbc.insets = new Insets(0, 0, 0, 5);
+        gbc.insets = new Insets(0, 0, 5, 5);
         this.add(txtMestre, gbc);
 
         // Definições para cbxDadoPadrao
@@ -187,7 +187,7 @@ public class CampanhaCreateView extends JPanel { // true = modal
         gbc.gridx = 0;
         gbc.gridy = 10;
         gbc.gridwidth = 2;
-        gbc.weightx = 1.0;
+        gbc.weightx = 0.0;
         gbc.insets = new Insets(5, 0, 0, 0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         this.add(btnCriarCampanha, gbc);

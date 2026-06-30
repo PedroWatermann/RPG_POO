@@ -1,19 +1,18 @@
 package com.rpgpoo.Campanha.view;
 
 import com.rpgpoo.Campanha.controller.CampanhaListController;
+import com.rpgpoo.Dado.model.DadoModel;
 import com.rpgpoo.Gerenciador.Gerenciador;
 import com.rpgpoo.utils.*;
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.util.Dictionary;
 
 public class CampanhaListView extends JPanel {
     JLabel lblTitulo = new JLabel();
@@ -26,10 +25,10 @@ public class CampanhaListView extends JPanel {
     JScrollPane scrDescricao = new JScrollPane();
 
     JLabel lblMestre = new JLabel();
-    JComboBox<String> cbxMestre = new JComboBox<>();
+    JTextField txtMestre = new JTextField();
 
     JLabel lblDadoPadrao = new JLabel();
-    JComboBox<String> cbxDadoPadrao = new JComboBox<>();
+    JComboBox<DadoModel> cbxDadoPadrao = new JComboBox<>();
 
     JLabel lblJogadores = new JLabel();
     JTable tblJogadores = new JTable();
@@ -42,7 +41,7 @@ public class CampanhaListView extends JPanel {
     JButton btnEditarCampanha;
 
     public CampanhaListView(Gerenciador gerenciador) {
-        CampanhaListController campanhaSelectController = new CampanhaListController(this, gerenciador);
+        CampanhaListController campanhaListController = new CampanhaListController(this, gerenciador);
 
         UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(AppColors.GOLD, 1));
         UIManager.put("List.background", AppColors.DARK);
@@ -101,14 +100,13 @@ public class CampanhaListView extends JPanel {
         lblMestre.setHorizontalAlignment(SwingConstants.LEFT);
         lblMestre.setForeground(AppColors.PARCHMENT);
 
-        cbxMestre.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-        cbxMestre.setForeground(Color.WHITE);
-        cbxMestre.setBackground(AppColors.DARK);
-        GenericUtils.estilizarComboBox(cbxMestre);
-        // Dados ficticios
-        cbxMestre.addItem("Alemão");
-        cbxMestre.addItem("Barela");
-        cbxMestre.addItem("Laranjinha");
+        txtMestre.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+        txtMestre.setOpaque(false);
+        txtMestre.setForeground(Color.WHITE);
+        txtMestre.setCaretColor(AppColors.PARCHMENT);
+        txtMestre.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
+        txtMestre.setPreferredSize(new Dimension(0, 28));
+        txtMestre.setEditable(false);
 
         lblDadoPadrao.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         lblDadoPadrao.setText("Dado padrão");
@@ -120,14 +118,6 @@ public class CampanhaListView extends JPanel {
         cbxDadoPadrao.setForeground(Color.WHITE);
         cbxDadoPadrao.setBackground(AppColors.DARK);
         GenericUtils.estilizarComboBox(cbxDadoPadrao);
-        // Dados ficticios
-        cbxDadoPadrao.addItem("D4");
-        cbxDadoPadrao.addItem("D6");
-        cbxDadoPadrao.addItem("D8");
-        cbxDadoPadrao.addItem("D10");
-        cbxDadoPadrao.addItem("D12");
-        cbxDadoPadrao.addItem("D20");
-        cbxDadoPadrao.addItem("D100");
 
         JSeparator sepEsquerda = new JSeparator();
         sepEsquerda.setForeground(AppColors.GOLD);
@@ -142,14 +132,18 @@ public class CampanhaListView extends JPanel {
         sepDireita.setForeground(AppColors.GOLD);
         sepDireita.setBackground(AppColors.GOLD);
 
-        Object[][] dadosTemporarios = {
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Alemão", "Thorin, o Forte"},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Barela", "Elira Lança Preta"},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Laranjinha", "Thorin, o Forte"},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Sensual", "Thorin, o Forte"},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Pescado", "Thorin, o Forte"},
-        };
-        tblJogadores.setModel(new DefaultTableModel(dadosTemporarios, new Object[]{"", "Usuário", "Personagem"}));
+        Dictionary<String, Object> dicionarioDados = campanhaListController.listarJogadoresEPersonagensParaTabela();
+        tblJogadores.setModel(
+                new DefaultTableModel(
+                        (Object[][]) dicionarioDados.get("dados"),
+                        (Object[]) dicionarioDados.get("colunas")
+                ) {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                }
+        );
         tblJogadores.setDefaultRenderer(Object.class, new IconTextCellRender());
         tblJogadores.getColumnModel().getColumn(0).setMaxWidth(30);
         tblJogadores.setShowVerticalLines(false);
@@ -205,6 +199,7 @@ public class CampanhaListView extends JPanel {
                 JButtonCustom.Style.SECONDARY,
                 FontIcon.of(FontAwesomeSolid.SYNC_ALT, 12, AppColors.PARCHMENT)
         );
+        btnTrocarCampanha.addActionListener(_ -> campanhaListController.btnTrocarCampanhaClick());
 
         btnEditarCampanha = new JButtonCustom(
                 "Editar Campanha",
@@ -266,13 +261,13 @@ public class CampanhaListView extends JPanel {
         gbc.insets = new Insets(6, 5, 0, 0);
         this.add(lblDadoPadrao, gbc);
 
-        // Definições para cbxMestre
+        // Definições para txtMestre
         gbc.gridy = 7;
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 0, 0, 5);
-        this.add(cbxMestre, gbc);
+        this.add(txtMestre, gbc);
 
-        // Definições para cbxMestre
+        // Definições para cbxDadoPadrao
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 5, 0, 0);
         this.add(cbxDadoPadrao, gbc);
@@ -361,34 +356,43 @@ public class CampanhaListView extends JPanel {
         this.add(btnEditarCampanha, gbc);
     }
 
-    static void estilizarComboBox(JComboBox<?> cbx) {
-        cbx.setBackground(AppColors.DARK);
-        cbx.setForeground(AppColors.PARCHMENT);
-        cbx.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        cbx.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
+    public JTextField getTxtNome() {
+        return txtNome;
+    }
 
-        cbx.setUI(new BasicComboBoxUI() {
-            @Override
-            protected JButton createArrowButton() {
-                JButton btn = new JButton("▾");
-                btn.setBackground(AppColors.DARK);
-                btn.setForeground(AppColors.PARCHMENT);
-                btn.setBorder(BorderFactory.createEmptyBorder(0, 4, 0, 4));
-                btn.setFocusPainted(false);
-                btn.setContentAreaFilled(false);
-                return btn;
-            }
+    public JTextArea getTxtDescricao() {
+        return txtDescricao;
+    }
 
-            @Override
-            protected ComboPopup createPopup() {
-                BasicComboPopup popup = (BasicComboPopup) super.createPopup();
-                popup.setBorder(BorderFactory.createLineBorder(AppColors.GOLD, 1));
-                popup.getList().setBackground(AppColors.DARK3);
-                popup.getList().setForeground(AppColors.PARCHMENT);
-                popup.getList().setSelectionBackground(AppColors.CRIMSON);
-                popup.getList().setSelectionForeground(AppColors.PARCHMENT);
-                return popup;
-            }
-        });
+    public JTextField getTxtMestre() {
+        return txtMestre;
+    }
+
+    public JComboBox<DadoModel> getCbxDadoPadrao() {
+        return cbxDadoPadrao;
+    }
+
+    public JTable getTblJogadores() {
+        return tblJogadores;
+    }
+
+    public JButton getBtnAdicionarJogador() {
+        return btnAdicionarJogador;
+    }
+
+    public JButton getBtnRemoverJogador() {
+        return btnRemoverJogador;
+    }
+
+    public JButton getBtnIniciarCombate() {
+        return btnIniciarCombate;
+    }
+
+    public JButton getBtnTrocarCampanha() {
+        return btnTrocarCampanha;
+    }
+
+    public JButton getBtnEditarCampanha() {
+        return btnEditarCampanha;
     }
 }
