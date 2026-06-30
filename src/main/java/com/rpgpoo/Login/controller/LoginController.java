@@ -53,6 +53,11 @@ public class LoginController {
         String usuario = view.getTxtUsuario().getText().trim();
         String senha = new String(view.getTxtSenha().getPassword()).trim();
 
+        if (usuario.isEmpty() || senha.isEmpty()) {
+            JOptionPane.showMessageDialog(view, "Preencha todos os campos.", "Atenção", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         if (usuario.contains(" ")) {
             JOptionPane.showMessageDialog(view, "O nome de usuário não deve conter espaços vazios.", "Atenção", JOptionPane.WARNING_MESSAGE);
             return;
@@ -60,7 +65,8 @@ public class LoginController {
 
         try (EntityManager em = JpaUtil.getEntityManager()) {
             JogadorModel jogador = em
-                    .createNamedQuery("Jogador.porNome", JogadorModel.class).setParameter("nome", usuario)
+                    .createNamedQuery("Jogador.porNome", JogadorModel.class)
+                    .setParameter("nome", usuario)
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
@@ -74,6 +80,8 @@ public class LoginController {
 
             jogador = new JogadorModel(usuario, senha);
             em.persist(jogador);
+
+            SessaoUsuario.getInstancia().setJogadorLogado(jogador);
 
             em.getTransaction().commit();
 

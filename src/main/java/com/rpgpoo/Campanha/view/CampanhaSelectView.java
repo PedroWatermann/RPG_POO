@@ -12,11 +12,7 @@ import org.kordamp.ikonli.swing.FontIcon;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Objects;
 
 public class CampanhaSelectView extends JPanel {
     JLabel lblTitulo = new JLabel();
@@ -57,8 +53,10 @@ public class CampanhaSelectView extends JPanel {
                 }
         );
         tblCampanhas.setDefaultRenderer(Object.class, new IconTextCellRender());
-        tblCampanhas.getColumnModel().getColumn(0).setMaxWidth(30);
-        tblCampanhas.getColumnModel().getColumn(2).setMaxWidth(30);
+        if (tblCampanhas.getColumnModel().getColumnCount() > 0) {
+            tblCampanhas.getColumnModel().getColumn(0).setMaxWidth(30);
+            tblCampanhas.getColumnModel().getColumn(2).setMaxWidth(30);
+        }
         tblCampanhas.setTableHeader(null);
         tblCampanhas.setShowVerticalLines(false);
         tblCampanhas.setBackground(AppColors.DARK);

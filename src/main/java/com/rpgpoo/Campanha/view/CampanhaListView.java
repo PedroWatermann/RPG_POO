@@ -214,6 +214,8 @@ public class CampanhaListView extends JPanel {
                 BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
 
+        campanhaListController.preencherCampos();
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridwidth = 2;
