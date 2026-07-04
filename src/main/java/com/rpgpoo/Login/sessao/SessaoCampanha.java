@@ -28,6 +28,10 @@ public class SessaoCampanha {
         return campanhaLogada != null;
     }
 
+    public boolean jogadorLogadoEhMestre() {
+        return this.campanhaLogada.getMestre().getId() == SessaoUsuario.getInstancia().getJogadorLogado().getId();
+    }
+
     public void logout() {
         this.campanhaLogada = null;
     }

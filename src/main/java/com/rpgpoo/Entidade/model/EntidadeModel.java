@@ -165,4 +165,9 @@ public abstract class EntidadeModel {
     public abstract int atacar(int dtAlvo);
 
     public abstract void defender(int danoRecebido);
+
+    @Override
+    public String toString() {
+        return this.getNome().substring(0, 1).toUpperCase() + this.getNome().substring(1);
+    }
 }

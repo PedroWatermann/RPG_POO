@@ -48,4 +48,10 @@ public class ClasseModel {
     public int getMultiplicadorDefesa() { return this.multiplicadorDefesa; }
     public void setMultiplicadorDefesa(int multiplicador) { this.multiplicadorDefesa = multiplicador; }
     //endregion
+
+
+    @Override
+    public String toString() {
+        return this.getNome().substring(0, 1).toUpperCase() + this.getNome().substring(1);
+    }
 }

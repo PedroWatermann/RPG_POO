@@ -1,10 +1,13 @@
 package com.rpgpoo.Campanha.controller;
 
 import com.rpgpoo.Campanha.model.CampanhaModel;
+import com.rpgpoo.Campanha.view.CampanhaCreateView;
 import com.rpgpoo.Campanha.view.CampanhaListView;
 import com.rpgpoo.Campanha.view.CampanhaSelectView;
 import com.rpgpoo.Dado.model.DadoModel;
 import com.rpgpoo.Gerenciador.Gerenciador;
+import com.rpgpoo.Jogador.model.JogadorModel;
+import com.rpgpoo.Jogador.view.JogadorListView;
 import com.rpgpoo.Login.sessao.SessaoCampanha;
 import com.rpgpoo.Personagem.model.PersonagemModel;
 import com.rpgpoo.utils.AppColors;
@@ -14,12 +17,15 @@ import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class CampanhaListController {
-    private CampanhaListView view;
-    private Gerenciador gerenciador;
+    private final CampanhaListView view;
+    private final Gerenciador gerenciador;
 
     public CampanhaListController(CampanhaListView view, Gerenciador gerenciador) {
         this.view = view;
@@ -40,7 +46,7 @@ public class CampanhaListController {
                     .setParameter("campanhaId", campanhaId)
                     .getResultList();
 
-            Object[][] dados = new Object[personagens.size()][3];
+            Object[][] dados = new Object[personagens.size()][6];
             FontIcon iconeUsuario = FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT);
 
             for (int i = 0; i < personagens.size(); i++) {
@@ -48,12 +54,15 @@ public class CampanhaListController {
 
                 dados[i][0] = iconeUsuario;
                 dados[i][1] = personagem.getJogador();
-                dados[i][2] = personagem.getNome();
+                dados[i][2] = personagem;
+                dados[i][3] = personagem.getNivel();
+                dados[i][4] = personagem.getRaca();
+                dados[i][5] = personagem.getClasse();
             }
 
             Dictionary<String, Object> dicionarioRetorno = new Hashtable<>();
             dicionarioRetorno.put("dados", dados);
-            dicionarioRetorno.put("colunas", new Object[]{"", "Jogador", "Personagem"});
+            dicionarioRetorno.put("colunas", new Object[]{"", "Jogador", "Personagem", "Nível", "Raça", "Classe"});
             return dicionarioRetorno;
 
         } catch (Exception ex) {
@@ -71,6 +80,8 @@ public class CampanhaListController {
                         (Object[]) campanhas.get("colunas")
                 )
         );
+
+        view.getTblJogadores().getColumnModel().getColumn(0).setMaxWidth(30);
     }
 
     public void preencherCampos() {
@@ -115,6 +126,72 @@ public class CampanhaListController {
             dialog.pack();
             dialog.setLocationRelativeTo(gerenciador);
             dialog.setVisible(true);
+        }
+    }
+
+    public void btnAdicionarJogadorClick() {
+        JDialog dialog = new JDialog(gerenciador, "Narratus RPG - Adicionar Jogador", true);
+
+        JogadorListView jogadorListView = new JogadorListView(this.gerenciador, () -> {
+            dialog.dispose();
+            recarregarTblJogadores();
+        });
+
+        dialog.setContentPane(jogadorListView);
+        dialog.setMinimumSize(new Dimension(800,0));
+        dialog.pack();
+        dialog.setLocationRelativeTo(this.gerenciador);
+        dialog.setVisible(true);
+    }
+
+    public void btnRemoverJogadorClick() {
+        if (JOptionPane.showConfirmDialog(
+            view,
+            "Deseja realmente excluir este jogador?",
+            "Atenção",
+            JOptionPane.YES_NO_OPTION
+        ) == JOptionPane.YES_OPTION) {
+            JTable tblJogadores = view.getTblJogadores();
+            int linha = tblJogadores.getSelectedRow();
+            if (linha == -1) return;
+
+            int i = tblJogadores.convertRowIndexToModel(linha);
+            JogadorModel jogadorSelecionado = (JogadorModel) tblJogadores.getModel().getValueAt(i, 1);
+            PersonagemModel personagemSelecionado = (PersonagemModel) tblJogadores.getModel().getValueAt(i, 2);
+
+            try (EntityManager em = JpaUtil.getEntityManager()) {
+                em.getTransaction().begin();
+
+                CampanhaModel campanha = em.find(CampanhaModel.class, SessaoCampanha.getInstancia().getCampanhaLogada().getId());
+                JogadorModel jogador = em.find(JogadorModel.class, jogadorSelecionado.getId());
+                PersonagemModel personagem = em.find(PersonagemModel.class, personagemSelecionado.getId());
+
+                campanha.getPersonagens().remove(personagem);
+                campanha.getJogadores().remove(jogador);
+
+                em.getTransaction().commit();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            recarregarTblJogadores();
+        }
+    }
+
+    public void btnEditarCampanhaClick() {
+        JDialog dialog = new JDialog(gerenciador, "Narratus RPG - Editar Campanha", true);
+
+        CampanhaCreateView campanhaCreateView = new CampanhaCreateView(this.gerenciador, false, dialog::dispose);
+
+        dialog.setContentPane(campanhaCreateView);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this.gerenciador);
+        dialog.setVisible(true);
+    }
+
+    public void tblJogadoresSelectRow(ListSelectionEvent e) {
+        if (!e.getValueIsAdjusting()) {
+            view.getBtnRemoverJogador().setEnabled(view.getTblJogadores().getSelectedRow() != -1);
         }
     }
 

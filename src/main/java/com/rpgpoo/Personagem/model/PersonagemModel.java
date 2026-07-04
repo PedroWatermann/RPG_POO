@@ -118,4 +118,6 @@ public class PersonagemModel extends EntidadeModel {
         int danoFinal = Math.max(danoRecebido - reducao, 0);
         this.setVida(this.getVida() - danoFinal);
     }
+
+
 }

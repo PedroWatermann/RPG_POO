@@ -3,6 +3,7 @@ package com.rpgpoo.Campanha.view;
 import com.rpgpoo.Campanha.controller.CampanhaListController;
 import com.rpgpoo.Dado.model.DadoModel;
 import com.rpgpoo.Gerenciador.Gerenciador;
+import com.rpgpoo.Login.sessao.SessaoCampanha;
 import com.rpgpoo.utils.*;
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import org.kordamp.ikonli.swing.FontIcon;
@@ -146,13 +147,13 @@ public class CampanhaListView extends JPanel {
         );
         tblJogadores.setDefaultRenderer(Object.class, new IconTextCellRender());
         tblJogadores.getColumnModel().getColumn(0).setMaxWidth(30);
-        tblJogadores.setShowVerticalLines(false);
         tblJogadores.setShowHorizontalLines(false);
         tblJogadores.setBackground(AppColors.DARK);
         tblJogadores.setForeground(AppColors.PARCHMENT);
         tblJogadores.setSelectionBackground(AppColors.CRIMSON);
         tblJogadores.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         tblJogadores.setRowHeight(28);
+        tblJogadores.getSelectionModel().addListSelectionListener(campanhaListController::tblJogadoresSelectRow);
         JTableHeader header = tblJogadores.getTableHeader();
         header.setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
@@ -182,12 +183,15 @@ public class CampanhaListView extends JPanel {
                 JButtonCustom.Style.SECONDARY,
                 FontIcon.of(FontAwesomeSolid.USER_PLUS, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
+        btnAdicionarJogador.addActionListener(_ -> campanhaListController.btnAdicionarJogadorClick());
 
         btnRemoverJogador = new JButtonCustom(
                 "Remover Jogador",
                 JButtonCustom.Style.DANGER,
                 FontIcon.of(FontAwesomeSolid.USER_MINUS, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
+        btnRemoverJogador.setEnabled(false);
+        btnRemoverJogador.addActionListener(_ -> campanhaListController.btnRemoverJogadorClick());
 
         btnIniciarCombate = new JButtonCustom(
                 "Iniciar Combate",
@@ -206,6 +210,7 @@ public class CampanhaListView extends JPanel {
                 JButtonCustom.Style.SECONDARY,
                 FontIcon.of(FontAwesomeSolid.PEN, 12, AppColors.PARCHMENT)
         );
+        btnEditarCampanha.addActionListener(_ -> campanhaListController.btnEditarCampanhaClick());
 
         this.setLayout(new GridBagLayout());
         this.setBackground(AppColors.DARK);
@@ -317,45 +322,48 @@ public class CampanhaListView extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         this.add(scrJogadores, gbc);
 
-        // Definições para botões lado a lado
-        gbc.gridy = 10;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        boolean ehMestre = SessaoCampanha.getInstancia().jogadorLogadoEhMestre();
+        if (ehMestre) {
+            // Definições para botões lado a lado
+            gbc.gridy = 10;
+            gbc.weighty = 0;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Definições para btnAdicionarJogador
-        gbc.gridx = 0;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(10, 0, 5, 5);
-        this.add(btnAdicionarJogador, gbc);
+            // Definições para btnAdicionarJogador
+            gbc.gridx = 0;
+            gbc.gridwidth = 1;
+            gbc.insets = new Insets(10, 0, 5, 5);
+            this.add(btnAdicionarJogador, gbc);
 
-        // Definições para btnRemoverJogador
-        gbc.gridx = 1;
-        gbc.insets = new Insets(10, 5, 5, 0);
-        this.add(btnRemoverJogador, gbc);
+            // Definições para btnRemoverJogador
+            gbc.gridx = 1;
+            gbc.insets = new Insets(10, 5, 5, 0);
+            this.add(btnRemoverJogador, gbc);
 
-        // Definições para btnIniciarCombate
-        gbc.gridy = 11;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(5, 0, 5, 0);
-        this.add(btnIniciarCombate, gbc);
+            // Definições para btnIniciarCombate
+            gbc.gridy = 11;
+            gbc.gridx = 0;
+            gbc.gridwidth = 2;
+            gbc.insets = new Insets(5, 0, 5, 0);
+            this.add(btnIniciarCombate, gbc);
 
-        JPanel pnlBotoesCampanha = new JPanel(new GridBagLayout());
-        pnlBotoesCampanha.setOpaque(false);
+            JPanel pnlBotoesCampanha = new JPanel(new GridBagLayout());
+            pnlBotoesCampanha.setOpaque(false);
 
-        // Definições para btnTrocarCampanha
-        gbc.gridy = 12;
-        gbc.gridwidth = 1;
-        gbc.weightx = 0.5;
-        gbc.insets = new Insets(5, 0, 0, 5);
-        gbc.anchor = GridBagConstraints.WEST;
-        this.add(btnTrocarCampanha, gbc);
+            // Definições para btnTrocarCampanha
+            gbc.gridy = 12;
+            gbc.gridwidth = 1;
+            gbc.weightx = 0.5;
+            gbc.insets = new Insets(5, 0, 0, 5);
+            gbc.anchor = GridBagConstraints.WEST;
+            this.add(btnTrocarCampanha, gbc);
 
-        // Definições para btnEditarCampanha
-        gbc.gridx = 1;
-        gbc.insets = new Insets(5, 5, 0, 0);
-        gbc.anchor = GridBagConstraints.EAST;
-        this.add(btnEditarCampanha, gbc);
+            // Definições para btnEditarCampanha
+            gbc.gridx = 1;
+            gbc.insets = new Insets(5, 5, 0, 0);
+            gbc.anchor = GridBagConstraints.EAST;
+            this.add(btnEditarCampanha, gbc);
+        }
     }
 
     public JTextField getTxtNome() {

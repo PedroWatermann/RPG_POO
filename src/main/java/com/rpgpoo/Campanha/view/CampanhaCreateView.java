@@ -97,6 +97,7 @@ public class CampanhaCreateView extends JPanel {
         txtMestre.setForeground(Color.WHITE);
         txtMestre.setCaretColor(AppColors.PARCHMENT);
         txtMestre.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
+        txtMestre.setPreferredSize(new Dimension(0, 28));
         txtMestre.setEditable(false);
 
         lblDadoPadrao.setFont(new Font("SansSerif", Font.PLAIN, 12));

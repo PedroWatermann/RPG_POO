@@ -42,6 +42,7 @@ public class CampanhaSelectController {
         this.modoTroca = modoTroca;
         this.aoSelecionar = aoSelecionar;
     }
+
     public void btnNovoClick() {
         JDialog dialog = new JDialog(gerenciador, "Narratus RPG - Nova Campanha", true);
 
