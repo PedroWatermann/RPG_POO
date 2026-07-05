@@ -9,6 +9,10 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@NamedQuery(
+        name = "Monstro.porId",
+        query = "FROM MonstroModel WHERE id = :id"
+)
 @Table(name = "monstro")
 public class MonstroModel extends EntidadeModel {
     @ManyToMany
@@ -29,13 +33,20 @@ public class MonstroModel extends EntidadeModel {
     }
 
     public void setLoot(List<ItemModel> loot) {
-        if (loot != null && !loot.isEmpty())
-            this.loot = loot;
+        this.loot = loot;
     }
 
-    public void setLoot(ItemModel itemLoot) {
-        if (this.loot != null)
-            this.loot.add(itemLoot);
+    public void adicionarItemLoot(ItemModel itemLoot) {
+        if (this.loot == null) {
+            this.loot = new java.util.ArrayList<>();
+        }
+        this.loot.add(itemLoot);
+    }
+
+    public void removerItemLoot(ItemModel itemLoot) {
+        if (this.loot != null) {
+            this.loot.remove(itemLoot);
+        }
     }
 
     public RacaModel getRaca() {
@@ -48,7 +59,7 @@ public class MonstroModel extends EntidadeModel {
     //endregion
 
     //Construtor
-    protected MonstroModel() {}
+    public MonstroModel() {}
 
     public MonstroModel(String nome, int nivel, int ataque, int vida, int defesa, ArmaModel arma, List<ItemModel> loot, RacaModel raca, int dt) {
         super(nome, nivel, ataque, vida, defesa, arma, dt);

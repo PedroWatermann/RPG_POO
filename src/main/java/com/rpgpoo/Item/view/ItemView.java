@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 
 public class ItemView extends JPanel {
     JLabel lblTitulo = new JLabel();
@@ -47,6 +48,7 @@ public class ItemView extends JPanel {
         txtBusca.setCaretColor(AppColors.PARCHMENT);
         txtBusca.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
         txtBusca.setPreferredSize(new Dimension(0, 28));
+        txtBusca.addActionListener(_ -> controller.btnBuscarClick()); // Enter também busca
 
         btnBuscar = new JButtonCustom(
                 "",
@@ -54,26 +56,42 @@ public class ItemView extends JPanel {
                 FontIcon.of(FontAwesomeSolid.SEARCH, AppColors.ICON_MD1, AppColors.GOLD)
         );
         btnBuscar.setPreferredSize(new Dimension(28, 28));
+        btnBuscar.addActionListener(_ -> controller.btnBuscarClick());
 
         cbxTipoItem.setFont(new Font("SansSerif", Font.PLAIN, 12));
         cbxTipoItem.setForeground(Color.WHITE);
         cbxTipoItem.setBackground(AppColors.DARK);
         GenericUtils.estilizarComboBox(cbxTipoItem);
-        // Dados ficticios
-        cbxTipoItem.addItem(TipoItemEnum.FERRAMENTA);
-        cbxTipoItem.addItem(TipoItemEnum.ANEL);
-        cbxTipoItem.addItem(TipoItemEnum.BEBIDA);
+        cbxTipoItem.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                          boolean isSelected, boolean cellHasFocus) {
+                String texto = (value == null) ? "Todos os Tipos" : value.toString();
+                return super.getListCellRendererComponent(list, texto, index, isSelected, cellHasFocus);
+            }
+        });
+        cbxTipoItem.addItem(null); // "Todos os Tipos"
+        for (TipoItemEnum tipo : TipoItemEnum.values()) {
+            cbxTipoItem.addItem(tipo);
+        }
 
-        Object[][] dadosTemporarios = {
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Alemão", "Thorin, o Forte"},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Barela", "Elira Lança Preta"},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Laranjinha", "Thorin, o Forte"},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Sensual", "Thorin, o Forte"},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Pescado", "Thorin, o Forte"},
-        };
-        tblItens.setModel(new DefaultTableModel(dadosTemporarios, new Object[]{"", "Usuário", "Personagem"}));
+        boolean[] carregandoFiltro = {true};
+        cbxTipoItem.addItemListener(e -> {
+            if (carregandoFiltro[0]) return;
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                controller.btnBuscarClick();
+            }
+        });
+        carregandoFiltro[0] = false;
+        GenericUtils.estilizarComboBox(cbxTipoItem);
+
+        tblItens.setModel(new DefaultTableModel(new Object[][]{}, new Object[]{"", "Nome", "Tipo", "Raridade", "Valor (GP)", ""}) {
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        });
         tblItens.setDefaultRenderer(Object.class, new IconTextCellRender());
         tblItens.getColumnModel().getColumn(0).setMaxWidth(30);
+        tblItens.removeColumn(tblItens.getColumnModel().getColumn(5)); // coluna oculta com o id do item
         tblItens.setShowVerticalLines(false);
         tblItens.setShowHorizontalLines(false);
         tblItens.setBackground(AppColors.DARK);
@@ -117,12 +135,14 @@ public class ItemView extends JPanel {
                 JButtonCustom.Style.SECONDARY,
                 FontIcon.of(FontAwesomeSolid.PENCIL_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
+        btnEditar.addActionListener(_ -> controller.btnEditarClick());
 
         btnExcluir = new JButtonCustom(
                 "Excluir Item",
                 JButtonCustom.Style.DANGER,
                 FontIcon.of(FontAwesomeSolid.TRASH_ALT, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
+        btnExcluir.addActionListener(_ -> controller.btnExcluirClick());
 
         this.setLayout(new GridBagLayout());
         this.setBackground(AppColors.DARK);
@@ -150,7 +170,6 @@ public class ItemView extends JPanel {
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Definições para lblTitulo
         gbc.gridx = 0;
         gbc.gridwidth = 3;
         gbc.weightx = 1.0;
@@ -158,23 +177,19 @@ public class ItemView extends JPanel {
         gbc.insets = new Insets(0, 0, 6, 0);
         this.add(lblTitulo, gbc);
 
-        // Definições para separador
         gbc.gridy = 1;
         this.add(separador, gbc);
 
-        // Definições para pnlBusca
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(0, 0, 6, 5);
         this.add(pnlBusca, gbc);
 
-        // Definições para cbxTipoItem
         gbc.gridx = 2;
         gbc.gridwidth = 1;
         gbc.insets = new Insets(0, 5, 6, 0);
         this.add(cbxTipoItem, gbc);
 
-        // Definições para tblItens/scrItens
         gbc.gridy = 3;
         gbc.gridx = 0;
         gbc.weighty = 1.0;
@@ -183,23 +198,23 @@ public class ItemView extends JPanel {
         gbc.gridwidth = 3;
         this.add(scrItens, gbc);
 
-        // Definições para botões lado a lado
         gbc.weighty = 0.0;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
 
-        // Definições para btnAdicionar
         gbc.insets = new Insets(0, 0, 0, 5);
         this.add(btnAdicionar, gbc);
 
-        // Definições para btnEditar
         gbc.insets = new Insets(0, 5, 0, 5);
         gbc.gridx = 1;
         this.add(btnEditar, gbc);
 
-        // Definições para btnExcluir
         gbc.insets = new Insets(0, 5, 0, 0);
         gbc.gridx = 2;
         this.add(btnExcluir, gbc);
     }
+
+    public JTextField getTxtBusca() { return txtBusca; }
+    public JComboBox<TipoItemEnum> getCbxTipoItem() { return cbxTipoItem; }
+    public JTable getTblItens() { return tblItens; }
 }

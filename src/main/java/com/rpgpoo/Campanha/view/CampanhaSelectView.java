@@ -172,10 +172,6 @@ public class CampanhaSelectView extends JPanel {
         return tblCampanhas;
     }
 
-    public JButton getBtnNovo() {
-        return btnNovo;
-    }
-
     public JButton getBtnEditar() {
         return btnEditar;
     }

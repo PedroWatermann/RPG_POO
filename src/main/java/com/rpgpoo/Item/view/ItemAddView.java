@@ -2,6 +2,8 @@ package com.rpgpoo.Item.view;
 
 import com.rpgpoo.Enum.RaridadeEnum;
 import com.rpgpoo.Enum.TipoItemEnum;
+import com.rpgpoo.Gerenciador.Gerenciador;
+import com.rpgpoo.Item.controller.ItemAddController;
 import com.rpgpoo.utils.AppColors;
 import com.rpgpoo.utils.GenericUtils;
 import com.rpgpoo.utils.JButtonCustom;
@@ -11,8 +13,8 @@ import org.kordamp.ikonli.swing.FontIcon;
 import javax.swing.*;
 import java.awt.*;
 
-public class ItemAddView extends JFrame {
-    JPanel contentPane = new JPanel();
+public class ItemAddView extends JPanel {
+    JLabel lblIdItem = new JLabel();
 
     JLabel lblTitulo = new JLabel();
     JSeparator sepTopo = new JSeparator();
@@ -37,9 +39,13 @@ public class ItemAddView extends JFrame {
     JButton btnSalvar;
     JButton btnCancelar;
 
-    public ItemAddView() {
+    public ItemAddView(Gerenciador gerenciador, boolean ehNovo, Integer idItem, Runnable sucesso, Runnable cancelar) {
+        ItemAddController controller = new ItemAddController(gerenciador, this, ehNovo, idItem, sucesso);
+
+        lblIdItem.setVisible(false);
+
         lblTitulo.setIcon(FontIcon.of(FontAwesomeSolid.BOX, AppColors.ICON_LG, AppColors.GOLD));
-        lblTitulo.setText(" ADICIONAR ITEM");
+        lblTitulo.setText(ehNovo ? " ADICIONAR ITEM" : " EDITAR ITEM");
         lblTitulo.setFont(new Font(Font.SERIF, Font.BOLD, 18));
         lblTitulo.setForeground(AppColors.GOLD);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -68,10 +74,9 @@ public class ItemAddView extends JFrame {
         cbxTipo.setForeground(Color.WHITE);
         cbxTipo.setBackground(AppColors.DARK);
         GenericUtils.estilizarComboBox(cbxTipo);
-        // Dados ficticios
-        cbxTipo.addItem(TipoItemEnum.FERRAMENTA);
-        cbxTipo.addItem(TipoItemEnum.ANEL);
-        cbxTipo.addItem(TipoItemEnum.BEBIDA);
+        for (TipoItemEnum tipo : TipoItemEnum.values()) {
+            cbxTipo.addItem(tipo);
+        }
 
         lblRaridade.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         lblRaridade.setText("Raridade");
@@ -82,10 +87,9 @@ public class ItemAddView extends JFrame {
         cbxRaridade.setForeground(Color.WHITE);
         cbxRaridade.setBackground(AppColors.DARK);
         GenericUtils.estilizarComboBox(cbxRaridade);
-        // Dados ficticios
-        cbxRaridade.addItem(RaridadeEnum.COMUM);
-        cbxRaridade.addItem(RaridadeEnum.EPICO);
-        cbxRaridade.addItem(RaridadeEnum.RARO);
+        for (RaridadeEnum raridade : RaridadeEnum.values()) {
+            cbxRaridade.addItem(raridade);
+        }
 
         lblEfeito.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         lblEfeito.setText("Valor do Efeito");
@@ -100,7 +104,7 @@ public class ItemAddView extends JFrame {
         txtEfeito.setPreferredSize(new Dimension(0, 28));
 
         lblValor.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-        lblValor.setText("Valor");
+        lblValor.setText("Valor (GP)");
         lblValor.setHorizontalAlignment(SwingConstants.LEFT);
         lblValor.setForeground(AppColors.PARCHMENT);
 
@@ -119,112 +123,103 @@ public class ItemAddView extends JFrame {
                 JButtonCustom.Style.PRIMARY,
                 FontIcon.of(FontAwesomeSolid.SAVE, AppColors.ICON_SM, AppColors.GOLD)
         );
+        btnSalvar.addActionListener(_ -> controller.btnSalvarClick());
 
         btnCancelar = new JButtonCustom(
                 "Cancelar",
                 JButtonCustom.Style.DANGER,
                 FontIcon.of(FontAwesomeSolid.TIMES, AppColors.ICON_SM, AppColors.GOLD)
         );
+        btnCancelar.addActionListener(_ -> cancelar.run());
 
-        // Definições para o painel de conteúdo
-        contentPane.setLayout(new GridBagLayout());
-        contentPane.setBackground(AppColors.DARK);
-        contentPane.setBorder(BorderFactory.createCompoundBorder(
+        this.setLayout(new GridBagLayout());
+        this.setBackground(AppColors.DARK);
+        this.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(AppColors.GOLD, 0),
                 BorderFactory.createEmptyBorder(15, 20, 15, 20)
         ));
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Definições para lblTitulo
         gbc.gridwidth = 2;
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        contentPane.add(lblTitulo, gbc);
+        this.add(lblTitulo, gbc);
 
-        // Definições para sepTopo
         gbc.gridy = 1;
         gbc.insets = new Insets(5, 0, 5, 0);
-        contentPane.add(sepTopo, gbc);
+        this.add(sepTopo, gbc);
 
-        // Definições para lblNome
         gbc.gridy = 2;
         gbc.insets = new Insets(5, 0, 0, 0);
-        contentPane.add(lblNome, gbc);
+        this.add(lblNome, gbc);
 
-        // Definições para txtNome
         gbc.gridy = 3;
-        contentPane.add(txtNome, gbc);
+        gbc.insets = new Insets(0, 0, 5, 0);
+        this.add(txtNome, gbc);
 
-        // Definições para lblTipo
         gbc.gridy = 4;
         gbc.gridwidth = 1;
+        gbc.weightx = 0.5;
         gbc.insets = new Insets(5, 0, 0, 5);
-        contentPane.add(lblTipo, gbc);
+        this.add(lblTipo, gbc);
 
-        // Definições para lblRaridade
         gbc.gridx = 1;
         gbc.insets = new Insets(5, 5, 0, 0);
-        contentPane.add(lblRaridade, gbc);
+        this.add(lblRaridade, gbc);
 
-        // Definições para cbxTipo
         gbc.gridy = 5;
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 0, 5, 5);
-        contentPane.add(cbxTipo, gbc);
+        this.add(cbxTipo, gbc);
 
-        // Definições para cbxRaridade
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 5, 5, 0);
-        contentPane.add(cbxRaridade, gbc);
+        this.add(cbxRaridade, gbc);
 
-        // Definições para lblEfeito
         gbc.gridy = 6;
         gbc.gridx = 0;
         gbc.insets = new Insets(5, 0, 0, 5);
-        contentPane.add(lblEfeito, gbc);
+        this.add(lblEfeito, gbc);
 
-        // Definições para lblValor
         gbc.gridx = 1;
         gbc.insets = new Insets(5, 5, 0, 0);
-        contentPane.add(lblValor, gbc);
+        this.add(lblValor, gbc);
 
-        // Definições para txtEfeito
         gbc.gridy = 7;
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 0, 5, 5);
-        contentPane.add(txtEfeito, gbc);
+        this.add(txtEfeito, gbc);
 
-        // Definições para txtValor
         gbc.gridx = 1;
         gbc.insets = new Insets(0, 5, 5, 0);
-        contentPane.add(txtValor, gbc);
+        this.add(txtValor, gbc);
 
-        // Definições para sepBaixo
         gbc.gridy = 8;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
         gbc.insets = new Insets(5, 0, 5, 0);
-        contentPane.add(sepBaixo, gbc);
+        this.add(sepBaixo, gbc);
 
-        // Definições para btnSalvar
         gbc.gridwidth = 1;
         gbc.gridy = 9;
         gbc.insets = new Insets(5, 0, 0, 5);
-        contentPane.add(btnSalvar, gbc);
+        this.add(btnSalvar, gbc);
 
-        // Definições para btnCancelar
         gbc.gridx = 1;
         gbc.insets = new Insets(5, 5, 0, 0);
-        contentPane.add(btnCancelar, gbc);
-
-        // Definições para a tela
-        this.setContentPane(contentPane);
-        this.setTitle("Narratus RPG - Adicionar Item");
-        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        this.pack();
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.add(btnCancelar, gbc);
     }
+
+    public JLabel getLblIdItem() { return lblIdItem; }
+    public JTextField getTxtNome() { return txtNome; }
+    public JComboBox<TipoItemEnum> getCbxTipo() { return cbxTipo; }
+    public JComboBox<RaridadeEnum> getCbxRaridade() { return cbxRaridade; }
+    public JTextField getTxtEfeito() { return txtEfeito; }
+    public JTextField getTxtValor() { return txtValor; }
+    public JButton getBtnSalvar() { return btnSalvar; }
+    public JButton getBtnCancelar() { return btnCancelar; }
 }

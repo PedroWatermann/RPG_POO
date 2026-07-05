@@ -1,11 +1,21 @@
 package com.rpgpoo.Monstro.controller;
 
+import com.rpgpoo.Arma.model.ArmaModel;
 import com.rpgpoo.Gerenciador.Gerenciador;
+import com.rpgpoo.Item.model.ItemModel;
 import com.rpgpoo.Monstro.model.MonstroModel;
+import com.rpgpoo.Monstro.view.MonstroEditView;
 import com.rpgpoo.Monstro.view.MonstroView;
+import com.rpgpoo.Raca.model.RacaModel;
+import com.rpgpoo.utils.AppColors;
+import com.rpgpoo.utils.JpaUtil;
+import jakarta.persistence.EntityManager;
+import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
+import org.kordamp.ikonli.swing.FontIcon;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,56 +23,71 @@ public class MonstroController {
     private final MonstroView view;
     private final Gerenciador gerenciador;
 
-    // TODO: Quando existir um banco de dados real, trocar estas listas pelos seus respectivos Repositories/DAOs
-    // ex: private final MonstroRepository monstroRepository;
-    private List<MonstroModel> monstrosMock = new ArrayList<>();
-    private List<String> racasMock = new ArrayList<>();
-    private List<String> armasMock = new ArrayList<>();
+    private List<MonstroModel> monstros = new ArrayList<>();
+    private List<RacaModel> racas = new ArrayList<>();
+    private List<ArmaModel> armas = new ArrayList<>();
 
     public MonstroController(MonstroView view, Gerenciador gerenciador) {
         this.view = view;
         this.gerenciador = gerenciador;
 
-        this.view.getBtnSalvar().addActionListener(e -> btnSalvarClick());
-        this.view.getBtnExcluir().addActionListener(e -> btnExcluirClick());
-        this.view.getBtnAdicionarLoot().addActionListener(e -> btnAdicionarLootClick());
-        this.view.getBtnRemoverLoot().addActionListener(e -> btnRemoverLootClick());
+        this.view.getBtnNovo().addActionListener(_ -> btnNovoClick());
+        this.view.getBtnEditar().addActionListener(_ -> btnEditarClick());
+        this.view.getBtnExcluir().addActionListener(_ -> btnExcluirClick());
+        this.view.getBtnAdicionarLoot().addActionListener(_ -> btnAdicionarLootClick());
+        this.view.getBtnRemoverLoot().addActionListener(_ -> btnRemoverLootClick());
+        this.view.getCbxSelecionar().addActionListener(_ -> aoSelecionarMonstro());
 
-        this.view.getCbxSelecionar().addActionListener(e -> aoSelecionarMonstro());
+        carregarDadosIniciais();
+    }
 
-        carregarMockups();
+    private void carregarDadosIniciais() {
+        buscarRacasEArmas();
+        buscarMonstrosDoBanco();
         atualizarView();
     }
 
-    private void carregarMockups() {
-        // Mockups de Raças
-        racasMock.add("Nenhuma");
-        racasMock.add("Goblinóide");
-        racasMock.add("Morto-Vivo");
-        
-        // Mockups de Armas
-        armasMock.add("Desarmado");
-        armasMock.add("Espada Curta");
-        armasMock.add("Machado de Batalha");
+    private void buscarRacasEArmas() {
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            racas = em.createQuery("SELECT r FROM RacaModel r ORDER BY r.nome", RacaModel.class)
+                    .getResultList();
+            armas = em.createQuery("SELECT a FROM ArmaModel a ORDER BY a.nome", ArmaModel.class)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(view, "Erro ao carregar raças e armas do banco de dados.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-        // Mockups de Monstros
-        MonstroModel goblin = new MonstroModel("Goblin Saqueador", 1, 3, 7, 12, null, new ArrayList<>(), null, 10);
-        MonstroModel orc = new MonstroModel("Orc Enfurecido", 2, 5, 15, 14, null, new ArrayList<>(), null, 12);
-        monstrosMock.add(goblin);
-        monstrosMock.add(orc);
+    private void buscarMonstrosDoBanco() {
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            monstros = em.createQuery(
+                            "SELECT DISTINCT m FROM MonstroModel m " +
+                                    "LEFT JOIN FETCH m.raca " +
+                                    "LEFT JOIN FETCH m.arma " +
+                                    "ORDER BY m.nome",
+                            MonstroModel.class
+                    )
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(view, "Erro ao carregar monstros do banco de dados.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void atualizarView() {
         // Preenche Raças
         view.getCbxRaca().removeAllItems();
-        for (String raca : racasMock) {
-            view.getCbxRaca().addItem(raca);
+        for (RacaModel raca : racas) {
+            view.getCbxRaca().addItem(raca.getNome());
         }
 
         // Preenche Armas
         view.getCbxArma().removeAllItems();
-        for (String arma : armasMock) {
-            view.getCbxArma().addItem(arma);
+        for (ArmaModel arma : armas) {
+            view.getCbxArma().addItem(arma.getNome());
         }
 
         atualizarComboSelecionar();
@@ -74,7 +99,7 @@ public class MonstroController {
         isUpdatingCombo = true;
         view.getCbxSelecionar().removeAllItems();
         view.getCbxSelecionar().addItem("Novo Monstro...");
-        for (MonstroModel m : monstrosMock) {
+        for (MonstroModel m : monstros) {
             view.getCbxSelecionar().addItem(m.getNome());
         }
         isUpdatingCombo = false;
@@ -82,14 +107,12 @@ public class MonstroController {
 
     private void aoSelecionarMonstro() {
         if (isUpdatingCombo) return;
-        
+
         int index = view.getCbxSelecionar().getSelectedIndex();
         if (index <= 0) {
-            // "Novo Monstro..." selecionado ou lista vazia
             limparFormulario();
         } else {
-            // O index 0 é "Novo Monstro...", então o monstro na lista está em index - 1
-            MonstroModel monstroSelecionado = monstrosMock.get(index - 1);
+            MonstroModel monstroSelecionado = monstros.get(index - 1);
             preencherFormulario(monstroSelecionado);
         }
     }
@@ -103,7 +126,7 @@ public class MonstroController {
         view.getTxtDt().setText("");
         view.getCbxRaca().setSelectedIndex(0);
         view.getCbxArma().setSelectedIndex(0);
-        // Limpar tabela de loot
+
         DefaultTableModel model = (DefaultTableModel) view.getTblLoot().getModel();
         model.setRowCount(0);
     }
@@ -115,89 +138,76 @@ public class MonstroController {
         view.getTxtDefesa().setText(String.valueOf(m.getDefesa()));
         view.getTxtAtaque().setText(String.valueOf(m.getAtaque()));
         view.getTxtDt().setText(String.valueOf(m.getDt()));
-        
-        // Em um sistema real com BD, você setaria o Item selecionado do ComboBox buscando pelo ID
-        if (m.getRaca() != null && m.getRaca().getNome() != null) {
+
+        if (m.getRaca() != null) {
             view.getCbxRaca().setSelectedItem(m.getRaca().getNome());
         } else {
             view.getCbxRaca().setSelectedIndex(0);
         }
 
-        if (m.getArma() != null && m.getArma().getNome() != null) {
+        if (m.getArma() != null) {
             view.getCbxArma().setSelectedItem(m.getArma().getNome());
         } else {
             view.getCbxArma().setSelectedIndex(0);
         }
 
-        // TODO: Popular a JTable de Loot com os dados de m.getLoot()
         DefaultTableModel model = (DefaultTableModel) view.getTblLoot().getModel();
         model.setRowCount(0);
-        // Exemplo: 
-        // for (ItemModel item : m.getLoot()) { model.addRow(new Object[]{ icone, item.getNome(), item.getRaridade() }); }
+        if (m.getLoot() != null) {
+            for (ItemModel item : m.getLoot()) {
+                model.addRow(new Object[]{
+                        FontIcon.of(FontAwesomeSolid.BOX, AppColors.ICON_SM, AppColors.PARCHMENT),
+                        item.getNome(),
+                        item.getRaridade().toString(),
+                        item
+                });
+            }
+        }
     }
 
-    public void btnSalvarClick() {
-        String nome = view.getTxtNome().getText();
-        if (nome == null || nome.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(view, "O nome do monstro não pode estar vazio.", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
+    public void btnNovoClick() {
+        JDialog dialog = new JDialog(gerenciador, "Narratus RPG - Novo Monstro", true);
+
+        MonstroEditView monstroEditView = new MonstroEditView(this.gerenciador, true, null, () -> {
+            dialog.dispose();
+            recarregarCampos();
+        });
+
+        dialog.setContentPane(monstroEditView);
+        dialog.setMinimumSize(new Dimension(800, 0));
+        dialog.pack();
+        dialog.setLocationRelativeTo(this.gerenciador);
+        dialog.setVisible(true);
+    }
+
+    public void btnEditarClick() {
+        int index = view.getCbxSelecionar().getSelectedIndex();
+        if (index <= 0) {
+            JOptionPane.showMessageDialog(view, "Selecione um monstro existente para editar.",
+                    "Atenção", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        try {
-            int nivel = parseCampo(view.getTxtNivel());
-            int vida = parseCampo(view.getTxtVida());
-            int defesa = parseCampo(view.getTxtDefesa());
-            int ataque = parseCampo(view.getTxtAtaque());
-            int dt = parseCampo(view.getTxtDt());
+        Integer idMonstroSelecionado = monstros.get(index - 1).getId();
 
-            if (nivel < 0 || vida < 0 || defesa < 0 || ataque < 0 || dt < 0) {
-                JOptionPane.showMessageDialog(view, "Os atributos numéricos não podem ser menores que zero.", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        JDialog dialog = new JDialog(gerenciador, "Narratus RPG - Editar Monstro", true);
 
-            int index = view.getCbxSelecionar().getSelectedIndex();
-            MonstroModel alvo;
-            
-            if (index <= 0) {
-                // Criar Novo
-                alvo = new MonstroModel(nome, nivel, ataque, vida, defesa, null, new ArrayList<>(), null, dt);
-                monstrosMock.add(alvo);
-                JOptionPane.showMessageDialog(view, "Novo monstro cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                // Editar Existente
-                alvo = monstrosMock.get(index - 1);
-                alvo.setNome(nome);
-                alvo.setNivel(nivel);
-                alvo.setVida(vida);
-                alvo.setDefesa(defesa);
-                alvo.setAtaque(ataque);
-                alvo.setDt(dt);
-                JOptionPane.showMessageDialog(view, "Monstro atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            }
+        MonstroEditView monstroEditView = new MonstroEditView(this.gerenciador, false, idMonstroSelecionado, () -> {
+            dialog.dispose();
+            recarregarCampos();
+        });
 
-            // Mockando Raca e Arma de forma bem simples para visualização temporária
-            if (view.getCbxRaca().getSelectedIndex() > 0) {
-                alvo.setRaca(new com.rpgpoo.Raca.model.RacaModel((String) view.getCbxRaca().getSelectedItem(), null));
-            } else {
-                alvo.setRaca(null);
-            }
+        dialog.setContentPane(monstroEditView);
+        dialog.setMinimumSize(new Dimension(800, 0));
+        dialog.pack();
+        dialog.setLocationRelativeTo(this.gerenciador);
+        dialog.setVisible(true);
+    }
 
-            if (view.getCbxArma().getSelectedIndex() > 0) {
-                alvo.setArma(new com.rpgpoo.Arma.model.ArmaModel((String) view.getCbxArma().getSelectedItem(), null, 0, null, 0, 0, 0, 0, null));
-            } else {
-                alvo.setArma(null);
-            }
-
-            // Atualiza os ComboBoxes para refletir a nova lista
-            atualizarComboSelecionar();
-            // Mantém a seleção correta (no novo elemento ou no atualizado)
-            isUpdatingCombo = true;
-            view.getCbxSelecionar().setSelectedItem(nome);
-            isUpdatingCombo = false;
-
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(view, "Por favor, preencha todos os atributos numéricos com valores válidos.", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
-        }
+    private void recarregarCampos() {
+        buscarMonstrosDoBanco();
+        atualizarComboSelecionar();
+        limparFormulario();
     }
 
     private int parseCampo(JTextField campo) throws NumberFormatException {
@@ -211,28 +221,161 @@ public class MonstroController {
     public void btnExcluirClick() {
         int index = view.getCbxSelecionar().getSelectedIndex();
         if (index <= 0) {
-            JOptionPane.showMessageDialog(view, "Selecione um monstro existente para excluir.", "Atenção", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(view, "Selecione um monstro existente para excluir.",
+                    "Atenção", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(view, "Deseja realmente excluir este monstro?", "Confirmação", JOptionPane.YES_NO_OPTION);
-        if (confirm == JOptionPane.YES_OPTION) {
-            MonstroModel monstroParaExcluir = monstrosMock.get(index - 1);
-            monstrosMock.remove(monstroParaExcluir);
-            
-            // TODO: Chamada de banco de dados para deletar: monstroRepository.delete(monstroParaExcluir.getId());
-            
+        int confirm = JOptionPane.showConfirmDialog(view, "Deseja realmente excluir este monstro?",
+                "Confirmação", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        MonstroModel monstroParaExcluir = monstros.get(index - 1);
+
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            em.getTransaction().begin();
+            MonstroModel gerenciado = em.find(MonstroModel.class, monstroParaExcluir.getId());
+            if (gerenciado != null) {
+                em.remove(gerenciado);
+            }
+            em.getTransaction().commit();
+
             JOptionPane.showMessageDialog(view, "Monstro excluído.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            atualizarComboSelecionar();
-            limparFormulario();
+            recarregarCampos();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(view, "Erro ao excluir monstro do banco de dados.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public void btnAdicionarLootClick() {
-        JOptionPane.showMessageDialog(view, "A funcionalidade de Adicionar Item ao loot será implementada com o repositório de Itens.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        Integer idMonstro = getIdMonstroSelecionado();
+        if (idMonstro == null) {
+            JOptionPane.showMessageDialog(view, "Selecione (ou salve) um monstro existente antes de adicionar itens ao loot.",
+                    "Atenção", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            List<ItemModel> todosItens = em
+                    .createQuery("SELECT i FROM ItemModel i ORDER BY i.nome", ItemModel.class)
+                    .getResultList();
+
+            ItemModel itemEscolhido = abrirSeletorDeItem(todosItens);
+            if (itemEscolhido == null) return;
+
+            em.getTransaction().begin();
+            MonstroModel monstro = em.find(MonstroModel.class, idMonstro);
+
+            boolean jaTemItem = monstro.getLoot() != null &&
+                    monstro.getLoot().stream().anyMatch(i -> i.getId() == itemEscolhido.getId());
+
+            if (jaTemItem) {
+                em.getTransaction().rollback();
+                JOptionPane.showMessageDialog(view, "Esse item já está no loot deste monstro.",
+                        "Atenção", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            ItemModel itemGerenciado = em.find(ItemModel.class, itemEscolhido.getId());
+            monstro.adicionarItemLoot(itemGerenciado);
+
+            em.getTransaction().commit();
+            recarregarMonstroSelecionadoNaTela(idMonstro);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(view, "Erro ao adicionar item ao loot.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void btnRemoverLootClick() {
-        JOptionPane.showMessageDialog(view, "A funcionalidade de Remover Item do loot será implementada com o repositório de Itens.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+        Integer idMonstro = getIdMonstroSelecionado();
+        if (idMonstro == null) {
+            JOptionPane.showMessageDialog(view, "Selecione um monstro existente primeiro.",
+                    "Atenção", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int linhaSelecionada = view.getTblLoot().getSelectedRow();
+        if (linhaSelecionada < 0) {
+            JOptionPane.showMessageDialog(view, "Selecione um item na tabela de loot para remover.",
+                    "Atenção", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) view.getTblLoot().getModel();
+        ItemModel itemParaRemover = (ItemModel) model.getValueAt(linhaSelecionada, 3);
+
+        int confirm = JOptionPane.showConfirmDialog(view, "Remover este item do loot do monstro?",
+                "Confirmação", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        try (EntityManager em = JpaUtil.getEntityManager()) {
+            em.getTransaction().begin();
+            MonstroModel monstro = em.find(MonstroModel.class, idMonstro);
+
+            ItemModel itemGerenciado = monstro.getLoot().stream()
+                    .filter(i -> i.getId() == itemParaRemover.getId())
+                    .findFirst()
+                    .orElse(null);
+
+            monstro.removerItemLoot(itemGerenciado);
+
+            em.getTransaction().commit();
+            recarregarMonstroSelecionadoNaTela(idMonstro);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(view, "Erro ao remover item do loot.",
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private Integer getIdMonstroSelecionado() {
+        int index = view.getCbxSelecionar().getSelectedIndex();
+        if (index <= 0) return null;
+        return monstros.get(index - 1).getId();
+    }
+
+    private void recarregarMonstroSelecionadoNaTela(int idMonstro) {
+        buscarMonstrosDoBanco();
+        MonstroModel atualizado = monstros.stream()
+                .filter(m -> m.getId() == idMonstro)
+                .findFirst()
+                .orElse(null);
+        atualizarComboSelecionar();
+        if (atualizado != null) {
+            view.getCbxSelecionar().setSelectedItem(atualizado.getNome());
+            preencherFormulario(atualizado);
+        }
+    }
+
+    private ItemModel abrirSeletorDeItem(List<ItemModel> itensDisponiveis) {
+        if (itensDisponiveis.isEmpty()) {
+            JOptionPane.showMessageDialog(view,
+                    "Não há itens cadastrados. Cadastre um item na tela de Itens primeiro.",
+                    "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            return null;
+        }
+
+        String[] opcoes = itensDisponiveis.stream()
+                .map(i -> i.getNome() + " (" + i.getRaridade() + ")")
+                .toArray(String[]::new);
+
+        String escolha = (String) JOptionPane.showInputDialog(
+                view,
+                "Selecione o item a adicionar:",
+                "Adicionar Item ao Loot",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]
+        );
+
+        if (escolha == null) return null;
+
+        int index = java.util.Arrays.asList(opcoes).indexOf(escolha);
+        return itensDisponiveis.get(index);
     }
 }

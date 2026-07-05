@@ -34,4 +34,9 @@ public class RacaModel {
     public AtributoModel getAtributo() { return atributo; }
     public void setAtributo(AtributoModel atributo) { this.atributo = atributo; }
     //endregion
+
+    @Override
+    public String toString() {
+        return this.getNome().substring(0, 1).toUpperCase() + this.getNome().substring(1);
+    }
 }

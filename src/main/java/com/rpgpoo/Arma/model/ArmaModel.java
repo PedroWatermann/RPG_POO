@@ -47,4 +47,9 @@ public class ArmaModel extends ItemModel {
     public DadoModel getDado() { return this.dado; }
     public void setDado(DadoModel dado) { this.dado = dado; }
     //endregion
+
+    @Override
+    public String toString() {
+        return this.getNome().substring(0, 1).toUpperCase() + this.getNome().substring(1);
+    }
 }
