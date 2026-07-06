@@ -58,4 +58,22 @@ public class ItemModel {
     public double getValor() { return valor; }
     public void setValor(double valor) { this.valor = valor; }
     //endregion
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemModel)) return false;
+        ItemModel itemModel = (ItemModel) o;
+        return getId() == itemModel.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return this.nome != null ? this.nome : "Item Desconhecido";
+    }
 }

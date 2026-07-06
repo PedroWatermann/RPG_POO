@@ -2,9 +2,15 @@ package com.rpgpoo.Personagem.view;
 
 import com.rpgpoo.Gerenciador.Gerenciador;
 import com.rpgpoo.Personagem.controller.PersonagemController;
+import com.rpgpoo.Personagem.model.PersonagemModel;
+import com.rpgpoo.Raca.model.RacaModel;
+import com.rpgpoo.Classe.model.ClasseModel;
+import com.rpgpoo.Campanha.model.CampanhaModel;
+import com.rpgpoo.Jogador.model.JogadorModel;
 import com.rpgpoo.utils.*;
 import org.kordamp.ikonli.fontawesome6.FontAwesomeSolid;
 import org.kordamp.ikonli.swing.FontIcon;
+import com.rpgpoo.Arma.model.ArmaModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -23,20 +29,25 @@ public class PersonagemView extends JPanel {
     // ficha do personagem
     JLabel lblTitulo = new JLabel();
 
+    JLabel lblSelecionarPersonagem = new JLabel();
+    JComboBox<PersonagemModel> cbxSelecionarPersonagem = new JComboBox<>();
+
     JLabel lblNome = new JLabel();
     JTextField txtNome = new JTextField();
     JLabel lblNivel = new JLabel();
     JTextField txtNivel = new JTextField();
 
     JLabel lblRaca = new JLabel();
-    JComboBox<String> cbxRaca = new JComboBox<>();
+    JComboBox<RacaModel> cbxRaca = new JComboBox<>();
     JLabel lblClasse = new JLabel();
-    JComboBox<String> cbxClasse = new JComboBox<>();
+    JComboBox<ClasseModel> cbxClasse = new JComboBox<>();
 
     JLabel lblDinheiro = new JLabel();
     JTextField txtDinheiro = new JTextField();
+    JLabel lblJogador = new JLabel();
+    JComboBox<JogadorModel> cbxJogador = new JComboBox<>();
     JLabel lblCampanha = new JLabel();
-    JComboBox<String> cbxCampanha = new JComboBox<>();
+    JComboBox<CampanhaModel> cbxCampanha = new JComboBox<>();
 
     // Atributo base
     JLabel lblTituloAtributo = new JLabel();
@@ -48,12 +59,12 @@ public class PersonagemView extends JPanel {
     JLabel lblSab = new JLabel();
     JLabel lblCar = new JLabel();
 
-    JLabel lblAtrFor = new JLabel();
-    JLabel lblAtrDes = new JLabel();
-    JLabel lblAtrCon = new JLabel();
-    JLabel lblAtrInt = new JLabel();
-    JLabel lblAtrSab = new JLabel();
-    JLabel lblAtrCar = new JLabel();
+    JTextField txtAtrFor = new JTextField();
+    JTextField txtAtrDes = new JTextField();
+    JTextField txtAtrCon = new JTextField();
+    JTextField txtAtrInt = new JTextField();
+    JTextField txtAtrSab = new JTextField();
+    JTextField txtAtrCar = new JTextField();
 
     // Status de combate
     JLabel lblTituloStatus =  new JLabel();
@@ -78,7 +89,7 @@ public class PersonagemView extends JPanel {
     JLabel lblDadoArma = new JLabel();
 
     JComboBox<String> cbxDadoArma = new JComboBox<>();
-    JTextField txtNomeArma = new JTextField();
+    JComboBox<ArmaModel> cbxArma = new JComboBox<>();
     JTextField txtDanoArma = new JTextField();
     JTextField txtAlcanceArma = new JTextField();
     JTextField txtDurabilidadeArma = new JTextField();
@@ -93,6 +104,36 @@ public class PersonagemView extends JPanel {
 
     JButton btnNovoPersonagem;
     JButton btnExcluirPersonagem;
+    JButton btnSalvar;
+
+    
+    public JButton getBtnNovoPersonagem() { return btnNovoPersonagem; }
+    public JButton getBtnSalvar() { return btnSalvar; }
+    public JButton getBtnExcluirPersonagem() { return btnExcluirPersonagem; }
+    public JTextField getTxtNome() { return txtNome; }
+    public JTextField getTxtNivel() { return txtNivel; }
+    public JTextField getTxtDinheiro() { return txtDinheiro; }
+    public JComboBox<RacaModel> getCbxRaca() { return cbxRaca; }
+    public JComboBox<ClasseModel> getCbxClasse() { return cbxClasse; }
+    public JComboBox<CampanhaModel> getCbxCampanha() { return cbxCampanha; }
+    public JComboBox<JogadorModel> getCbxJogador() { return cbxJogador; }
+    public JTextField getTxtAtrFor() { return txtAtrFor; }
+    public JTextField getTxtAtrDes() { return txtAtrDes; }
+    public JTextField getTxtAtrCon() { return txtAtrCon; }
+    public JTextField getTxtAtrInt() { return txtAtrInt; }
+    public JTextField getTxtAtrSab() { return txtAtrSab; }
+    public JTextField getTxtAtrCar() { return txtAtrCar; }
+    public JComboBox<PersonagemModel> getCbxSelecionarPersonagem() {
+        return cbxSelecionarPersonagem;
+    }
+    public JComboBox<ArmaModel> getCbxArma() { return cbxArma; }
+    public JTable getTblInventario() { return tblInventario; }
+    public JButton getBtnAdicionarInventario() { return btnAdicionarInventario; }
+    public JButton getBtnRemoverInventario() { return btnRemoverInventario; }
+    public JTextField getTxtDanoArma() { return txtDanoArma; }
+    public JTextField getTxtAlcanceArma() { return txtAlcanceArma; }
+    public JTextField getTxtDurabilidadeArma() { return txtDurabilidadeArma; }
+    public JComboBox<String> getCbxDadoArma() { return cbxDadoArma; }
 
     public PersonagemView(Gerenciador gerenciador) {
         PersonagemController controller = new PersonagemController(this, gerenciador);
@@ -113,6 +154,16 @@ public class PersonagemView extends JPanel {
         JSeparator sepTituloFicha = new JSeparator();
         sepTituloFicha.setForeground(AppColors.GOLD);
         sepTituloFicha.setBackground(AppColors.GOLD);
+
+        lblSelecionarPersonagem.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblSelecionarPersonagem.setText("Selecionar Personagem");
+        lblSelecionarPersonagem.setHorizontalAlignment(SwingConstants.LEFT);
+        lblSelecionarPersonagem.setForeground(AppColors.PARCHMENT);
+
+        cbxSelecionarPersonagem.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        cbxSelecionarPersonagem.setForeground(Color.WHITE);
+        cbxSelecionarPersonagem.setBackground(AppColors.DARK);
+        GenericUtils.estilizarComboBox(cbxSelecionarPersonagem);
 
         lblNome.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblNome.setText("Nome");
@@ -179,6 +230,14 @@ public class PersonagemView extends JPanel {
         cbxCampanha.setForeground(Color.WHITE);
         cbxCampanha.setBackground(AppColors.DARK);
         GenericUtils.estilizarComboBox(cbxCampanha);
+        lblJogador.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblJogador.setText("Jogador");
+        lblJogador.setForeground(AppColors.PARCHMENT);
+        lblJogador.setHorizontalAlignment(SwingConstants.LEFT);
+
+        GenericUtils.estilizarComboBox(cbxJogador);
+        cbxJogador.setPreferredSize(new Dimension(0, 28));
+
 
         // Definições para Atributo base
         lblTituloAtributo.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
@@ -199,60 +258,96 @@ public class PersonagemView extends JPanel {
         lblFor.setForeground(AppColors.PARCHMENT);
         lblFor.setHorizontalAlignment(SwingConstants.LEFT);
 
-        lblAtrFor.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        lblAtrFor.setText("18");
-        lblAtrFor.setForeground(AppColors.PARCHMENT);
-        lblAtrFor.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        txtAtrFor.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtAtrFor.setText("18");
+        txtAtrFor.setOpaque(false);
+        txtAtrFor.setForeground(Color.WHITE);
+        txtAtrFor.setCaretColor(AppColors.PARCHMENT);
+        txtAtrFor.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
+        txtAtrFor.setPreferredSize(new Dimension(30, 28));
+        txtAtrFor.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         lblDes.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblDes.setText("Des");
         lblDes.setForeground(AppColors.PARCHMENT);
         lblDes.setHorizontalAlignment(SwingConstants.LEFT);
 
-        lblAtrDes.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        lblAtrDes.setText("12");
-        lblAtrDes.setForeground(AppColors.PARCHMENT);
-        lblAtrDes.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        txtAtrDes.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtAtrDes.setText("12");
+        txtAtrDes.setOpaque(false);
+        txtAtrDes.setForeground(Color.WHITE);
+        txtAtrDes.setCaretColor(AppColors.PARCHMENT);
+        txtAtrDes.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
+        txtAtrDes.setPreferredSize(new Dimension(30, 28));
+        txtAtrDes.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         lblCon.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblCon.setText("Con");
         lblCon.setForeground(AppColors.PARCHMENT);
         lblCon.setHorizontalAlignment(SwingConstants.LEFT);
 
-        lblAtrCon.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        lblAtrCon.setText("16");
-        lblAtrCon.setForeground(AppColors.PARCHMENT);
-        lblAtrCon.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        txtAtrCon.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtAtrCon.setText("16");
+        txtAtrCon.setOpaque(false);
+        txtAtrCon.setForeground(Color.WHITE);
+        txtAtrCon.setCaretColor(AppColors.PARCHMENT);
+        txtAtrCon.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
+        txtAtrCon.setPreferredSize(new Dimension(30, 28));
+        txtAtrCon.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         lblInt.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblInt.setText("Int");
         lblInt.setForeground(AppColors.PARCHMENT);
         lblInt.setHorizontalAlignment(SwingConstants.LEFT);
 
-        lblAtrInt.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        lblAtrInt.setText("8");
-        lblAtrInt.setForeground(AppColors.PARCHMENT);
-        lblAtrInt.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        txtAtrInt.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtAtrInt.setText("8");
+        txtAtrInt.setOpaque(false);
+        txtAtrInt.setForeground(Color.WHITE);
+        txtAtrInt.setCaretColor(AppColors.PARCHMENT);
+        txtAtrInt.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
+        txtAtrInt.setPreferredSize(new Dimension(30, 28));
+        txtAtrInt.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         lblSab.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblSab.setText("Sab");
         lblSab.setForeground(AppColors.PARCHMENT);
         lblSab.setHorizontalAlignment(SwingConstants.LEFT);
 
-        lblAtrSab.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        lblAtrSab.setText("10");
-        lblAtrSab.setForeground(AppColors.PARCHMENT);
-        lblAtrSab.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        txtAtrSab.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtAtrSab.setText("10");
+        txtAtrSab.setOpaque(false);
+        txtAtrSab.setForeground(Color.WHITE);
+        txtAtrSab.setCaretColor(AppColors.PARCHMENT);
+        txtAtrSab.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
+        txtAtrSab.setPreferredSize(new Dimension(30, 28));
+        txtAtrSab.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         lblCar.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblCar.setText("Car");
         lblCar.setForeground(AppColors.PARCHMENT);
         lblCar.setHorizontalAlignment(SwingConstants.LEFT);
 
-        lblAtrCar.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        lblAtrCar.setText("9");
-        lblAtrCar.setForeground(AppColors.PARCHMENT);
-        lblAtrCar.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        txtAtrCar.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtAtrCar.setText("9");
+        txtAtrCar.setOpaque(false);
+        txtAtrCar.setForeground(Color.WHITE);
+        txtAtrCar.setCaretColor(AppColors.PARCHMENT);
+        txtAtrCar.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
+        txtAtrCar.setPreferredSize(new Dimension(30, 28));
+        txtAtrCar.setHorizontalAlignment(SwingConstants.CENTER);
+
 
         // Definições para
         JSeparator sepEsquerda2 = new JSeparator();
@@ -339,12 +434,10 @@ public class PersonagemView extends JPanel {
         lblNomeArma.setForeground(AppColors.PARCHMENT);
         lblNomeArma.setHorizontalAlignment(SwingConstants.LEFT);
 
-        txtNomeArma.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        txtNomeArma.setOpaque(false);
-        txtNomeArma.setForeground(Color.WHITE);
-        txtNomeArma.setCaretColor(AppColors.PARCHMENT);
-        txtNomeArma.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
-        txtNomeArma.setPreferredSize(new Dimension(0, 28));
+        cbxArma.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        cbxArma.setForeground(Color.WHITE);
+        cbxArma.setBackground(AppColors.DARK);
+        GenericUtils.estilizarComboBox(cbxArma);
 
         lblDanoArma.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblDanoArma.setText("Dano");
@@ -357,6 +450,8 @@ public class PersonagemView extends JPanel {
         txtDanoArma.setCaretColor(AppColors.PARCHMENT);
         txtDanoArma.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
         txtDanoArma.setPreferredSize(new Dimension(0, 28));
+        txtDanoArma.setEditable(false);
+        txtDanoArma.setFocusable(false);
 
         lblAlcanceArma.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblAlcanceArma.setText("Alcance ");
@@ -369,6 +464,8 @@ public class PersonagemView extends JPanel {
         txtAlcanceArma.setCaretColor(AppColors.PARCHMENT);
         txtAlcanceArma.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
         txtAlcanceArma.setPreferredSize(new Dimension(0, 28));
+        txtAlcanceArma.setEditable(false);
+        txtAlcanceArma.setFocusable(false);
 
         lblDurabilidadeArma.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblDurabilidadeArma.setText("Durabilidade");
@@ -381,6 +478,8 @@ public class PersonagemView extends JPanel {
         txtDurabilidadeArma.setCaretColor(AppColors.PARCHMENT);
         txtDurabilidadeArma.setBorder(BorderFactory.createLineBorder(AppColors.GOLD));
         txtDurabilidadeArma.setPreferredSize(new Dimension(0, 28));
+        txtDurabilidadeArma.setEditable(false);
+        txtDurabilidadeArma.setFocusable(false);
 
         lblDadoArma.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblDadoArma.setText("Tipo de Dado");
@@ -392,6 +491,7 @@ public class PersonagemView extends JPanel {
         cbxDadoArma.setForeground(Color.WHITE);
         cbxDadoArma.setBackground(AppColors.DARK);
         GenericUtils.estilizarComboBox(cbxDadoArma);
+        cbxDadoArma.setEnabled(false);
 
         // INVENTARIO
         lblTituloInventario.setIcon(FontIcon.of(FontAwesomeSolid.SHOPPING_BAG, AppColors.ICON_LG, AppColors.GOLD));
@@ -404,12 +504,7 @@ public class PersonagemView extends JPanel {
         sepInventario.setForeground(AppColors.GOLD);
         sepInventario.setBackground(AppColors.GOLD);
 
-        Object[][] dadosTemporarios = {
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT),"Poção de vida", "Consumível", "Comum", 100},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Amuleto do Herói", "Acessório", "Raro", 300},
-                {FontIcon.of(FontAwesomeSolid.USER_ALT, AppColors.ICON_SM, AppColors.PARCHMENT), "Escudo", "Acessório", "Comum", 120},
-        };
-        tblInventario.setModel(new DefaultTableModel(dadosTemporarios, new Object[]{"", "ITEM", "TIPO", "RARIDADE", "GP"}));
+        tblInventario.setModel(new DefaultTableModel(new Object[][]{}, new Object[]{"", "ITEM", "TIPO", "RARIDADE", "GP"}));
         tblInventario.setDefaultRenderer(Object.class, new IconTextCellRender());
         tblInventario.getColumnModel().getColumn(0).setMaxWidth(30);
         tblInventario.setShowVerticalLines(false);
@@ -468,7 +563,13 @@ public class PersonagemView extends JPanel {
                 FontIcon.of(FontAwesomeSolid.USER_MINUS, AppColors.ICON_SM, AppColors.PARCHMENT)
         );
 
-        this.setLayout(new GridBagLayout());
+        
+        btnSalvar = new JButtonCustom(
+                "Salvar",
+                JButtonCustom.Style.PRIMARY,
+                FontIcon.of(FontAwesomeSolid.SAVE, AppColors.ICON_SM, AppColors.PARCHMENT)
+        );
+       this.setLayout(new GridBagLayout());
         this.setBackground(AppColors.DARK);
         this.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(AppColors.GOLD, 0),
@@ -519,8 +620,21 @@ public class PersonagemView extends JPanel {
         gbcPnlFichaPersonagem.gridy = 1;
         pnlFichaPersonagem.add(sepTituloFicha, gbcPnlFichaPersonagem);
 
-        // Definições lblNome
+        // Definições lblSelecionarPersonagem
         gbcPnlFichaPersonagem.gridy = 2;
+        gbcPnlFichaPersonagem.gridwidth = 6;
+        gbcPnlFichaPersonagem.weightx = 1.0;
+        gbcPnlFichaPersonagem.insets = new Insets(5, 0, 0, 0);
+        pnlFichaPersonagem.add(lblSelecionarPersonagem, gbcPnlFichaPersonagem);
+
+        // Definições cbxSelecionarPersonagem
+        gbcPnlFichaPersonagem.gridy = 3;
+        gbcPnlFichaPersonagem.gridwidth = 6;
+        gbcPnlFichaPersonagem.insets = new Insets(0, 0, 10, 0);
+        pnlFichaPersonagem.add(cbxSelecionarPersonagem, gbcPnlFichaPersonagem);
+
+        // Definições lblNome
+        gbcPnlFichaPersonagem.gridy = 4;
         gbcPnlFichaPersonagem.gridwidth = 3;
         gbcPnlFichaPersonagem.weightx = 0.5;
         gbcPnlFichaPersonagem.insets = new Insets(5, 0, 0, 5);
@@ -533,7 +647,7 @@ public class PersonagemView extends JPanel {
 
         // Definições para txtNome
         gbcPnlFichaPersonagem.gridx = 0;
-        gbcPnlFichaPersonagem.gridy = 3;
+        gbcPnlFichaPersonagem.gridy = 5;
         gbcPnlFichaPersonagem.insets = new Insets(0, 0, 5, 5);
         pnlFichaPersonagem.add(txtNome, gbcPnlFichaPersonagem);
 
@@ -544,7 +658,7 @@ public class PersonagemView extends JPanel {
 
         // Definições para lblRaca
         gbcPnlFichaPersonagem.gridx = 0;
-        gbcPnlFichaPersonagem.gridy = 4;
+        gbcPnlFichaPersonagem.gridy = 6;
         gbcPnlFichaPersonagem.insets = new Insets(5, 0, 0, 5);
         pnlFichaPersonagem.add(lblRaca, gbcPnlFichaPersonagem);
 
@@ -555,7 +669,7 @@ public class PersonagemView extends JPanel {
 
         // Definições para cbxRaca
         gbcPnlFichaPersonagem.gridx = 0;
-        gbcPnlFichaPersonagem.gridy = 5;
+        gbcPnlFichaPersonagem.gridy = 7;
         gbcPnlFichaPersonagem.insets = new Insets(0, 0, 5, 5);
         pnlFichaPersonagem.add(cbxRaca, gbcPnlFichaPersonagem);
 
@@ -566,27 +680,37 @@ public class PersonagemView extends JPanel {
 
         // Definições para lblDinheiro
         gbcPnlFichaPersonagem.gridx = 0;
-        gbcPnlFichaPersonagem.gridy = 6;
+        gbcPnlFichaPersonagem.gridy = 8;
         gbcPnlFichaPersonagem.insets = new Insets(5, 0, 0, 5);
         pnlFichaPersonagem.add(lblDinheiro, gbcPnlFichaPersonagem);
 
         //Definições de lblCampanha
         gbcPnlFichaPersonagem.gridx = 3;
-        gbcPnlFichaPersonagem.gridy = 6;
+        gbcPnlFichaPersonagem.gridy = 8;
         gbcPnlFichaPersonagem.insets = new Insets(5, 5, 0, 0);
         pnlFichaPersonagem.add(lblCampanha, gbcPnlFichaPersonagem);
 
         // Definições de txtDinheiro
-        gbcPnlFichaPersonagem.gridy = 7;
+        gbcPnlFichaPersonagem.gridy = 9;
         gbcPnlFichaPersonagem.gridx = 0;
         gbcPnlFichaPersonagem.insets = new Insets(0, 0, 5, 5);
         pnlFichaPersonagem.add(txtDinheiro, gbcPnlFichaPersonagem);
 
         //Definições de cbxCampanha
         gbcPnlFichaPersonagem.gridx = 3;
-        gbcPnlFichaPersonagem.gridy = 7;
+        gbcPnlFichaPersonagem.gridy = 9;
         gbcPnlFichaPersonagem.insets = new Insets(0, 5, 5, 0);
         pnlFichaPersonagem.add(cbxCampanha, gbcPnlFichaPersonagem);
+        gbcPnlFichaPersonagem.gridx = 0;
+        gbcPnlFichaPersonagem.gridy = 10;
+        gbcPnlFichaPersonagem.gridwidth = 6;
+        gbcPnlFichaPersonagem.insets = new Insets(5, 0, 0, 0);
+        pnlFichaPersonagem.add(lblJogador, gbcPnlFichaPersonagem);
+
+        gbcPnlFichaPersonagem.gridy = 11;
+        gbcPnlFichaPersonagem.insets = new Insets(0, 0, 5, 0);
+        pnlFichaPersonagem.add(cbxJogador, gbcPnlFichaPersonagem);
+
 
         JPanel pnlAtributo = new JPanel(new GridBagLayout());
         pnlAtributo.setBackground(AppColors.DARK);
@@ -622,7 +746,7 @@ public class PersonagemView extends JPanel {
 
         // Adiciona o painel no layout principal
         gbcPnlFichaPersonagem.gridx = 0;
-        gbcPnlFichaPersonagem.gridy = 8;
+        gbcPnlFichaPersonagem.gridy = 12;
         gbcPnlFichaPersonagem.gridwidth = 6;
         gbcPnlFichaPersonagem.insets = new Insets(0, 0, 0, 0);
         pnlFichaPersonagem.add(pnlAtributo, gbcPnlFichaPersonagem);
@@ -644,7 +768,7 @@ public class PersonagemView extends JPanel {
         gbcPnlAtrFor.weighty = 0.5;
         pnlAtrFor.add(lblFor, gbcPnlAtrFor);
         gbcPnlAtrFor.gridy = 1;
-        pnlAtrFor.add(lblAtrFor, gbcPnlAtrFor);
+        pnlAtrFor.add(txtAtrFor, gbcPnlAtrFor);
 
         // Adiciona painel para colocar atributo base de Des
         JPanel pnlAtrDes = new JPanel(new GridBagLayout());
@@ -662,7 +786,7 @@ public class PersonagemView extends JPanel {
         gbcPnlAtrDes.weighty = 0.5;
         pnlAtrDes.add(lblDes, gbcPnlAtrDes);
         gbcPnlAtrDes.gridy = 1;
-        pnlAtrDes.add(lblAtrDes, gbcPnlAtrDes);
+        pnlAtrDes.add(txtAtrDes, gbcPnlAtrDes);
 
         // Adiciona painel para colocar atributo base de Con
         JPanel pnlAtrCon = new JPanel(new GridBagLayout());
@@ -680,7 +804,7 @@ public class PersonagemView extends JPanel {
         gbcPnlAtrCon.weighty = 0.5;
         pnlAtrCon.add(lblCon, gbcPnlAtrCon);
         gbcPnlAtrCon.gridy = 1;
-        pnlAtrCon.add(lblAtrCon, gbcPnlAtrCon);
+        pnlAtrCon.add(txtAtrCon, gbcPnlAtrCon);
 
         // Adiciona painel para colocar atributo base de Int
         JPanel pnlAtrInt = new JPanel(new GridBagLayout());
@@ -698,7 +822,7 @@ public class PersonagemView extends JPanel {
         gbcPnlAtrInt.weighty = 0.5;
         pnlAtrInt.add(lblInt, gbcPnlAtrInt);
         gbcPnlAtrInt.gridy = 1;
-        pnlAtrInt.add(lblAtrInt, gbcPnlAtrInt);
+        pnlAtrInt.add(txtAtrInt, gbcPnlAtrInt);
 
         // Adiciona painel para colocar atributo base de Sab
         JPanel pnlAtrSab = new JPanel(new GridBagLayout());
@@ -716,7 +840,7 @@ public class PersonagemView extends JPanel {
         gbcPnlAtrSab.weighty = 0.5;
         pnlAtrSab.add(lblSab, gbcPnlAtrSab);
         gbcPnlAtrSab.gridy = 1;
-        pnlAtrSab.add(lblAtrSab, gbcPnlAtrSab);
+        pnlAtrSab.add(txtAtrSab, gbcPnlAtrSab);
 
         // Adiciona painel para colocar atributo base de Car
         JPanel pnlAtrCar = new JPanel(new GridBagLayout());
@@ -734,7 +858,7 @@ public class PersonagemView extends JPanel {
         gbcPnlAtrCar.weighty = 0.5;
         pnlAtrCar.add(lblCar, gbcPnlAtrCar);
         gbcPnlAtrCar.gridy = 1;
-        pnlAtrCar.add(lblAtrCar, gbcPnlAtrCar);
+        pnlAtrCar.add(txtAtrCar, gbcPnlAtrCar);
         //endregion
 
         JPanel pnlAtrBase = new JPanel(new GridBagLayout());
@@ -770,7 +894,7 @@ public class PersonagemView extends JPanel {
         pnlAtrBase.add(pnlAtrCar, gbcPnlAtrBase);
 
         gbcPnlFichaPersonagem.gridx = 0;
-        gbcPnlFichaPersonagem.gridy = 9;
+        gbcPnlFichaPersonagem.gridy = 13;
         gbcPnlFichaPersonagem.gridwidth = 6;
         gbcPnlFichaPersonagem.insets = new Insets(5, 0, 5, 0);
         pnlFichaPersonagem.add(pnlAtrBase, gbcPnlFichaPersonagem);
@@ -809,7 +933,7 @@ public class PersonagemView extends JPanel {
         pnlStatusCombate.add(sepDireita2, PnlStatusCombate);
 
         gbcPnlFichaPersonagem.gridx = 0;
-        gbcPnlFichaPersonagem.gridy = 11;
+        gbcPnlFichaPersonagem.gridy = 15;
         gbcPnlFichaPersonagem.gridwidth = 6;
         gbcPnlFichaPersonagem.insets = new Insets(10, 0, 5, 0);
         pnlFichaPersonagem.add(pnlStatusCombate, gbcPnlFichaPersonagem);
@@ -887,19 +1011,19 @@ public class PersonagemView extends JPanel {
         gbcPnlStatus.insets = new Insets(0, 5, 0, 0);
         pnlStatus.add(pnlDefesaStatus, gbcPnlStatus);
 
-        gbcPnlFichaPersonagem.gridy = 12;
+        gbcPnlFichaPersonagem.gridy = 16;
         gbcPnlFichaPersonagem.insets = new Insets(5, 0, 5, 0);
         pnlFichaPersonagem.add(pnlStatus, gbcPnlFichaPersonagem);
 
         //Hp atual
-        gbcPnlFichaPersonagem.gridy = 13;
+        gbcPnlFichaPersonagem.gridy = 17;
         gbcPnlFichaPersonagem.gridx = 0;
         gbcPnlFichaPersonagem.gridwidth = 6;
         gbcPnlFichaPersonagem.weightx = 1.0;
         gbcPnlFichaPersonagem.insets = new Insets(5, 0, 0, 0);
         pnlFichaPersonagem.add(lblHpAtual, gbcPnlFichaPersonagem);
 
-        gbcPnlFichaPersonagem.gridy = 14;
+        gbcPnlFichaPersonagem.gridy = 18;
         gbcPnlFichaPersonagem.insets = new Insets(0, 0, 0, 0);
         pnlFichaPersonagem.add(pbrHpAtual, gbcPnlFichaPersonagem);
 
@@ -923,7 +1047,7 @@ public class PersonagemView extends JPanel {
 
         gbcPnlArmaPersonagem.gridy = 3;
         gbcPnlArmaPersonagem.insets = new Insets(0, 0, 5, 0);
-        pnlArmaPersonagem.add(txtNomeArma, gbcPnlArmaPersonagem);
+        pnlArmaPersonagem.add(cbxArma, gbcPnlArmaPersonagem);
 
         gbcPnlArmaPersonagem.gridy = 4;
         gbcPnlArmaPersonagem.weightx = 0.33;
@@ -1035,8 +1159,16 @@ public class PersonagemView extends JPanel {
         gbc.insets = new  Insets(5, 0, 0, 5);
         this.add(btnNovoPersonagem, gbc);
 
+
+        JPanel pnlBotoesDireita = new JPanel(new GridLayout(1, 2, 10, 0));
+        pnlBotoesDireita.setOpaque(false);
+        pnlBotoesDireita.add(btnSalvar);
+        pnlBotoesDireita.add(btnExcluirPersonagem);
+
         gbc.gridx = 1;
-        gbc.insets = new  Insets(5, 5, 0, 0);
-        this.add(btnExcluirPersonagem, gbc);
+        gbc.insets = new Insets(5, 5, 0, 0);
+        this.add(pnlBotoesDireita, gbc);
+
+        controller.init();
     }
 }

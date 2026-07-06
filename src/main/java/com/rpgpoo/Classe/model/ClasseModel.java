@@ -2,6 +2,7 @@ package com.rpgpoo.Classe.model;
 
 import com.rpgpoo.Enum.TipoArmaEnum;
 import jakarta.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "classe")
@@ -53,5 +54,18 @@ public class ClasseModel {
     @Override
     public String toString() {
         return this.getNome().substring(0, 1).toUpperCase() + this.getNome().substring(1);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClasseModel)) return false;
+        ClasseModel that = (ClasseModel) o;
+        return id == that.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

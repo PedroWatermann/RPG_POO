@@ -212,6 +212,8 @@ public class ItemView extends JPanel {
         gbc.insets = new Insets(0, 5, 0, 0);
         gbc.gridx = 2;
         this.add(btnExcluir, gbc);
+
+        controller.init();
     }
 
     public JTextField getTxtBusca() { return txtBusca; }
