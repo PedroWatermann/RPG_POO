@@ -2,6 +2,7 @@ package com.rpgpoo.Raca.model;
 
 import com.rpgpoo.Atributo.model.AtributoModel;
 import jakarta.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "raca")
@@ -38,5 +39,18 @@ public class RacaModel {
     @Override
     public String toString() {
         return this.getNome().substring(0, 1).toUpperCase() + this.getNome().substring(1);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RacaModel)) return false;
+        RacaModel racaModel = (RacaModel) o;
+        return id == racaModel.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -6,6 +6,8 @@ import com.rpgpoo.Gerenciador.Gerenciador;
 import com.rpgpoo.Item.model.ItemModel;
 import com.rpgpoo.Item.view.ItemAddView;
 import com.rpgpoo.utils.JpaUtil;
+import com.rpgpoo.Arma.model.ArmaModel;
+import com.rpgpoo.Dado.model.DadoModel;
 import jakarta.persistence.EntityManager;
 
 import javax.swing.*;
@@ -99,7 +101,12 @@ public class ItemAddController {
                 item.setValorEfeito(valorEfeito);
                 item.setValor(valor);
             } else {
-                item = new ItemModel(nome, tipo, valorEfeito, raridade, valor);
+                if (tipo == TipoItemEnum.ARMA) {
+                    DadoModel dadoDummy = em.createQuery("SELECT d FROM DadoModel d", DadoModel.class).getResultStream().findFirst().orElse(null);
+                    item = new ArmaModel(nome, tipo, valorEfeito, raridade, valor, 0, 0, 0, dadoDummy);
+                } else {
+                    item = new ItemModel(nome, tipo, valorEfeito, raridade, valor);
+                }
                 em.persist(item);
             }
 

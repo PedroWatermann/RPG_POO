@@ -27,7 +27,9 @@ public class ItemController {
     public ItemController(ItemView view, Gerenciador gerenciador) {
         this.view = view;
         this.gerenciador = gerenciador;
+    }
 
+    public void init() {
         carregarItens(null, null);
     }
 

@@ -45,6 +45,24 @@ public abstract class EntidadeModel {
     @JoinColumn(name = "campanha_atual_id")
     private CampanhaModel campanhaAtual;
 
+    @Column(nullable = false, columnDefinition = "integer default 10")
+    private int atrFor = 10;
+
+    @Column(nullable = false, columnDefinition = "integer default 10")
+    private int atrDes = 10;
+
+    @Column(nullable = false, columnDefinition = "integer default 10")
+    private int atrCon = 10;
+
+    @Column(nullable = false, columnDefinition = "integer default 10")
+    private int atrInt = 10;
+
+    @Column(nullable = false, columnDefinition = "integer default 10")
+    private int atrSab = 10;
+
+    @Column(nullable = false, columnDefinition = "integer default 10")
+    private int atrCar = 10;
+
     //region Getters e Setters
     public int getId() {
         return id;
@@ -114,6 +132,24 @@ public abstract class EntidadeModel {
         this.campanhaAtual = campanhaAtual;
     }
 
+    public int getAtrFor() { return atrFor; }
+    public void setAtrFor(int atrFor) { this.atrFor = atrFor; }
+
+    public int getAtrDes() { return atrDes; }
+    public void setAtrDes(int atrDes) { this.atrDes = atrDes; }
+
+    public int getAtrCon() { return atrCon; }
+    public void setAtrCon(int atrCon) { this.atrCon = atrCon; }
+
+    public int getAtrInt() { return atrInt; }
+    public void setAtrInt(int atrInt) { this.atrInt = atrInt; }
+
+    public int getAtrSab() { return atrSab; }
+    public void setAtrSab(int atrSab) { this.atrSab = atrSab; }
+
+    public int getAtrCar() { return atrCar; }
+    public void setAtrCar(int atrCar) { this.atrCar = atrCar; }
+
     public void setCampanhas(List<CampanhaModel> campanhas) {
         if (campanhas != null && !campanhas.isEmpty())
             for (CampanhaModel campanha : campanhas)
@@ -168,6 +204,9 @@ public abstract class EntidadeModel {
 
     @Override
     public String toString() {
+        if (this.getNome() == null || this.getNome().isEmpty()) {
+            return "Desconhecido";
+        }
         return this.getNome().substring(0, 1).toUpperCase() + this.getNome().substring(1);
     }
 }

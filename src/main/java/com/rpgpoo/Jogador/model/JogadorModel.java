@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Entity
 @NamedQuery(
@@ -75,5 +76,18 @@ public class JogadorModel {
     @Override
     public String toString() {
         return this.getNome().substring(0, 1).toUpperCase() + this.getNome().substring(1);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JogadorModel)) return false;
+        JogadorModel that = (JogadorModel) o;
+        return id == that.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
